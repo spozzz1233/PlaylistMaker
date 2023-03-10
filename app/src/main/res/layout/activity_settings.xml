@@ -40,6 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp">
         <TextView
+            android:id="@+id/darkTheme"
             style="@style/Text"
             android:text="@string/dark_theme"
             />
@@ -71,6 +72,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/share"
             style="@style/Text"
             android:text="@string/Share_app" />
 
@@ -88,6 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/Support"
             style="@style/Text"
             android:text="@string/Write_to_support"
             />
@@ -132,6 +135,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/terms"
             style="@style/Text"
             android:text="@string/Terms_of_use"
             />
