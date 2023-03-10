@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="start_main">17dp</dimen>
+    <dimen name="end_main">14dp</dimen>
+    <dimen name="icon_radius">16dp</dimen>
+</resources>
