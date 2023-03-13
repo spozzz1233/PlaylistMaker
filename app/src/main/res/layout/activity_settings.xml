@@ -1,37 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    style="@style/search">
 
     <Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/toolbar">
 
         <ImageView
             android:id="@+id/back"
-            style="@style/Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/button"
+            style="@style/toolbar_image"
             />
-
-
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="14dp"
             android:text="@string/settings"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            style="@style/Toolbar"
-            android:fontFamily="@font/ys_display_medium"/>
-
+            style="@style/toolbar_text"
+            />
     </Toolbar>
 
     <FrameLayout
@@ -40,31 +26,18 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp">
         <TextView
-            android:id="@+id/darkTheme"
+
             style="@style/Text"
             android:text="@string/dark_theme"
             />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/track"
+        <Switch
+            android:id="@+id/darkTheme"
+            android:layout_width="48dp"
+            android:layout_height="60dp"
             android:layout_gravity="end"
-            android:layout_marginTop="24dp"
             android:layout_marginEnd="18dp"
-            style="@style/Icon"
+            style="@style/Switch"
             />
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/knob"
-            android:layout_gravity="end"
-            android:layout_marginTop="21dp"
-            android:layout_marginEnd="35dp"
-            style="@style/Icon"
-            />
-
-
     </FrameLayout>
 
     <FrameLayout

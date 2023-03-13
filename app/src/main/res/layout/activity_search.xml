@@ -3,13 +3,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-
+    style="@style/search"
     >
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:text="Тут будет экран поиска"/>
+    <Toolbar
+        style="@style/toolbar">
+
+        <ImageView
+            android:id="@+id/back"
+            style="@style/toolbar_image"
+            />
+        <TextView
+            android:text="@string/search"
+            style="@style/toolbar_text"
+            />
+    </Toolbar>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+
+        <EditText
+            android:id="@+id/SearchForm"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:background="@drawable/rounded_edittext"
+            android:drawableStart="@drawable/small_search"
+            android:drawablePadding="8dp"
+            android:hint="@string/search"
+            android:inputType="text"
+            android:padding="8dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="32dp"
+            style="@style/search_form"
+            />
+
+
+        <ImageView
+            android:id="@+id/clear"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="center|end"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_menu_close_clear_cancel"
+            android:visibility="visible"
+            style="@style/search_form"
+             />
+    </FrameLayout>
 
 </LinearLayout>
