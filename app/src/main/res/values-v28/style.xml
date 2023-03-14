@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="button_main">
+    <style name="button_main" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_marginStart">@dimen/start_main</item>
         <item name="android:layout_marginEnd">@dimen/end_main</item>
         <item name="android:textColor">@color/text_main</item>

@@ -9,18 +9,21 @@ import android.widget.EditText
 import android.widget.ImageView
 
 class SearchActivity : AppCompatActivity() {
-    var inputText:String? = null
+    private var inputText:String? = null
+    private lateinit var editText: EditText
+    private lateinit var back:ImageView
+    private lateinit var clearButton:ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        val back = findViewById<ImageView>(R.id.back)
-        val clearButton = findViewById<ImageView>(R.id.clear)
-        var inputEditText = findViewById<EditText>(R.id.SearchForm)
+        back = findViewById(R.id.back)
+        clearButton = findViewById(R.id.clear)
+        editText = findViewById(R.id.SearchForm)
         back.setOnClickListener {
             finish()
         }
         clearButton.setOnClickListener {
-            inputEditText.setText("")
+            editText.setText("")
         }
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -34,13 +37,11 @@ class SearchActivity : AppCompatActivity() {
                 // empty
             }
         }
-        inputEditText.addTextChangedListener(simpleTextWatcher)
-        inputEditText.setText(inputText)
+        editText.addTextChangedListener(simpleTextWatcher)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        var inputEditText = findViewById<EditText>(R.id.SearchForm)
-        outState.putString(TEXT_SEARCH, inputEditText.text.toString())
+        outState.putString(TEXT_SEARCH, editText.text.toString())
         super.onSaveInstanceState(outState)
     }
 
