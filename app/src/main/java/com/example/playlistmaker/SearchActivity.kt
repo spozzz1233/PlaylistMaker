@@ -35,7 +35,6 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
-        inputEditText.setText(inputText)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
