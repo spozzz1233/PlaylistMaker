@@ -27,7 +27,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         share.setOnClickListener{
-            val message = "Привет, приходи к нам на курс 'https://practicum.yandex.ru/profile/android-developer/'"
+            val message = getString(R.string.share)
             val shareIntent = Intent(Intent.ACTION_SENDTO)
             shareIntent.data = Uri.parse("mailto:")
             shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("minulin.misha@bk.ru"))
@@ -41,13 +41,13 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
         support.setOnClickListener{
-            val message1 = "Сообщение разработчикам и разработчицам приложения Playlist Maker"
-            val message2 = "Спасибо разработчикам и разработчицам за крутое приложение!"
+            val message1 = getString(R.string.header)
+            val message2 = getString(R.string.mesage_support)
             val shareIntent = Intent(Intent.ACTION_SENDTO)
             shareIntent.data = Uri.parse("mailto:")
             shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("minulin.misha@bk.ru"))
-            shareIntent.putExtra(Intent.EXTRA_TEXT, message2)
             shareIntent.putExtra(Intent.EXTRA_TITLE, message1)
+            shareIntent.putExtra(Intent.EXTRA_TEXT, message2)
             startActivity(shareIntent)
         }
         terms.setOnClickListener{
