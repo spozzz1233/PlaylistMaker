@@ -10,6 +10,7 @@
     <string name="share">Привет, приходи к нам на курс \'https://practicum.yandex.ru/profile/android-developer/\'</string>
     <string name="header">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="mesage_support">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="mail" translatable="false">minulin.misha@bk.ru</string>
 
 
 </resources>
