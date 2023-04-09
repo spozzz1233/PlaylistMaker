@@ -63,5 +63,14 @@
         <item name="android:textColor">@color/text_main</item>
         <item name="android:drawableTint">@color/light_grey</item>
     </style>
+    <style name="title_search_card">
+        <item name="android:textColor">"@color/black"</item>
+    </style>
+    <style name="search_card">
+        <item name="android:textColor">"@color/light_grey"</item>
+    </style>
+    <style name="bg_search_card">
+        <item name="android:background">"@color/white"</item>
+    </style>
 
 </resources>
