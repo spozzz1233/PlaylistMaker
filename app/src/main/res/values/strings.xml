@@ -11,6 +11,9 @@
     <string name="header">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="mesage_support">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="mail" translatable="false">minulin.misha@bk.ru</string>
+    <string name="no_result">Ничего не нашлось</string>
+    <string name="enet_error">Проблемы со связь\n\nЗагрузка не удалась. Проверьте\nподключение к интернету</string>
+    <string name="update">Обновить</string>
 
 
 </resources>

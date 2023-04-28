@@ -7,12 +7,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import java.text.SimpleDateFormat
+import java.util.*
 
 class searchAdapter() : RecyclerView.Adapter<searchAdapter.SearchViewHolder>(){
 
-    //holder.itemView.track_name.text =
-//holder.itemView.trackTime.text =
-//holder.itemView.artistName.text =
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         var cardMusicView = LayoutInflater.from(parent.context).inflate(R.layout.card_music, parent, false)
         return SearchViewHolder(cardMusicView)
@@ -30,7 +29,7 @@ class searchAdapter() : RecyclerView.Adapter<searchAdapter.SearchViewHolder>(){
         fun bind(track: Track) {
             trackName.text = track.trackName
             artistName.text = track.artistName
-            trackTime.text = track.trackTime
+            trackTime.text =  SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
 
             Glide.with(itemView.context)
                 .load(track.artworkUrl100)
