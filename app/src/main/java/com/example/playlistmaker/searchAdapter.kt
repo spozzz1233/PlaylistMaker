@@ -1,16 +1,21 @@
 package com.example.playlistmaker
+import android.content.Context
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat
 import java.util.*
 
-class searchAdapter() : RecyclerView.Adapter<searchAdapter.SearchViewHolder>(){
+class searchAdapter(private val context: Context) : RecyclerView.Adapter<searchAdapter.SearchViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         var cardMusicView = LayoutInflater.from(parent.context).inflate(R.layout.card_music, parent, false)
@@ -18,7 +23,9 @@ class searchAdapter() : RecyclerView.Adapter<searchAdapter.SearchViewHolder>(){
     }
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         holder.bind(tracks[position])
-
+        Toast.makeText(context, "Сохранили значение ", Toast.LENGTH_SHORT).show()
+        saveHistoryTracks(context, historyTracks)
+        val HistoryTrackList = getHistoryTracks(context)
     }
     override fun getItemCount(): Int = tracks.size
     class SearchViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -39,5 +46,21 @@ class searchAdapter() : RecyclerView.Adapter<searchAdapter.SearchViewHolder>(){
                 .into(image)
 
         }
+
+    }
+    fun saveHistoryTracks(context: Context, historyTrackList: List<HistoryTrack>) {
+        val sharedPreferences = context.getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
+        val gson = Gson()
+        val trackListJson = gson.toJson(historyTrackList)
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putString("history_tracks", trackListJson)
+        editor.apply()
+    }
+    fun getHistoryTracks(context: Context): List<HistoryTrack> {
+        val sharedPreferences = context.getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
+        val trackListJson = sharedPreferences.getString("history_tracks", null)
+        val gson = Gson()
+        val trackListType = object : TypeToken<List<HistoryTrack>>() {}.type
+        return gson.fromJson<List<HistoryTrack>>(trackListJson, trackListType) ?: emptyList()
     }
 }

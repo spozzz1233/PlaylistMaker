@@ -33,6 +33,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var UpdateButton:Button
     lateinit var binding: ActivitySearchBinding
     lateinit var adapter: searchAdapter
+    lateinit var historyAdapter: HistoryAdapter
     lateinit var recyclerView: RecyclerView
     val retrofit = Retrofit.Builder()
         .baseUrl("https://itunes.apple.com")
@@ -49,6 +50,7 @@ class SearchActivity : AppCompatActivity() {
         UpdateButton = findViewById(R.id.update_button)
         noResultPlaceholderMessage = findViewById(R.id.no_result)
         initial()
+
         recyclerView = findViewById(R.id.recyclerViewSearch)
 
 
@@ -109,8 +111,11 @@ class SearchActivity : AppCompatActivity() {
     }
     private fun initial(){
         recyclerView = binding.recyclerViewSearch
-        adapter = searchAdapter()
+        adapter = searchAdapter(this)
         recyclerView.adapter = adapter
+        recyclerView = binding.recyclerViewSearch
+        historyAdapter = HistoryAdapter()
+        recyclerView.adapter = historyAdapter
     }
     private fun checkInternetConnection(): Boolean {
         val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
