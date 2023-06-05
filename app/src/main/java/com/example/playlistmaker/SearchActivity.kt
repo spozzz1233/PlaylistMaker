@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.content.Context
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.GridLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -32,9 +34,13 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var noResultPlaceholderMessage:FrameLayout
     private lateinit var UpdateButton:Button
     lateinit var binding: ActivitySearchBinding
-    lateinit var adapter: searchAdapter
+    lateinit var searchAdapter: searchAdapter
     lateinit var historyAdapter: HistoryAdapter
-    lateinit var recyclerView: RecyclerView
+    lateinit var recyclerViewSearch: RecyclerView
+    lateinit var recyclerViewHistory: RecyclerView
+    lateinit var removeHistory:Button
+    lateinit var history:LinearLayout
+    val musicHistory = MusicHistory(this)
     val retrofit = Retrofit.Builder()
         .baseUrl("https://itunes.apple.com")
         .addConverterFactory(GsonConverterFactory.create())
@@ -49,11 +55,12 @@ class SearchActivity : AppCompatActivity() {
         editText = findViewById(R.id.SearchForm)
         UpdateButton = findViewById(R.id.update_button)
         noResultPlaceholderMessage = findViewById(R.id.no_result)
+        recyclerViewSearch = findViewById(R.id.recyclerViewSearch)
+        recyclerViewHistory = findViewById(R.id.recyclerViewHistory)
+        removeHistory =findViewById(R.id.button_history)
+        history = findViewById(R.id.history)
         initial()
-
-        recyclerView = findViewById(R.id.recyclerViewSearch)
-
-
+        musicHistory.getHistoryTracks(this)
 
         editText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -74,12 +81,18 @@ class SearchActivity : AppCompatActivity() {
         UpdateButton.setOnClickListener {
             searchTrack()
         }
+        removeHistory.setOnClickListener{
+            historyTracks.clear()
+            musicHistory.clearSharedPreferences(this)
+            historyAdapter.notifyDataSetChanged()
+        }
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // empty
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
+                history.visibility=View.GONE
 
             }
             override fun afterTextChanged(s: Editable?) {
@@ -110,12 +123,12 @@ class SearchActivity : AppCompatActivity() {
         const val TEXT_SEARCH = "TEXT_SEARCH"
     }
     private fun initial(){
-        recyclerView = binding.recyclerViewSearch
-        adapter = searchAdapter(this)
-        recyclerView.adapter = adapter
-        recyclerView = binding.recyclerViewSearch
+        recyclerViewSearch = binding.recyclerViewSearch
+        searchAdapter = searchAdapter(this)
+        recyclerViewSearch.adapter = searchAdapter
+        recyclerViewHistory =binding.recyclerViewHistory
         historyAdapter = HistoryAdapter()
-        recyclerView.adapter = historyAdapter
+        recyclerViewHistory.adapter = historyAdapter
     }
     private fun checkInternetConnection(): Boolean {
         val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -129,13 +142,15 @@ class SearchActivity : AppCompatActivity() {
                 if (response.code() == 200) {
                     tracks.clear()
                     if (response.body()?.results?.isNotEmpty() == true) {
-                        recyclerView.visibility = View.VISIBLE
+                        recyclerViewSearch.visibility = View.VISIBLE
                         tracks.addAll(response.body()?.results!!)
-                        adapter.notifyDataSetChanged()
+                        searchAdapter.notifyDataSetChanged()
 
                     }
                     if (tracks.isEmpty()) {
                         noResultPlaceholderMessage.visibility=View.VISIBLE
+                        history.visibility=View.GONE
+
                     }
 
                 }
@@ -145,6 +160,7 @@ class SearchActivity : AppCompatActivity() {
                 if (!checkInternetConnection()) {
                     val noInternetPlaceholderMessage = findViewById<View>(R.id.no_internet)
                     noInternetPlaceholderMessage.visibility = View.VISIBLE
+                    history.visibility=View.GONE
                 }
 
 

@@ -1,4 +1,5 @@
 package com.example.playlistmaker
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,23 +11,17 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HistoryAdapter: RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+class HistoryAdapter(): RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         var cardMusicView = LayoutInflater.from(parent.context).inflate(R.layout.card_music, parent, false)
         return HistoryViewHolder(cardMusicView)
     }
 
-    override fun getItemCount(): Int = tracks.size
+    override fun getItemCount(): Int = historyTracks.size
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
-        holder.bind(tracks[position])
-        val selectedTrack = historyTracks[position]
-        val historyItem = HistoryTrack(
-            trackName = selectedTrack.trackName,
-            artistName = selectedTrack.artistName,
-            trackTimeMillis = selectedTrack.trackTimeMillis,
-            artworkUrl100 = selectedTrack.artworkUrl100)
+        holder.bind(historyTracks[position])
     }
 
     class HistoryViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -34,7 +29,7 @@ class HistoryAdapter: RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
         private val artistName: TextView = itemView.findViewById(R.id.artist_Name)
         private val trackTime: TextView = itemView.findViewById(R.id.track_Time)
         private val image: ImageView = itemView.findViewById(R.id.image)
-        fun bind(track: Track) {
+        fun bind(track: HistoryTrack) {
             trackName.text = track.trackName
             artistName.text = track.artistName
             trackTime.text =  SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
