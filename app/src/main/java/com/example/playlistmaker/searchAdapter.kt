@@ -30,7 +30,6 @@ class searchAdapter(private val context: Context) : RecyclerView.Adapter<searchA
         val track = tracks[position]
         holder.itemView.setOnClickListener {
             musicHistory.saveHistoryTrack(track)
-            musicHistory.getHistoryTracks(context)
         }
     }
 
@@ -49,9 +48,9 @@ class searchAdapter(private val context: Context) : RecyclerView.Adapter<searchA
 
             Glide.with(itemView.context)
                 .load(track.artworkUrl100)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
-                .transform(RoundedCorners(2))
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder)
+                .transform(RoundedCorners(itemView.context.resources.getDimensionPixelSize(R.dimen.rounded_corners)))
                 .into(image)
         }
     }

@@ -36,9 +36,9 @@ class HistoryAdapter(): RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>()
 
             Glide.with(itemView.context)
                 .load(track.artworkUrl100)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
-                .transform(RoundedCorners(2))
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder)
+                .transform(RoundedCorners(itemView.context.resources.getDimensionPixelSize(R.dimen.rounded_corners)))
                 .into(image)
 
         }

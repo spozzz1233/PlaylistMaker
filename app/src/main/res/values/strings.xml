@@ -16,6 +16,7 @@
     <string name="update">Обновить</string>
     <string name="history_text">Вы искали</string>
     <string name="Update_history">Очистить историю</string>
+    <string name="histry_placeholder">Здесь мы напомним, что вы искали</string>
 
 
 </resources>

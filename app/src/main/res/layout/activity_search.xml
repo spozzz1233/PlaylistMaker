@@ -55,7 +55,7 @@
             android:visibility="gone"
             style="@style/search_form"
              />
-        
+
     </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -156,7 +156,8 @@
             android:layout_weight="1"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_marginTop="20dp"
-            tools:listitem="@layout/card_music" />
+            tools:listitem="@layout/card_music"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/button_history"
@@ -165,7 +166,10 @@
             android:layout_height="wrap_content"
             android:text="@string/Update_history"
             android:layout_marginTop="24dp"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+
 
     </LinearLayout>
 

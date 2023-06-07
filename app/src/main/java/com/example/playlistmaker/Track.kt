@@ -9,8 +9,7 @@ data class Track(
 )
 
 
-var tracks = ArrayList<Track>(
-)
+var tracks = ArrayList<Track>()
 
 data class HistoryTrack(
     val trackName: String, // Название композиции

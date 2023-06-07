@@ -46,6 +46,7 @@ class SearchActivity : AppCompatActivity() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     val searchApi = retrofit.create(searchApi::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
@@ -57,14 +58,16 @@ class SearchActivity : AppCompatActivity() {
         noResultPlaceholderMessage = findViewById(R.id.no_result)
         recyclerViewSearch = findViewById(R.id.recyclerViewSearch)
         recyclerViewHistory = findViewById(R.id.recyclerViewHistory)
-        removeHistory =findViewById(R.id.button_history)
+        removeHistory = findViewById(R.id.button_history)
         history = findViewById(R.id.history)
         initial()
-        musicHistory.getHistoryTracks(this)
+        historyVisible()
+        editText.setOnFocusChangeListener{ view, hasFocus ->
 
+        }
         editText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (editText.text.isNotEmpty()){
+                if (editText.text.isNotEmpty()) {
                     searchTrack()
                 }
                 true
@@ -81,26 +84,29 @@ class SearchActivity : AppCompatActivity() {
         UpdateButton.setOnClickListener {
             searchTrack()
         }
-        removeHistory.setOnClickListener{
-            historyTracks.clear()
+        removeHistory.setOnClickListener {
             musicHistory.clearSharedPreferences(this)
+            recyclerViewHistory.visibility = View.GONE
+            removeHistory.visibility = View.GONE
             historyAdapter.notifyDataSetChanged()
         }
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // empty
             }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
-                history.visibility=View.GONE
-
+                history.visibility = View.GONE
             }
+
             override fun afterTextChanged(s: Editable?) {
                 // empty
             }
         }
         editText.addTextChangedListener(simpleTextWatcher)
     }
+
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString(TEXT_SEARCH, editText.text.toString())
@@ -110,8 +116,8 @@ class SearchActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         inputText = savedInstanceState.getString(TEXT_SEARCH)
-
     }
+
     private fun clearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             View.GONE
@@ -119,52 +125,61 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
+
     companion object {
         const val TEXT_SEARCH = "TEXT_SEARCH"
     }
-    private fun initial(){
+
+    private fun initial() {
         recyclerViewSearch = binding.recyclerViewSearch
         searchAdapter = searchAdapter(this)
         recyclerViewSearch.adapter = searchAdapter
-        recyclerViewHistory =binding.recyclerViewHistory
+        recyclerViewHistory = binding.recyclerViewHistory
         historyAdapter = HistoryAdapter()
         recyclerViewHistory.adapter = historyAdapter
     }
+
     private fun checkInternetConnection(): Boolean {
-        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetworkInfo = connectivityManager.activeNetworkInfo
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
-    private fun searchTrack(){
+
+    private fun searchTrack() {
         searchApi.search(editText.text.toString()).enqueue(object :
-            Callback<tracksResponse>{
-            override fun onResponse(call: Call<tracksResponse>,response: Response<tracksResponse>) {
+            Callback<tracksResponse> {
+            override fun onResponse(call: Call<tracksResponse>, response: Response<tracksResponse>) {
                 if (response.code() == 200) {
                     tracks.clear()
                     if (response.body()?.results?.isNotEmpty() == true) {
                         recyclerViewSearch.visibility = View.VISIBLE
                         tracks.addAll(response.body()?.results!!)
                         searchAdapter.notifyDataSetChanged()
-
                     }
                     if (tracks.isEmpty()) {
-                        noResultPlaceholderMessage.visibility=View.VISIBLE
-                        history.visibility=View.GONE
-
+                        noResultPlaceholderMessage.visibility = View.VISIBLE
+                        history.visibility = View.GONE
                     }
-
                 }
-
             }
+
             override fun onFailure(call: Call<tracksResponse>, t: Throwable) {
                 if (!checkInternetConnection()) {
                     val noInternetPlaceholderMessage = findViewById<View>(R.id.no_internet)
                     noInternetPlaceholderMessage.visibility = View.VISIBLE
-                    history.visibility=View.GONE
+                    history.visibility = View.GONE
                 }
-
-
             }
         })
+    }
+    private fun historyVisible(){
+        if(historyTracks.isNotEmpty()){
+            recyclerViewHistory.visibility = View.VISIBLE
+            removeHistory.visibility = View.VISIBLE
+        }
+        else{
+            recyclerViewHistory.visibility = View.GONE
+            removeHistory.visibility = View.GONE
+        }
     }
 }

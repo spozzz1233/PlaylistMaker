@@ -14,11 +14,12 @@ class MainActivity : AppCompatActivity() {
         val search = findViewById<Button>(R.id.search)
         val media = findViewById<Button>(R.id.media)
         val settings = findViewById<Button>(R.id.settings)
+        val musicHistory = MusicHistory(this)
+        musicHistory.getHistory()
         search.setOnClickListener {
             val searchIntent = Intent(this,SearchActivity::class.java)
             startActivity(searchIntent)
         }
-
         media.setOnClickListener {
             val mediatekaIntent = Intent(this,MediatekaActivity::class.java)
             startActivity(mediatekaIntent)

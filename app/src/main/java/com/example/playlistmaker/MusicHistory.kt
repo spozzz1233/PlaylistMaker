@@ -12,53 +12,50 @@ class MusicHistory(private val context: Context) {
     private lateinit var sharedPreferences: SharedPreferences
     private val gson = Gson()
 
-    fun getHistoryTracks(context: Context): List<HistoryTrack> {
-        sharedPreferences = context.getSharedPreferences("SaveHistory", Context.MODE_PRIVATE)
-        val jsonHistory = sharedPreferences.getString("history", null)
-        val type = object : TypeToken<List<HistoryTrack>>() {}.type
-        val historyTracks = gson.fromJson<List<HistoryTrack>>(jsonHistory, type) ?: emptyList()
-        Log.d(TAG, "List size: ${historyTracks.size}")
-        return historyTracks
-    }
-
     fun clearSharedPreferences(context: Context) {
         sharedPreferences = context.getSharedPreferences("SaveHistory", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.remove("history")
         editor.apply()
+        historyTracks.clear()
         Log.d(TAG, "History cleared")
     }
     fun saveHistoryTrack(track: Track) {
-        val sharedPreferences: SharedPreferences = context.getSharedPreferences("SaveHistory", Context.MODE_PRIVATE)
+        sharedPreferences = context.getSharedPreferences("SaveHistory", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
+        val existingTrackIndex = historyTracks.indexOfFirst { it.trackName == track.trackName && it.artistName == track.artistName}
+        if (existingTrackIndex != -1) {
 
-        val jsonHistory = sharedPreferences.getString("history", null)
-        val historyList = if (jsonHistory != null) {
-            val type = object : TypeToken<ArrayList<Track>>() {}.type
-            Gson().fromJson<ArrayList<Track>>(jsonHistory, type)
+            val existingTrack = historyTracks.removeAt(existingTrackIndex)
+            historyTracks.add(0, existingTrack)
         } else {
-            ArrayList()
+            val historyTrack = HistoryTrack(
+                track.trackName,
+                track.artistName,
+                track.trackTimeMillis,
+                track.artworkUrl100
+            )
+            historyTracks.add(0, historyTrack)
         }
 
-        historyList.add(track)
-
-
-        if (historyList.size > 10) {
-            historyList.removeAt(0)
+        if (historyTracks.size >= 10) {
+            historyTracks.removeAt(0)
         }
 
-        val updatedJsonHistory = Gson().toJson(historyList)
+        val updatedJsonHistory = Gson().toJson(historyTracks)
         editor.putString("history", updatedJsonHistory)
         editor.apply()
 
-
-        val historyTrack = HistoryTrack(
-            track.trackName,
-            track.artistName,
-            track.trackTimeMillis.toInt(),
-            track.artworkUrl100
-        )
-        historyTracks.add(0, historyTrack)
+    }
+    fun getHistory() {
+        sharedPreferences = context.getSharedPreferences("SaveHistory", Context.MODE_PRIVATE)
+        val jsonHistory = sharedPreferences.getString("history", null)
+        if (jsonHistory != null) {
+            val type = object : TypeToken<ArrayList<HistoryTrack>>() {}.type
+            val loadedTracks: ArrayList<HistoryTrack> = gson.fromJson(jsonHistory, type)
+            historyTracks.clear()
+            historyTracks.addAll(loadedTracks)
+        }
     }
 
 }

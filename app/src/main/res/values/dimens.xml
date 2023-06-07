@@ -4,4 +4,5 @@
     <dimen name="start_main">17dp</dimen>
     <dimen name="end_main">14dp</dimen>
     <dimen name="icon_radius">16dp</dimen>
+    <dimen name="rounded_corners">2dp</dimen>
 </resources>
