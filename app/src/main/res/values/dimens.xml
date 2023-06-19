@@ -5,4 +5,5 @@
     <dimen name="end_main">14dp</dimen>
     <dimen name="icon_radius">16dp</dimen>
     <dimen name="rounded_corners">2dp</dimen>
+    <dimen name="textSize_track">13sp</dimen>
 </resources>

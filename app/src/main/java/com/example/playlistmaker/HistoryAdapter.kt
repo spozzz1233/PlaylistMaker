@@ -1,5 +1,7 @@
 package com.example.playlistmaker
+
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,28 +13,42 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HistoryAdapter(): RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+class HistoryAdapter() : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
-        var cardMusicView = LayoutInflater.from(parent.context).inflate(R.layout.card_music, parent, false)
+        val cardMusicView = LayoutInflater.from(parent.context).inflate(R.layout.card_music, parent, false)
         return HistoryViewHolder(cardMusicView)
     }
 
     override fun getItemCount(): Int = historyTracks.size
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
-        holder.bind(historyTracks[position])
+        val track = historyTracks[position]
+        holder.bind(track)
+        holder.itemView.setOnClickListener {
+            val songActivity = Intent(holder.itemView.context, SongActivity::class.java)
+            songActivity.putExtra("trackName", track.trackName)
+            songActivity.putExtra("artistName", track.artistName)
+            songActivity.putExtra("trackTimeMillis", track.trackTimeMillis)
+            songActivity.putExtra("artworkUrl100", track.artworkUrl100)
+            songActivity.putExtra("collectionName", track.collectionName)
+            songActivity.putExtra("releaseDate", track.releaseDate)
+            songActivity.putExtra("primaryGenreName", track.primaryGenreName)
+            songActivity.putExtra("country", track.country)
+            holder.itemView.context.startActivity(songActivity)
+        }
     }
 
-    class HistoryViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class HistoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val trackName: TextView = itemView.findViewById(R.id.track_name)
         private val artistName: TextView = itemView.findViewById(R.id.artist_Name)
         private val trackTime: TextView = itemView.findViewById(R.id.track_Time)
         private val image: ImageView = itemView.findViewById(R.id.image)
+
         fun bind(track: HistoryTrack) {
             trackName.text = track.trackName
             artistName.text = track.artistName
-            trackTime.text =  SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+            trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
 
             Glide.with(itemView.context)
                 .load(track.artworkUrl100)
@@ -40,9 +56,6 @@ class HistoryAdapter(): RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>()
                 .error(R.drawable.placeholder)
                 .transform(RoundedCorners(itemView.context.resources.getDimensionPixelSize(R.dimen.rounded_corners)))
                 .into(image)
-
         }
-
     }
 }
-

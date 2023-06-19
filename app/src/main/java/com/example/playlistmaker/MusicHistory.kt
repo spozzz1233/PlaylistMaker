@@ -33,7 +33,11 @@ class MusicHistory(private val context: Context) {
                 track.trackName,
                 track.artistName,
                 track.trackTimeMillis,
-                track.artworkUrl100
+                track.artworkUrl100,
+                track.collectionName,
+                track.releaseDate,
+                track.primaryGenreName,
+                track.country
             )
             historyTracks.add(0, historyTrack)
         }

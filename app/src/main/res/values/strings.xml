@@ -17,6 +17,11 @@
     <string name="history_text">Вы искали</string>
     <string name="Update_history">Очистить историю</string>
     <string name="histry_placeholder">Здесь мы напомним, что вы искали</string>
+    <string name="country">Страна</string>
+    <string name="Genre">Жанр</string>
+    <string name="Year">Год</string>
+    <string name="Album">Альбом</string>
+    <string name="Duration">Длительность</string>
 
 
 </resources>
