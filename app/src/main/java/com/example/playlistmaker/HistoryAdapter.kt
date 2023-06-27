@@ -13,20 +13,19 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.text.SimpleDateFormat
 import java.util.*
 
-class searchAdapter(private val context: Context) : RecyclerView.Adapter<searchAdapter.SearchViewHolder>() {
+class HistoryAdapter() : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
-    private val musicHistory = MusicHistory(context)
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val cardMusicView = LayoutInflater.from(parent.context).inflate(R.layout.card_music, parent, false)
-        return SearchViewHolder(cardMusicView)
+        return HistoryViewHolder(cardMusicView)
     }
 
-    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
-        holder.bind(tracks[position])
-        val track = tracks[position]
+    override fun getItemCount(): Int = historyTracks.size
+
+    override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
+        val track = historyTracks[position]
+        holder.bind(track)
         holder.itemView.setOnClickListener {
-            musicHistory.saveHistoryTrack(track)
             val songActivity = Intent(holder.itemView.context, SongActivity::class.java)
             songActivity.putExtra("trackName", track.trackName)
             songActivity.putExtra("artistName", track.artistName)
@@ -40,15 +39,13 @@ class searchAdapter(private val context: Context) : RecyclerView.Adapter<searchA
         }
     }
 
-    override fun getItemCount(): Int = tracks.size
-
-    class SearchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class HistoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val trackName: TextView = itemView.findViewById(R.id.track_name)
         private val artistName: TextView = itemView.findViewById(R.id.artist_Name)
         private val trackTime: TextView = itemView.findViewById(R.id.track_Time)
         private val image: ImageView = itemView.findViewById(R.id.image)
 
-        fun bind(track: Track) {
+        fun bind(track: HistoryTrack) {
             trackName.text = track.trackName
             artistName.text = track.artistName
             trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)

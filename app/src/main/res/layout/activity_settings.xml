@@ -24,19 +24,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp">
-        <TextView
-
-            style="@style/Text"
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/themeSwitcher"
             android:text="@string/dark_theme"
-            />
-        <Switch
-            android:id="@+id/darkTheme"
-            android:layout_width="48dp"
-            android:layout_height="60dp"
-            android:layout_gravity="end"
+            style="@style/Text"
             android:layout_marginEnd="18dp"
-            style="@style/Switch"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </FrameLayout>
 
     <FrameLayout
