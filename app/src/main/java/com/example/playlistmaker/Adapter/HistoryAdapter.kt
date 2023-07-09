@@ -1,6 +1,5 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.Adapter
 
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +9,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.HistoryTrack
+import com.example.playlistmaker.R
+import com.example.playlistmaker.Activity.SongActivity
+import com.example.playlistmaker.historyTracks
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,6 +38,7 @@ class HistoryAdapter() : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>(
             songActivity.putExtra("releaseDate", track.releaseDate)
             songActivity.putExtra("primaryGenreName", track.primaryGenreName)
             songActivity.putExtra("country", track.country)
+            songActivity.putExtra("trackUrl", track.previewUrl)
             holder.itemView.context.startActivity(songActivity)
         }
     }

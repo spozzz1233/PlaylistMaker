@@ -2,28 +2,30 @@ package com.example.playlistmaker
 
 
 data class Track(
-    val trackName: String, // Название композиции
-    val artistName: String, // Имя исполнителя
-    val trackTimeMillis: Int, // Продолжительность трека
+    val trackName: String,
+    val artistName: String,
+    val trackTimeMillis: Int,
     val artworkUrl100: String,
     val collectionName: String,
     val releaseDate: String,
     val primaryGenreName: String,
-    val country: String// Ссылка на изображение обложки
+    val country: String,
+    val previewUrl: String
 )
 
 
 var tracks = ArrayList<Track>()
 
 data class HistoryTrack(
-    val trackName: String, // Название композиции
-    val artistName: String, // Имя исполнителя
-    val trackTimeMillis: Int, // Продолжительность трека
+    val trackName: String,
+    val artistName: String,
+    val trackTimeMillis: Int,
     val artworkUrl100: String,
     val collectionName: String,
     val releaseDate: String,
     val primaryGenreName: String,
-    val country: String// Ссылка на изображение обложки
+    val country: String,
+    val previewUrl: String
 )
 
 var historyTracks = ArrayList<HistoryTrack>()
