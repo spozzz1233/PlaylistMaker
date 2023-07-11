@@ -92,6 +92,7 @@ class SongActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.release()
+        handler.removeCallbacksAndMessages(null)
     }
     companion object {
         private const val STATE_DEFAULT = 0
