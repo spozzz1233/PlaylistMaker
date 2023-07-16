@@ -1,11 +1,11 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.Activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import android.widget.Toast
+import com.example.playlistmaker.MusicHistory
+import com.example.playlistmaker.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,15 +17,15 @@ class MainActivity : AppCompatActivity() {
         val musicHistory = MusicHistory(this)
         musicHistory.getHistory()
         search.setOnClickListener {
-            val searchIntent = Intent(this,SearchActivity::class.java)
+            val searchIntent = Intent(this, SearchActivity::class.java)
             startActivity(searchIntent)
         }
         media.setOnClickListener {
-            val mediatekaIntent = Intent(this,MediatekaActivity::class.java)
+            val mediatekaIntent = Intent(this, MediatekaActivity::class.java)
             startActivity(mediatekaIntent)
         }
         settings.setOnClickListener {
-            val settingsIntent = Intent(this,SettingsActivity::class.java)
+            val settingsIntent = Intent(this, SettingsActivity::class.java)
             startActivity(settingsIntent)
         }
 

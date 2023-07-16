@@ -2,23 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/search"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    style="@style/search">
+    android:orientation="vertical">
+
     <Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/back"
-            style="@style/toolbar_image"
-            />
+            style="@style/toolbar_image" />
+
         <TextView
-            android:text="@string/search"
             style="@style/toolbar_text"
-            />
+            android:text="@string/search" />
     </Toolbar>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,33 +29,31 @@
 
         <EditText
             android:id="@+id/SearchForm"
+            style="@style/search_form"
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
             android:background="@drawable/rounded_edittext"
             android:drawableStart="@drawable/small_search"
             android:drawablePadding="8dp"
             android:hint="@string/search"
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:padding="8dp"
             android:paddingStart="12dp"
             android:paddingEnd="32dp"
-            style="@style/search_form"
-            />
+            android:singleLine="true" />
 
 
         <ImageView
             android:id="@+id/clear"
+            style="@style/search_form"
             android:layout_width="12dp"
             android:layout_height="12dp"
             android:layout_gravity="center|end"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="12dp"
             android:src="@drawable/ic_menu_close_clear_cancel"
-            android:visibility="gone"
-            style="@style/search_form"
-             />
+            android:visibility="gone" />
 
     </FrameLayout>
 
@@ -62,18 +61,18 @@
         android:id="@+id/recyclerViewSearch"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:visibility="gone"
-        />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
     <FrameLayout
         android:id="@+id/no_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center"
         android:layout_marginTop="110dp"
+        android:orientation="horizontal"
         android:visibility="gone"
-        tools:visibility= "gone">
+        tools:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -86,28 +85,28 @@
             style="@style/all_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text = "@string/no_result"
             android:layout_gravity="bottom|center"
             android:layout_marginTop="140dp"
-            android:textStyle="bold"
-            />
+            android:text="@string/no_result"
+            android:textStyle="bold" />
     </FrameLayout>
+
     <LinearLayout
         android:id="@+id/no_internet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
         android:layout_gravity="center"
         android:layout_marginTop="110dp"
+        android:gravity="center"
+        android:orientation="vertical"
         android:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
             android:src="@drawable/no_internet"
-            app:iconGravity="textStart"
-            android:layout_gravity="top|center" />
+            app:iconGravity="textStart" />
 
         <TextView
             android:id="@+id/no_inet_placeholder"
@@ -120,13 +119,13 @@
             android:textStyle="bold" />
 
         <Button
-            style="@style/button_placeholder"
             android:id="@+id/update_button"
+            style="@style/button_placeholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/update"
+            android:layout_gravity="bottom|center"
             android:layout_marginTop="25dp"
-            android:layout_gravity="bottom|center" />
+            android:text="@string/update" />
 
     </LinearLayout>
 
@@ -135,43 +134,52 @@
         android:id="@+id/history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:visibility="visible">
 
         <TextView
             style="@style/all_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/history_text"
             android:layout_marginTop="30dp"
-            android:textStyle="bold"
+            android:text="@string/history_text"
             android:textAlignment="center"
-            android:textSize="19sp" />
+            android:textSize="19sp"
+            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewHistory"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_marginTop="20dp"
-            tools:listitem="@layout/card_music"
-            android:visibility="gone"/>
+            android:layout_weight="1"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/card_music" />
 
         <Button
             android:id="@+id/button_history"
             style="@style/button_placeholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Update_history"
-            android:layout_marginTop="24dp"
             android:layout_gravity="center"
-            android:visibility="gone"/>
-
+            android:layout_marginTop="24dp"
+            android:text="@string/Update_history"
+            android:visibility="gone" />
 
 
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="140dp"
+        android:baselineAligned="false"
+        android:indeterminateTint="@color/YP_Blue"
+        android:visibility="gone" />
 
 
 </LinearLayout>

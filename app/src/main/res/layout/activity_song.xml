@@ -9,7 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SongActivity"
+    tools:context=".Activity.SongActivity"
     style="@style/search">
 
     <androidx.constraintlayout.widget.Guideline
@@ -84,7 +84,7 @@
         app:layout_constraintStart_toEndOf="@+id/interface_left_border"
         app:layout_constraintEnd_toStartOf="@+id/interface_right_border"
         android:layout_marginTop="12dp"
-        tools:text="0:30" />
+        android:text="00:00" />
 
 
     <TextView
