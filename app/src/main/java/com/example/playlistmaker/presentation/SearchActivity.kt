@@ -1,4 +1,4 @@
-package com.example.playlistmaker.Activity
+package com.example.playlistmaker.presentation
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -20,19 +20,21 @@ import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.Adapter.HistoryAdapter
 import com.example.playlistmaker.Adapter.searchAdapter
-import com.example.playlistmaker.MusicHistory
+import com.example.playlistmaker.util.MusicHistory
 import com.example.playlistmaker.R
+import com.example.playlistmaker.api.SearchApi
+import com.example.playlistmaker.api.tracksResponse
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.historyTracks
-import com.example.playlistmaker.tracks
-import com.example.playlistmaker.tracksResponse
+import com.example.playlistmaker.model.historyTracks
+import com.example.playlistmaker.domain.CallBack
+import com.example.playlistmaker.model.tracks
 import retrofit2.Call
 import retrofit2.Callback
-import retrofit2.Retrofit
 import retrofit2.Response
+import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity() , CallBack {
 
     private lateinit var progressBar:ProgressBar
     private var inputText:String? = null
@@ -49,11 +51,12 @@ class SearchActivity : AppCompatActivity() {
     lateinit var removeHistory:Button
     lateinit var history:LinearLayout
     val musicHistory = MusicHistory(this)
+
     val retrofit = Retrofit.Builder()
         .baseUrl("https://itunes.apple.com")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-    val searchApi = retrofit.create(com.example.playlistmaker.searchApi::class.java)
+    val searchApi = retrofit.create(SearchApi::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +73,9 @@ class SearchActivity : AppCompatActivity() {
         removeHistory = findViewById(R.id.button_history)
         history = findViewById(R.id.history)
         progressBar =findViewById(R.id.progressBar)
+
+        val searchString = editText.text.toString()
+
 
         initial()
         historyVisible()
@@ -167,8 +173,52 @@ class SearchActivity : AppCompatActivity() {
         val activeNetworkInfo = connectivityManager.activeNetworkInfo
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
+    private fun history(){
+        if(historyTracks.isNotEmpty()){
+            recyclerViewHistory.visibility = View.VISIBLE
+            removeHistory.visibility = View.VISIBLE
+        }
+        else{
+            recyclerViewHistory.visibility = View.GONE
+            removeHistory.visibility = View.GONE
+        }
+    }
 
-    private fun searchTrack() {
+
+    override fun recyclerViewSearchGone() {
+        recyclerViewSearch.visibility = View.GONE
+    }
+
+    override fun recyclerViewSearchVisible() {
+        recyclerViewSearch.visibility = View.VISIBLE
+    }
+
+    override fun progressBarGone() {
+        progressBar.visibility = View.GONE
+    }
+
+    override fun progressBarVisible() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    override fun noResultVisible() {
+        noResultPlaceholderMessage.visibility = View.VISIBLE
+    }
+
+    override fun historyVisible() {
+        history.visibility = View.VISIBLE
+    }
+
+    override fun historyGone() {
+        history.visibility = View.GONE
+    }
+
+    override fun noInternetVisible() {
+        val noInternetPlaceholderMessage = findViewById<View>(R.id.no_internet)
+        noInternetPlaceholderMessage.visibility = View.VISIBLE
+    }
+
+        private fun searchTrack() {
         if (editText.text.isNotEmpty()) {
             progressBar.visibility = View.VISIBLE
             recyclerViewSearch.visibility = View.GONE
@@ -204,15 +254,9 @@ class SearchActivity : AppCompatActivity() {
             })
         }
     }
-    private fun historyVisible(){
-        if(historyTracks.isNotEmpty()){
-            recyclerViewHistory.visibility = View.VISIBLE
-            removeHistory.visibility = View.VISIBLE
-        }
-        else{
-            recyclerViewHistory.visibility = View.GONE
-            removeHistory.visibility = View.GONE
-        }
-    }
+
+
+
+
 
 }

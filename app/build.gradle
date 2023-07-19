@@ -7,16 +7,13 @@ plugins {
 android {
     namespace 'com.example.playlistmaker'
     compileSdk 33
-    buildFeatures {
-        viewBinding true
-    }
     defaultConfig {
         applicationId "com.example.playlistmaker"
         minSdk 24
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
+        viewBinding.enabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

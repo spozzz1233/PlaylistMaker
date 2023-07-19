@@ -1,8 +1,11 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.util
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import com.example.playlistmaker.model.HistoryTrack
+import com.example.playlistmaker.model.Track
+import com.example.playlistmaker.model.historyTracks
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.ArrayList

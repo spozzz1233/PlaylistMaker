@@ -1,10 +1,10 @@
-package com.example.playlistmaker.Activity
+package com.example.playlistmaker.presentation
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import com.example.playlistmaker.MusicHistory
+import com.example.playlistmaker.util.MusicHistory
 import com.example.playlistmaker.R
 
 class MainActivity : AppCompatActivity() {
