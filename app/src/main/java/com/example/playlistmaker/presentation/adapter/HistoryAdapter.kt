@@ -1,4 +1,4 @@
-package com.example.playlistmaker.Adapter
+package com.example.playlistmaker.presentation.adapter
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -9,11 +9,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.HistoryTrack
+import com.example.playlistmaker.domain.model.HistoryTrack
 import com.example.playlistmaker.R
-import com.example.playlistmaker.Activity.SongActivity
-import com.example.playlistmaker.Debounce
-import com.example.playlistmaker.historyTracks
+import com.example.playlistmaker.presentation.SongActivity
+import com.example.playlistmaker.util.Debounce
+import com.example.playlistmaker.domain.model.historyTracks
 import java.text.SimpleDateFormat
 import java.util.*
 

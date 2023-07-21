@@ -1,11 +1,7 @@
-package com.example.playlistmaker.api
+package com.example.playlistmaker.data.api
 
-import android.view.View
-import com.example.playlistmaker.R
-import com.example.playlistmaker.model.tracks
+import com.example.playlistmaker.data.dto.tracksResponse
 import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 

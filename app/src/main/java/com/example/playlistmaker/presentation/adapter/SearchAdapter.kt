@@ -1,4 +1,4 @@
-package com.example.playlistmaker.Adapter
+package com.example.playlistmaker.presentation.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -14,8 +14,8 @@ import com.example.playlistmaker.util.MusicHistory
 import com.example.playlistmaker.R
 import com.example.playlistmaker.presentation.SongActivity
 import com.example.playlistmaker.util.Debounce
-import com.example.playlistmaker.model.Track
-import com.example.playlistmaker.model.tracks
+import com.example.playlistmaker.domain.model.Track
+import com.example.playlistmaker.domain.model.tracks
 import java.text.SimpleDateFormat
 import java.util.*
 

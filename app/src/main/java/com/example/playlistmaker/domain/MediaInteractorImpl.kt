@@ -2,28 +2,28 @@ package com.example.playlistmaker.domain
 
 import com.example.playlistmaker.data.MediaRepository
 
-class MediaUseCase(private val mediaRepository: MediaRepository) {
-    fun preparePlayer(trackUrl: String, onPrepared: () -> Unit) {
+class MediaInteractorImpl(private val mediaRepository: MediaRepository) : MediaInteractor {
+    override fun preparePlayer(trackUrl: String, onPrepared: () -> Unit) {
         mediaRepository.preparePlayer(trackUrl, onPrepared)
     }
 
-    fun startPlayer(onPlaybackStarted: () -> Unit) {
+    override fun startPlayer(onPlaybackStarted: () -> Unit) {
         mediaRepository.startPlayer(onPlaybackStarted)
     }
 
-    fun pausePlayer(onPlaybackPaused: () -> Unit) {
+    override fun pausePlayer(onPlaybackPaused: () -> Unit) {
         mediaRepository.pausePlayer(onPlaybackPaused)
     }
 
-    fun stopPlayer() {
+    override fun stopPlayer() {
         mediaRepository.stopPlayer()
     }
 
-    fun isPlaying(): Boolean {
+    override fun isPlaying(): Boolean {
         return mediaRepository.isPlaying()
     }
 
-    fun getCurrentPosition(): Int {
+    override fun getCurrentPosition(): Int {
         return mediaRepository.getCurrentPosition()
     }
 }
