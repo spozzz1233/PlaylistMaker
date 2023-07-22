@@ -1,6 +1,7 @@
 package com.example.playlistmaker.data
 
 import android.media.MediaPlayer
+import com.example.playlistmaker.domain.MediaRepository
 
 class MediaRepositoryImpl : MediaRepository {
     private var mediaPlayer: MediaPlayer? = null

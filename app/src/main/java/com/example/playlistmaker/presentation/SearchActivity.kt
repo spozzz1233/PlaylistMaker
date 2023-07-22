@@ -18,38 +18,37 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.Adapter.HistoryAdapter
-import com.example.playlistmaker.Adapter.searchAdapter
+import com.example.playlistmaker.presentation.adapter.HistoryAdapter
+import com.example.playlistmaker.presentation.adapter.searchAdapter
 import com.example.playlistmaker.util.MusicHistory
 import com.example.playlistmaker.R
-import com.example.playlistmaker.api.SearchApi
-import com.example.playlistmaker.api.tracksResponse
+import com.example.playlistmaker.data.api.SearchApi
+import com.example.playlistmaker.data.dto.tracksResponse
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.model.historyTracks
-import com.example.playlistmaker.domain.CallBack
-import com.example.playlistmaker.model.tracks
+import com.example.playlistmaker.domain.model.historyTracks
+import com.example.playlistmaker.domain.model.tracks
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class SearchActivity : AppCompatActivity() , CallBack {
+class SearchActivity : AppCompatActivity() {
 
-    private lateinit var progressBar:ProgressBar
-    private var inputText:String? = null
+    private lateinit var progressBar: ProgressBar
+    private var inputText: String? = null
     private lateinit var editText: EditText
-    private lateinit var back:ImageView
-    private lateinit var clearButton:ImageView
-    private lateinit var noResultPlaceholderMessage:FrameLayout
-    private lateinit var UpdateButton:Button
+    private lateinit var back: ImageView
+    private lateinit var clearButton: ImageView
+    private lateinit var noResultPlaceholderMessage: FrameLayout
+    private lateinit var UpdateButton: Button
     lateinit var binding: ActivitySearchBinding
     lateinit var searchAdapter: searchAdapter
     lateinit var historyAdapter: HistoryAdapter
     lateinit var recyclerViewSearch: RecyclerView
     lateinit var recyclerViewHistory: RecyclerView
-    lateinit var removeHistory:Button
-    lateinit var history:LinearLayout
+    lateinit var removeHistory: Button
+    lateinit var history: LinearLayout
     val musicHistory = MusicHistory(this)
 
     val retrofit = Retrofit.Builder()
@@ -72,16 +71,14 @@ class SearchActivity : AppCompatActivity() , CallBack {
         recyclerViewHistory = findViewById(R.id.recyclerViewHistory)
         removeHistory = findViewById(R.id.button_history)
         history = findViewById(R.id.history)
-        progressBar =findViewById(R.id.progressBar)
-
-        val searchString = editText.text.toString()
-
+        progressBar = findViewById(R.id.progressBar)
 
         initial()
         historyVisible()
 
         editText.requestFocus()
-        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
 
 
@@ -169,56 +166,24 @@ class SearchActivity : AppCompatActivity() , CallBack {
     }
 
     private fun checkInternetConnection(): Boolean {
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetworkInfo = connectivityManager.activeNetworkInfo
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
-    private fun history(){
-        if(historyTracks.isNotEmpty()){
+
+    private fun historyVisible() {
+        if (historyTracks.isNotEmpty()) {
             recyclerViewHistory.visibility = View.VISIBLE
             removeHistory.visibility = View.VISIBLE
-        }
-        else{
+        } else {
             recyclerViewHistory.visibility = View.GONE
             removeHistory.visibility = View.GONE
         }
     }
 
 
-    override fun recyclerViewSearchGone() {
-        recyclerViewSearch.visibility = View.GONE
-    }
-
-    override fun recyclerViewSearchVisible() {
-        recyclerViewSearch.visibility = View.VISIBLE
-    }
-
-    override fun progressBarGone() {
-        progressBar.visibility = View.GONE
-    }
-
-    override fun progressBarVisible() {
-        progressBar.visibility = View.VISIBLE
-    }
-
-    override fun noResultVisible() {
-        noResultPlaceholderMessage.visibility = View.VISIBLE
-    }
-
-    override fun historyVisible() {
-        history.visibility = View.VISIBLE
-    }
-
-    override fun historyGone() {
-        history.visibility = View.GONE
-    }
-
-    override fun noInternetVisible() {
-        val noInternetPlaceholderMessage = findViewById<View>(R.id.no_internet)
-        noInternetPlaceholderMessage.visibility = View.VISIBLE
-    }
-
-        private fun searchTrack() {
+    private fun searchTrack() {
         if (editText.text.isNotEmpty()) {
             progressBar.visibility = View.VISIBLE
             recyclerViewSearch.visibility = View.GONE
@@ -254,9 +219,6 @@ class SearchActivity : AppCompatActivity() , CallBack {
             })
         }
     }
-
-
-
 
 
 }

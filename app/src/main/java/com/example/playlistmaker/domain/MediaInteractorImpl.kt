@@ -1,7 +1,5 @@
 package com.example.playlistmaker.domain
 
-import com.example.playlistmaker.data.MediaRepository
-
 class MediaInteractorImpl(private val mediaRepository: MediaRepository) : MediaInteractor {
     override fun preparePlayer(trackUrl: String, onPrepared: () -> Unit) {
         mediaRepository.preparePlayer(trackUrl, onPrepared)
