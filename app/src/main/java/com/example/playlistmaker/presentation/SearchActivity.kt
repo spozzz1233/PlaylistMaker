@@ -23,7 +23,7 @@ import com.example.playlistmaker.presentation.adapter.searchAdapter
 import com.example.playlistmaker.util.MusicHistory
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.api.SearchApi
-import com.example.playlistmaker.data.dto.tracksResponse
+import com.example.playlistmaker.data.dto.TracksResponse
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.model.historyTracks
 import com.example.playlistmaker.domain.model.tracks
@@ -188,10 +188,10 @@ class SearchActivity : AppCompatActivity() {
             progressBar.visibility = View.VISIBLE
             recyclerViewSearch.visibility = View.GONE
             searchApi.search(editText.text.toString()).enqueue(object :
-                Callback<tracksResponse> {
+                Callback<TracksResponse> {
                 override fun onResponse(
-                    call: Call<tracksResponse>,
-                    response: Response<tracksResponse>
+                    call: Call<TracksResponse>,
+                    response: Response<TracksResponse>
                 ) {
                     progressBar.visibility = View.GONE
                     if (response.code() == 200) {
@@ -208,7 +208,7 @@ class SearchActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<tracksResponse>, t: Throwable) {
+                override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
                     if (!checkInternetConnection()) {
                         val noInternetPlaceholderMessage = findViewById<View>(R.id.no_internet)
                         noInternetPlaceholderMessage.visibility = View.VISIBLE
