@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation
+package com.example.playlistmaker.ui.search.activity
 
 import android.content.Context
 import android.net.ConnectivityManager
