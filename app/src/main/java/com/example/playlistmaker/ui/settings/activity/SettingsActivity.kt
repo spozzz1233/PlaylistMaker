@@ -1,4 +1,4 @@
-package com.example.playlistmaker.Activity
+package com.example.playlistmaker.ui.settings.activity
 
 import android.content.Intent
 import android.net.Uri
@@ -6,11 +6,17 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.App
 import com.example.playlistmaker.R
+import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.ui.settings.view_model.SettingsViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
+
+
+    val viewModel:SettingsViewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -25,12 +31,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         share.setOnClickListener{
-            val message = getString(R.string.share)
-            val shareIntent = Intent(Intent.ACTION_SENDTO)
-            shareIntent.data = Uri.parse("mailto:")
-            shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mail)))
-            shareIntent.putExtra(Intent.EXTRA_TEXT, message)
-            startActivity(shareIntent)
+            viewModel.share()
         }
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             (applicationContext as App).switchTheme(checked)
@@ -46,8 +47,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(shareIntent)
         }
         terms.setOnClickListener{
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://yandex.ru/legal/practicum_offer/"))
-            startActivity(browserIntent)
+            viewModel.terms()
         }
     }
 }

@@ -1,44 +1,48 @@
-package com.example.playlistmaker.Activity
+package com.example.playlistmaker.presentation
 
-import android.media.MediaPlayer
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
+import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.domain.MediaInteractor
 import java.text.SimpleDateFormat
 import java.util.*
 
 class SongActivity : AppCompatActivity() {
     private lateinit var back: ImageView
-    private lateinit var playButton:ImageView
-    private lateinit var progressOfTheWork:TextView
-    private var mediaPlayer = MediaPlayer()
-    private var handler = Handler(Looper.getMainLooper())
-    private var updateTimeRunnable: Runnable = Runnable { }
+    private lateinit var playButton: ImageView
+    private lateinit var progressOfTheWork: TextView
+//    private lateinit var mediaUseCase: MediaInteractorImpl
+    private lateinit var mediaInteractor: MediaInteractor
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_song)
+
         back = findViewById(R.id.back)
         playButton = findViewById(R.id.play_button)
+        progressOfTheWork = findViewById(R.id.progress_of_the_work)
+
         back.setOnClickListener {
             finish()
         }
-        progressOfTheWork = findViewById(R.id.progress_of_the_work)
+
+
+        mediaInteractor = Creator.provideMediaUseCase()
+
         val track = intent.getStringExtra("trackName")
         val artist = intent.getStringExtra("artistName")
-        val trackTimeMillis = intent.getIntExtra("trackTimeMillis",0)
+        val trackTimeMillis = intent.getIntExtra("trackTimeMillis", 0)
         val artworkUrl100 = intent.getStringExtra("artworkUrl100")
         val collectionName = intent.getStringExtra("collectionName")
         val releaseDate = intent.getStringExtra("releaseDate")
         val primaryGenreName = intent.getStringExtra("primaryGenreName")
         val country = intent.getStringExtra("country")
-        val trackUrl = intent.getStringExtra("trackUrl")
 
         val trackName: TextView = findViewById(R.id.trackName)
         val artistName: TextView = findViewById(R.id.artistName)
@@ -51,6 +55,7 @@ class SongActivity : AppCompatActivity() {
 
         val countryTextView: TextView = findViewById(R.id.country_name)
         val album: TextView = findViewById(R.id.album)
+
         trackName.text = track
         artistName.text = artist
         trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis)
@@ -65,87 +70,68 @@ class SongActivity : AppCompatActivity() {
         countryTextView.text = country
 
         Glide.with(this)
-            .load(artworkUrl100?.replaceAfterLast('/',"512x512bb.jpg"))
+            .load(artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg"))
             .placeholder(R.drawable.placeholder_512)
             .error(R.drawable.placeholder_512)
             .transform(RoundedCorners(8))
             .into(image)
 
-        if (collectionName != null) {
+        if (!collectionName.isNullOrEmpty()) {
             collection.visibility = View.VISIBLE
             album.visibility = View.VISIBLE
         }
-        if (primaryGenreName != null) {
+
+        if (!primaryGenreName.isNullOrEmpty()) {
             genre.visibility = View.VISIBLE
             genre_name.visibility = View.VISIBLE
         }
-        preparePlayer()
+
+        val trackUrl = intent.getStringExtra(TRACK_URL)!!
+
+        mediaInteractor.preparePlayer(trackUrl) {
+            playButton.isEnabled = true
+        }
+
         playButton.setOnClickListener {
             playbackControl()
         }
+
         updateTime()
     }
+
     override fun onPause() {
         super.onPause()
-        pausePlayer()
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        mediaPlayer.release()
-        handler.removeCallbacksAndMessages(null)
-    }
-    companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-    }
-    private var playerState = STATE_DEFAULT
-    private fun preparePlayer() {
-        val trackUrl = intent.getStringExtra("trackUrl")
-        mediaPlayer.setDataSource(trackUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playButton.isEnabled = true
-            playerState = STATE_PREPARED
+        if (mediaInteractor.isPlaying()) {
+            mediaInteractor.pausePlayer { }
         }
-        mediaPlayer.setOnCompletionListener {
-            playButton.setImageResource(R.drawable.button_play)
-            playerState = STATE_PREPARED
-        }
-    }
-    private fun startPlayer() {
-        mediaPlayer.start()
-        playButton.setImageResource(R.drawable.button_pause)
-        playerState = STATE_PLAYING
     }
 
-    private fun pausePlayer() {
-        mediaPlayer.pause()
-        playButton.setImageResource(R.drawable.button_play)
-        playerState = STATE_PAUSED
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaInteractor.stopPlayer()
     }
 
     private fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
+        if (mediaInteractor.isPlaying()) {
+            mediaInteractor.pausePlayer {
+                playButton.setImageResource(R.drawable.button_play)
             }
-
-            STATE_PREPARED, STATE_PAUSED -> {
-                startPlayer()
+        } else {
+            mediaInteractor.startPlayer {
+                playButton.setImageResource(R.drawable.button_pause)
             }
         }
     }
+
     private fun updateTime() {
-        if (mediaPlayer != null && mediaPlayer.isPlaying) {
-            val currentPosition = mediaPlayer.currentPosition
+        if (mediaInteractor.isPlaying()) {
+            val currentPosition = mediaInteractor.getCurrentPosition()
             val text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
             progressOfTheWork.text = text
         }
-        updateTimeRunnable = Runnable { updateTime() }
-        handler.postDelayed(updateTimeRunnable, 400)
+        progressOfTheWork.postDelayed(::updateTime, 400)
     }
-
-
+    companion object{
+        const val TRACK_URL = "trackUrl"
+    }
 }
