@@ -24,8 +24,8 @@ class SettingsActivity : AppCompatActivity() {
         val support = findViewById<TextView>(R.id.Support)
         val terms = findViewById<TextView>(R.id.terms)
 
-
-        vm = ViewModelProvider(this, SettingsViewModelFactory(this)).get(SettingsViewModel::class.java)
+        val app = application as App
+        vm = ViewModelProvider(this, SettingsViewModelFactory(this,app)).get(SettingsViewModel::class.java)
 
 
 
@@ -42,19 +42,15 @@ class SettingsActivity : AppCompatActivity() {
         share.setOnClickListener{
             vm.share()
         }
-//        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
-//            (applicationContext as App).switchTheme(checked)
-//
-//        }
-        // Обработчик для themeSwitcher
+
         themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
-            // Вызываем функцию в SettingsViewModel для обновления темы
             vm.updateThemeSettings(isChecked)
         }
 
         support.setOnClickListener{
             vm.support()
         }
+
         terms.setOnClickListener{
             vm.terms()
         }

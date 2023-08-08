@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.util.MusicHistory
 import com.example.playlistmaker.R
-import com.example.playlistmaker.presentation.SongActivity
+import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.util.Debounce
 import com.example.playlistmaker.domain.model.Track
 import com.example.playlistmaker.domain.model.tracks
@@ -35,17 +35,17 @@ class searchAdapter(private val context: Context) : RecyclerView.Adapter<searchA
         holder.itemView.setOnClickListener {
             musicHistory.saveHistoryTrack(track)
             debounce.clickDebounce()
-            val songActivity = Intent(holder.itemView.context, SongActivity::class.java)
-            songActivity.putExtra("trackName", track.trackName)
-            songActivity.putExtra("artistName", track.artistName)
-            songActivity.putExtra("trackTimeMillis", track.trackTimeMillis)
-            songActivity.putExtra("artworkUrl100", track.artworkUrl100)
-            songActivity.putExtra("collectionName", track.collectionName)
-            songActivity.putExtra("releaseDate", track.releaseDate)
-            songActivity.putExtra("primaryGenreName", track.primaryGenreName)
-            songActivity.putExtra("country", track.country)
-            songActivity.putExtra("trackUrl", track.previewUrl)
-            holder.itemView.context.startActivity(songActivity)
+            val playerActivity = Intent(holder.itemView.context, PlayerActivity::class.java)
+            playerActivity.putExtra("trackName", track.trackName)
+            playerActivity.putExtra("artistName", track.artistName)
+            playerActivity.putExtra("trackTimeMillis", track.trackTimeMillis)
+            playerActivity.putExtra("artworkUrl100", track.artworkUrl100)
+            playerActivity.putExtra("collectionName", track.collectionName)
+            playerActivity.putExtra("releaseDate", track.releaseDate)
+            playerActivity.putExtra("primaryGenreName", track.primaryGenreName)
+            playerActivity.putExtra("country", track.country)
+            playerActivity.putExtra("trackUrl", track.previewUrl)
+            holder.itemView.context.startActivity(playerActivity)
         }
     }
 

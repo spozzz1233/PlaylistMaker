@@ -1,24 +1,25 @@
-package com.example.playlistmaker.presentation
+package com.example.playlistmaker.ui.player.activity
 
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.domain.MediaInteractor
+import com.example.playlistmaker.ui.player.factory.PlayerViewModelFactory
+import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class SongActivity : AppCompatActivity() {
+class PlayerActivity : AppCompatActivity() {
     private lateinit var back: ImageView
     private lateinit var playButton: ImageView
     private lateinit var progressOfTheWork: TextView
-//    private lateinit var mediaUseCase: MediaInteractorImpl
-    private lateinit var mediaInteractor: MediaInteractor
+    private lateinit var vm: PlayerViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +33,7 @@ class SongActivity : AppCompatActivity() {
             finish()
         }
 
-
-        mediaInteractor = Creator.provideMediaInteractor()
+        vm = ViewModelProvider(this, PlayerViewModelFactory()).get(PlayerViewModel::class.java)
 
         val track = intent.getStringExtra("trackName")
         val artist = intent.getStringExtra("artistName")
@@ -88,7 +88,7 @@ class SongActivity : AppCompatActivity() {
 
         val trackUrl = intent.getStringExtra(TRACK_URL)!!
 
-        mediaInteractor.preparePlayer(trackUrl) {
+        vm.preparePlayer(trackUrl) {
             playButton.isEnabled = true
         }
 
@@ -101,31 +101,31 @@ class SongActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (mediaInteractor.isPlaying()) {
-            mediaInteractor.pausePlayer { }
+        if (vm.isPlaying()) {
+            vm.pausePlayer { }
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaInteractor.stopPlayer()
+        vm.stopPlayer()
     }
 
     private fun playbackControl() {
-        if (mediaInteractor.isPlaying()) {
-            mediaInteractor.pausePlayer {
+        if (vm.isPlaying()) {
+            vm.pausePlayer {
                 playButton.setImageResource(R.drawable.button_play)
             }
         } else {
-            mediaInteractor.startPlayer {
+            vm.startPlayer {
                 playButton.setImageResource(R.drawable.button_pause)
             }
         }
     }
 
     private fun updateTime() {
-        if (mediaInteractor.isPlaying()) {
-            val currentPosition = mediaInteractor.getCurrentPosition()
+        if (vm.isPlaying()) {
+            val currentPosition = vm.getCurrentPosition()
             val text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
             progressOfTheWork.text = text
         }

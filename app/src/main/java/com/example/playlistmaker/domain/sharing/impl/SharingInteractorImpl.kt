@@ -8,7 +8,7 @@ import com.example.playlistmaker.domain.sharing.model.EmailData
 
 
 
-class SharingInteractorImpl(private val externalNavigator: ExternalNavigator) : SharingInteractor {
+class SharingInteractorImpl(private val externalNavigator: ExternalNavigator,private val context: Context) : SharingInteractor {
     override fun shareApp() {
         externalNavigator.shareLink(getShareAppLink())
     }
@@ -26,8 +26,8 @@ class SharingInteractorImpl(private val externalNavigator: ExternalNavigator) : 
     }
 
     private fun getSupportEmailData(): EmailData {
-        val body = "234"//context.getString(R.string.header)
-        val subject = "234"//context.getString(R.string.mesage_support)
+        val body = context.getString(R.string.header)
+        val subject = context.getString(R.string.mesage_support)
         val recipient = "minulin.misha@bk.ru"
         return EmailData(recipient, subject, body)
     }

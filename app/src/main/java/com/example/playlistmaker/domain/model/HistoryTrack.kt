@@ -1,7 +1,6 @@
 package com.example.playlistmaker.domain.model
 
-
-data class Track(
+data class HistoryTrack(
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Int,
@@ -13,8 +12,4 @@ data class Track(
     val previewUrl: String
 )
 
-
-var tracks = ArrayList<Track>()
-
-
-// Call the addHistoryTracks function to add elements to the historyTracks list
+var historyTracks = ArrayList<HistoryTrack>()
