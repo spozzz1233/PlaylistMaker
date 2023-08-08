@@ -1,14 +1,17 @@
 package com.example.playlistmaker.domain.settings.impl
 
+import com.example.playlistmaker.data.settings.SettingsRepository
 import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.domain.settings.model.ThemeSettings
 
-class SettingsInteractorImpl: SettingsInteractor {
+class SettingsInteractorImpl(
+    private val settingsRepository: SettingsRepository,
+) : SettingsInteractor {
     override fun getThemeSettings(): ThemeSettings {
-        TODO("Not yet implemented")
+        return settingsRepository.getThemeSettings()
     }
 
     override fun updateThemeSetting(settings: ThemeSettings) {
-        TODO("Not yet implemented")
+        settingsRepository.updateThemeSetting(settings)
     }
 }

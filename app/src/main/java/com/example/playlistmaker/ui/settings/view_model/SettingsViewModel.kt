@@ -1,24 +1,53 @@
-package com.example.playlistmaker.ui.settings.view_model
-
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.playlistmaker.App
 import com.example.playlistmaker.domain.settings.SettingsInteractor
+import com.example.playlistmaker.domain.settings.model.ThemeSettings
 import com.example.playlistmaker.domain.sharing.SharingInteractor
-import com.example.playlistmaker.creator.Creator
 
 class SettingsViewModel(
-    private val sharingInteractor: SharingInteractor,
     private val settingsInteractor: SettingsInteractor,
-) : ViewModel(){
-    val externalNavigator = Creator.provideExternalNavigator(this)
+    private val sharingInteractor: SharingInteractor,
+    private val app: App
+) : ViewModel() {
 
-//    fun darkTheme(): Boolean{
-//        return switcher, checked ->
-//        (applicationContext as App).switchTheme(checked)
-//    }
-    fun terms(){
-        externalNavigator.openLink()
+    private val _themeSettingsLiveData: MutableLiveData<ThemeSettings> = MutableLiveData()
+    val themeSettingsLiveData: LiveData<ThemeSettings>
+        get() = _themeSettingsLiveData
+
+    init {
+
+        loadThemeSettings()
     }
-    fun share(){
-        externalNavigator.shareLink()
+
+    private fun loadThemeSettings() {
+        val themeSettings = settingsInteractor.getThemeSettings()
+        _themeSettingsLiveData.value = themeSettings
+    }
+
+
+    fun updateThemeSettings(isDarkTheme: Boolean) {
+        val currentThemeSettings = _themeSettingsLiveData.value
+        if (currentThemeSettings != null) {
+            val updatedThemeSettings = currentThemeSettings.copy(isDarkTheme = isDarkTheme)
+            settingsInteractor.updateThemeSetting(updatedThemeSettings)
+            _themeSettingsLiveData.value = updatedThemeSettings
+            app.switchTheme(isDarkTheme)
+        }
+    }
+
+
+
+    fun terms() {
+        sharingInteractor.openTerms()
+    }
+
+    fun share() {
+        sharingInteractor.shareApp()
+    }
+
+    fun support() {
+        sharingInteractor.openSupport()
     }
 }

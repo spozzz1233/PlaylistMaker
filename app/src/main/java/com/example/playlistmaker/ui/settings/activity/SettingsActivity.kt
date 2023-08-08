@@ -1,7 +1,7 @@
 package com.example.playlistmaker.ui.settings.activity
 
-import android.content.Intent
-import android.net.Uri
+
+import SettingsViewModel
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,14 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.App
 import com.example.playlistmaker.R
-import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.ui.settings.view_model.SettingsViewModel
+import com.example.playlistmaker.domain.settings.model.ThemeSettings
+import com.example.playlistmaker.ui.settings.factory.SettingsViewModelFactory
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
-
-
-    val viewModel:SettingsViewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
+    private lateinit var vm: SettingsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -26,28 +24,35 @@ class SettingsActivity : AppCompatActivity() {
         val support = findViewById<TextView>(R.id.Support)
         val terms = findViewById<TextView>(R.id.terms)
 
+        val app = application as App
+        vm = ViewModelProvider(this, SettingsViewModelFactory(this,app)).get(SettingsViewModel::class.java)
+
+
+
+        vm.themeSettingsLiveData.observe(this, { themeSettings ->
+            themeSwitcher.isChecked = when (themeSettings) {
+                is ThemeSettings.LightTheme -> false
+                is ThemeSettings.DarkTheme -> true
+            }
+        })
         back.setOnClickListener {
             finish()
         }
 
         share.setOnClickListener{
-            viewModel.share()
+            vm.share()
         }
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
-            (applicationContext as App).switchTheme(checked)
+
+        themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
+            vm.updateThemeSettings(isChecked)
         }
+
         support.setOnClickListener{
-            val message1 = getString(R.string.header)
-            val message2 = getString(R.string.mesage_support)
-            val shareIntent = Intent(Intent.ACTION_SENDTO)
-            shareIntent.data = Uri.parse("mailto:")
-            shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mail)))
-            shareIntent.putExtra(Intent.EXTRA_TITLE, message1)
-            shareIntent.putExtra(Intent.EXTRA_TEXT, message2)
-            startActivity(shareIntent)
+            vm.support()
         }
+
         terms.setOnClickListener{
-            viewModel.terms()
+            vm.terms()
         }
     }
 }

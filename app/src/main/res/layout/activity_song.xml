@@ -9,7 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentation.SongActivity"
+    tools:context=".ui.player.activity.PlayerActivity"
     style="@style/search">
 
     <androidx.constraintlayout.widget.Guideline
