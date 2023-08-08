@@ -11,8 +11,8 @@ class SearchViewModelFactory(searchCallback: SearchCallback, context: Context) :
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
-        return SearchViewModel(searchRepository) as T
+        return SearchViewModel(searchInteractor) as T
     }
 
-    val searchRepository = Creator.provideSearchRepository(searchCallback, context)
+    val searchInteractor = Creator.provideSearchInteractor(searchCallback, context)
 }

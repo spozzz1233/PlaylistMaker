@@ -54,7 +54,9 @@ class SearchActivity : AppCompatActivity(), SearchCallback {
     lateinit var recyclerViewHistory: RecyclerView
     lateinit var removeHistory: Button
     lateinit var history: LinearLayout
+    lateinit var query: String
     private lateinit var noInternetPlaceholderMessage: View
+
     val musicHistory = MusicHistory(this)
 
 //    val retrofit = Retrofit.Builder()
@@ -85,7 +87,6 @@ class SearchActivity : AppCompatActivity(), SearchCallback {
 
         initial()
         history()
-        val query = editText.text.toString()
         editText.requestFocus()
         val inputMethodManager =
             getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -132,6 +133,7 @@ class SearchActivity : AppCompatActivity(), SearchCallback {
                 clearButton.visibility = clearButtonVisibility(s)
                 history.visibility = View.GONE
                 searchDebounce()
+                query = editText.text.toString()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -216,40 +218,4 @@ class SearchActivity : AppCompatActivity(), SearchCallback {
             removeHistory.visibility = View.GONE
         }
     }
-//    private fun searchTrack() {
-//        if (editText.text.isNotEmpty()) {
-//            progressBar.visibility = View.VISIBLE
-//            recyclerViewSearch.visibility = View.GONE
-//            searchApi.search(editText.text.toString()).enqueue(object :
-//                Callback<TracksResponse> {
-//                override fun onResponse(
-//                    call: Call<TracksResponse>,
-//                    response: Response<TracksResponse>
-//                ) {
-//                    progressBar.visibility = View.GONE
-//                    if (response.code() == 200) {
-//                        tracks.clear()
-//                        if (response.body()?.results?.isNotEmpty() == true) {
-//                            recyclerViewSearch.visibility = View.VISIBLE
-//                            tracks.addAll(response.body()?.results!!)
-//                            searchAdapter.notifyDataSetChanged()
-//                        }
-//                        if (tracks.isEmpty()) {
-//                            noResultPlaceholderMessage.visibility = View.VISIBLE
-//                            history.visibility = View.GONE
-//                        }
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
-//                    if (!checkInternetConnection()) {
-//                        val noInternetPlaceholderMessage = findViewById<View>(R.id.no_internet)
-//                        noInternetPlaceholderMessage.visibility = View.VISIBLE
-//                        history.visibility = View.GONE
-//                        progressBar.visibility = View.GONE
-//                    }
-//                }
-//            })
-//        }
-//    }
 }

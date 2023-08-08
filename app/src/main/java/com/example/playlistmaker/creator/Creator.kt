@@ -12,7 +12,9 @@ import com.example.playlistmaker.domain.callback.SearchCallback
 import com.example.playlistmaker.domain.player.MediaInteractor
 import com.example.playlistmaker.domain.player.impl.MediaInteractorImpl
 import com.example.playlistmaker.domain.player.MediaRepository
+import com.example.playlistmaker.domain.search.SearchInteractor
 import com.example.playlistmaker.domain.search.SearchRepository
+import com.example.playlistmaker.domain.search.impl.SearchInteractorImpl
 import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.domain.settings.impl.SettingsInteractorImpl
 import com.example.playlistmaker.domain.sharing.SharingInteractor
@@ -40,8 +42,13 @@ object Creator {
     fun provideSharingInteractor(context: Context) : SharingInteractor {
         return SharingInteractorImpl(getExternalNavigator(context),context)
     }
-    fun provideSearchRepository(searchCallback: SearchCallback , context: Context):SearchRepository{
+    fun getSearchRepository(searchCallback: SearchCallback , context: Context):SearchRepository{
         return SearchRepositoryImpl(context,searchCallback)
     }
+    fun provideSearchInteractor(searchCallback: SearchCallback , context: Context): SearchInteractor{
+        return SearchInteractorImpl(getSearchRepository(searchCallback,context))
+    }
+
+
 
 }

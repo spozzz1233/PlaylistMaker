@@ -1,11 +1,34 @@
 package com.example.playlistmaker.ui.player.view_model
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.domain.player.MediaInteractor
 
 class PlayerViewModel(
     private val mediaInteractor: MediaInteractor
 ): ViewModel(){
+
+    private val _isPlaying = MutableLiveData<Boolean>()
+    val isPlaying: LiveData<Boolean>
+        get() = _isPlaying
+
+    private val _currentPosition = MutableLiveData<Int>()
+    val currentPosition: LiveData<Int>
+        get() = _currentPosition
+
+    init {
+        _isPlaying.value = false
+        _currentPosition.value = 0
+    }
+
+    fun updateIsPlaying(isPlaying: Boolean) {
+        _isPlaying.value = isPlaying
+    }
+
+    fun updateCurrentPosition(position: Int) {
+        _currentPosition.value = position
+    }
 
 
     fun isPlaying(): Boolean{

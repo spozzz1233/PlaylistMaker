@@ -2,6 +2,7 @@ package com.example.playlistmaker.data.search.Impl
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.util.Log
 import android.view.View
 import com.example.playlistmaker.data.api.SearchApi
 import com.example.playlistmaker.data.dto.TracksResponse
@@ -26,10 +27,11 @@ class SearchRepositoryImpl(private val context: Context,val searchCallback: Sear
         val searchApi = retrofit.create(SearchApi::class.java)
 
         val searchAdapter = searchAdapter(context)
-
+        Log.d("QueryValue", "Значение query: $query")
         if (query.isNotEmpty()) {
             searchCallback.progressBarVisible()
             searchCallback.recyclerViewSearchGone()
+            Log.d("CallbackTrigger", "Колбек сработал")
             searchApi.search(query).enqueue(object :
                 Callback<TracksResponse> {
                 override fun onResponse(

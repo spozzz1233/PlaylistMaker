@@ -1,8 +1,6 @@
 package com.example.playlistmaker.domain.search
 
-
-
-interface SearchRepository {
+interface SearchInteractor {
     fun searchTrack(query: String)
     fun getHistoryTracks()
     fun checkInternetConnection(): Boolean

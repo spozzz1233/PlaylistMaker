@@ -97,7 +97,24 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         updateTime()
+
+        vm.isPlaying.observe(this, { isPlaying ->
+            if (isPlaying) {
+                playButton.setImageResource(R.drawable.button_pause)
+            } else {
+                playButton.setImageResource(R.drawable.button_play)
+            }
+        })
+
+        vm.currentPosition.observe(this, { currentPosition ->
+            val text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
+            progressOfTheWork.text = text
+        })
+
     }
+
+
+
 
     override fun onPause() {
         super.onPause()
@@ -124,8 +141,8 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun updateTime() {
-        if (vm.isPlaying()) {
-            val currentPosition = vm.getCurrentPosition()
+        if (vm.isPlaying.value == true) {
+            val currentPosition = vm.currentPosition.value ?: 0
             val text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
             progressOfTheWork.text = text
         }
@@ -135,3 +152,8 @@ class PlayerActivity : AppCompatActivity() {
         const val TRACK_URL = "trackUrl"
     }
 }
+
+
+
+
+
