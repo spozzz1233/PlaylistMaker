@@ -9,27 +9,10 @@ class PlayerViewModel(
     private val mediaInteractor: MediaInteractor
 ): ViewModel(){
 
+
     private val _isPlaying = MutableLiveData<Boolean>()
     val isPlaying: LiveData<Boolean>
         get() = _isPlaying
-
-    private val _currentPosition = MutableLiveData<Int>()
-    val currentPosition: LiveData<Int>
-        get() = _currentPosition
-
-    init {
-        _isPlaying.value = false
-        _currentPosition.value = 0
-    }
-
-//    fun updateIsPlaying(isPlaying: Boolean) {
-//        _isPlaying.value = isPlaying
-//    }
-//
-//    fun updateCurrentPosition(position: Int) {
-//        _currentPosition.value = position
-//    }
-
 
     fun isPlaying(): Boolean{
         return mediaInteractor.isPlaying()
@@ -38,15 +21,25 @@ class PlayerViewModel(
         return mediaInteractor.getCurrentPosition()
     }
     fun startPlayer(onStarted: () -> Unit){
-        return mediaInteractor.startPlayer(onStarted)
+        mediaInteractor.startPlayer{
+            _isPlaying.postValue(true)
+            onStarted.invoke()
+        }
     }
     fun pausePlayer(onPlaybackPaused: () -> Unit ){
-        return mediaInteractor.pausePlayer(onPlaybackPaused)
+        return mediaInteractor.pausePlayer{
+            _isPlaying.postValue(false)
+            onPlaybackPaused.invoke()
+        }
     }
     fun stopPlayer(){
         return mediaInteractor.stopPlayer()
     }
     fun preparePlayer(trackUrl: String, onPrepared: () -> Unit) {
-        mediaInteractor.preparePlayer(trackUrl, onPrepared)
+        mediaInteractor.preparePlayer(trackUrl){
+            _isPlaying.postValue(false)
+            onPrepared.invoke()
+        }
     }
+
 }

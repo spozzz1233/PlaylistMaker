@@ -3,9 +3,9 @@ package com.example.playlistmaker.util
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.example.playlistmaker.domain.model.HistoryTrack
-import com.example.playlistmaker.domain.model.Track
-import com.example.playlistmaker.domain.model.historyTracks
+import com.example.playlistmaker.domain.search.model.HistoryTrack
+import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.domain.search.model.historyTracks
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.ArrayList

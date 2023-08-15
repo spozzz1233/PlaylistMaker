@@ -3,8 +3,7 @@ package com.example.playlistmaker.ui.search.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.playlistmaker.domain.model.Track
-import com.example.playlistmaker.domain.model.tracks
+import com.example.playlistmaker.domain.search.model.tracks
 import com.example.playlistmaker.domain.search.SearchInteractor
 
 class SearchViewModel(
@@ -23,22 +22,29 @@ class SearchViewModel(
     private val _noInternetLiveData = MutableLiveData<Boolean>()
     val noInternetLiveData: LiveData<Boolean> = _noInternetLiveData
 
-    private val _historyLiveData = MutableLiveData<Boolean>()
-    val historyLiveData: LiveData<Boolean> = _historyLiveData
 
 
 
 
     fun searchTrack(query: String) {
+        if(query.isNotEmpty()){
+            _loadingLiveData.value = true
+        }
         searchInteractor.searchTrack(query) { success ->
             if (success) {
                 if (tracks.isEmpty()) {
+                    _loadingLiveData.value = false
                     _searchResultsLiveData.value = false
                     _noResultLiveData.value = true
-                } else if(tracks.isNotEmpty()){
+                } else{
+                    _loadingLiveData.value = false
                     _searchResultsLiveData.value = true
+                    _noResultLiveData.value = false
                 }
             } else {
+                _loadingLiveData.value = false
+                _searchResultsLiveData.value = false
+                _noResultLiveData.value = false
                 _noInternetLiveData.value = true
             }
         }

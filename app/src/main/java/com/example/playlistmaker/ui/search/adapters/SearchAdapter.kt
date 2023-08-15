@@ -14,8 +14,8 @@ import com.example.playlistmaker.util.MusicHistory
 import com.example.playlistmaker.R
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.util.Debounce
-import com.example.playlistmaker.domain.model.Track
-import com.example.playlistmaker.domain.model.tracks
+import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.domain.search.model.tracks
 import java.text.SimpleDateFormat
 import java.util.*
 

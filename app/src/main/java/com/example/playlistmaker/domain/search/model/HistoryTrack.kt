@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.model
+package com.example.playlistmaker.domain.search.model
 
 data class HistoryTrack(
     val trackName: String,

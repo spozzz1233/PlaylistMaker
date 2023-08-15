@@ -23,7 +23,7 @@ import com.example.playlistmaker.ui.search.adapters.searchAdapter
 import com.example.playlistmaker.util.MusicHistory
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.domain.model.historyTracks
+import com.example.playlistmaker.domain.search.model.historyTracks
 import com.example.playlistmaker.ui.search.factory.SearchViewModelFactory
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 
@@ -90,13 +90,10 @@ class SearchActivity : AppCompatActivity(){
             noInternetPlaceholderMessage.visibility = if (noInternet) View.VISIBLE else View.GONE
         })
 
-        viewModel.historyLiveData.observe(this, { historyLiveData ->
-            history.visibility = if (historyLiveData) View.VISIBLE else View.GONE
-        })
-
         initial()
         history()
         editText.requestFocus()
+
         val inputMethodManager =
             getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
@@ -141,8 +138,8 @@ class SearchActivity : AppCompatActivity(){
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
                 history.visibility = View.GONE
-                searchDebounce()
                 query = editText.text.toString()
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -173,7 +170,7 @@ class SearchActivity : AppCompatActivity(){
 
     companion object {
         const val TEXT_SEARCH = "TEXT_SEARCH"
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val SEARCH_DEBOUNCE_DELAY = 1000L
     }
 
 
