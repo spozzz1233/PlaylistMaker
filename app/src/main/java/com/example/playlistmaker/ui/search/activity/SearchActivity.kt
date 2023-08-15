@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.search.activity
 
 import android.content.Context
-import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -19,25 +18,17 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.presentation.adapter.HistoryAdapter
-import com.example.playlistmaker.presentation.adapter.searchAdapter
+import com.example.playlistmaker.ui.search.adapters.HistoryAdapter
+import com.example.playlistmaker.ui.search.adapters.searchAdapter
 import com.example.playlistmaker.util.MusicHistory
 import com.example.playlistmaker.R
-import com.example.playlistmaker.data.api.SearchApi
-import com.example.playlistmaker.data.dto.TracksResponse
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.domain.callback.SearchCallback
 import com.example.playlistmaker.domain.model.historyTracks
-import com.example.playlistmaker.domain.model.tracks
 import com.example.playlistmaker.ui.search.factory.SearchViewModelFactory
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-class SearchActivity : AppCompatActivity(), SearchCallback {
+
+class SearchActivity : AppCompatActivity(){
 
     private lateinit var progressBar: ProgressBar
     private var inputText: String? = null
@@ -46,7 +37,7 @@ class SearchActivity : AppCompatActivity(), SearchCallback {
     private lateinit var clearButton: ImageView
     private lateinit var noResultPlaceholderMessage: FrameLayout
     private lateinit var UpdateButton: Button
-    private lateinit var vm: SearchViewModel
+    private lateinit var viewModel: SearchViewModel
     lateinit var binding: ActivitySearchBinding
     lateinit var searchAdapter: searchAdapter
     lateinit var historyAdapter: HistoryAdapter
@@ -59,11 +50,6 @@ class SearchActivity : AppCompatActivity(), SearchCallback {
 
     val musicHistory = MusicHistory(this)
 
-//    val retrofit = Retrofit.Builder()
-//        .baseUrl("https://itunes.apple.com")
-//        .addConverterFactory(GsonConverterFactory.create())
-//        .build()
-//    val searchApi = retrofit.create(SearchApi::class.java)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +69,30 @@ class SearchActivity : AppCompatActivity(), SearchCallback {
         progressBar = findViewById(R.id.progressBar)
         noInternetPlaceholderMessage = findViewById(R.id.no_internet)
 
-        vm = ViewModelProvider(this, SearchViewModelFactory(this,this)).get(SearchViewModel::class.java)
+        viewModel = ViewModelProvider(this, SearchViewModelFactory(this)).get(SearchViewModel::class.java)
+
+
+        viewModel.searchResultsLiveData.observe(this, { searchResults ->
+            searchAdapter.updateData()
+            recyclerViewSearch.visibility = if (searchResults) View.VISIBLE else View.GONE
+
+        })
+
+        viewModel.loadingLiveData.observe(this, { isLoading ->
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
+
+        viewModel.noResultLiveData.observe(this, { noResult ->
+            noResultPlaceholderMessage.visibility = if (noResult) View.VISIBLE else View.GONE
+        })
+
+        viewModel.noInternetLiveData.observe(this, { noInternet ->
+            noInternetPlaceholderMessage.visibility = if (noInternet) View.VISIBLE else View.GONE
+        })
+
+        viewModel.historyLiveData.observe(this, { historyLiveData ->
+            history.visibility = if (historyLiveData) View.VISIBLE else View.GONE
+        })
 
         initial()
         history()
@@ -93,7 +102,7 @@ class SearchActivity : AppCompatActivity(), SearchCallback {
         inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
 
 
-        val searchRunnable = Runnable { vm.searchTrack(query) }
+        val searchRunnable = Runnable { viewModel.searchTrack(query) }
 
         fun searchDebounce() {
             handler.removeCallbacks(searchRunnable)
@@ -102,7 +111,7 @@ class SearchActivity : AppCompatActivity(), SearchCallback {
         editText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (editText.text.isNotEmpty()) {
-                    vm.searchTrack(query)
+                    viewModel.searchTrack(query)
                 }
                 true
             }
@@ -116,7 +125,7 @@ class SearchActivity : AppCompatActivity(), SearchCallback {
             editText.setText("")
         }
         UpdateButton.setOnClickListener {
-            vm.searchTrack(query)
+            viewModel.searchTrack(query)
         }
         removeHistory.setOnClickListener {
             musicHistory.clearSharedPreferences(this)
@@ -177,38 +186,6 @@ class SearchActivity : AppCompatActivity(), SearchCallback {
         recyclerViewHistory.adapter = historyAdapter
     }
 
-    override fun recyclerViewSearchGone() {
-        recyclerViewSearch.visibility = View.GONE
-    }
-
-    override fun recyclerViewSearchVisible() {
-        recyclerViewSearch.visibility = View.VISIBLE
-    }
-
-    override fun progressBarGone() {
-        progressBar.visibility = View.GONE
-    }
-
-    override fun progressBarVisible() {
-        progressBar.visibility = View.VISIBLE
-    }
-
-    override fun noResultVisible() {
-        noResultPlaceholderMessage.visibility = View.VISIBLE
-    }
-
-    override fun historyVisible() {
-        history.visibility = View.VISIBLE
-    }
-
-    override fun historyGone() {
-        history.visibility = View.GONE
-    }
-
-    override fun noInternetVisible() {
-        noInternetPlaceholderMessage.visibility = View.VISIBLE
-    }
-
     private fun history() {
         if (historyTracks.isNotEmpty()) {
             recyclerViewHistory.visibility = View.VISIBLE
@@ -218,4 +195,6 @@ class SearchActivity : AppCompatActivity(), SearchCallback {
             removeHistory.visibility = View.GONE
         }
     }
+
+
 }

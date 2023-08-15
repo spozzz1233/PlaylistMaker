@@ -1,19 +1,17 @@
 package com.example.playlistmaker.creator
 
 import android.content.Context
-import com.example.playlistmaker.data.api.SearchApi
 import com.example.playlistmaker.data.player.impl.MediaRepositoryImpl
 import com.example.playlistmaker.data.search.Impl.SearchRepositoryImpl
 import com.example.playlistmaker.data.settings.SettingsRepository
 import com.example.playlistmaker.data.settings.theme.ThemeRepository
 import com.example.playlistmaker.data.sharing.ExternalNavigator
 import com.example.playlistmaker.data.sharing.impl.ExternalNavigatorImpl
-import com.example.playlistmaker.domain.callback.SearchCallback
 import com.example.playlistmaker.domain.player.MediaInteractor
 import com.example.playlistmaker.domain.player.impl.MediaInteractorImpl
-import com.example.playlistmaker.domain.player.MediaRepository
+import com.example.playlistmaker.data.player.MediaRepository
 import com.example.playlistmaker.domain.search.SearchInteractor
-import com.example.playlistmaker.domain.search.SearchRepository
+import com.example.playlistmaker.data.search.SearchRepository
 import com.example.playlistmaker.domain.search.impl.SearchInteractorImpl
 import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.domain.settings.impl.SettingsInteractorImpl
@@ -26,7 +24,7 @@ object Creator {
     private fun getMediaRepository(): MediaRepository {
         return MediaRepositoryImpl()
     }
-    fun provideMediaInteractor(): MediaInteractor {
+    fun provideMediaUseCase(): MediaInteractor {
         return MediaInteractorImpl(getMediaRepository())
     }
     fun getExternalNavigator(context: Context) : ExternalNavigator {
@@ -42,11 +40,11 @@ object Creator {
     fun provideSharingInteractor(context: Context) : SharingInteractor {
         return SharingInteractorImpl(getExternalNavigator(context),context)
     }
-    fun getSearchRepository(searchCallback: SearchCallback , context: Context):SearchRepository{
-        return SearchRepositoryImpl(context,searchCallback)
+    fun getSearchRepository(context: Context): SearchRepository {
+        return SearchRepositoryImpl(context)
     }
-    fun provideSearchInteractor(searchCallback: SearchCallback , context: Context): SearchInteractor{
-        return SearchInteractorImpl(getSearchRepository(searchCallback,context))
+    fun provideSearchInteractor(context: Context): SearchInteractor{
+        return SearchInteractorImpl(getSearchRepository(context))
     }
 
 

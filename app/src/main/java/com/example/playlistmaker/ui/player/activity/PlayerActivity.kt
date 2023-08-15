@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -13,6 +14,9 @@ import com.example.playlistmaker.ui.player.factory.PlayerViewModelFactory
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import java.text.SimpleDateFormat
 import java.util.*
+
+
+
 
 class PlayerActivity : AppCompatActivity() {
     private lateinit var back: ImageView
@@ -22,9 +26,11 @@ class PlayerActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_song)
 
+        vm = ViewModelProvider(this, PlayerViewModelFactory()).get(PlayerViewModel::class.java)
         back = findViewById(R.id.back)
         playButton = findViewById(R.id.play_button)
         progressOfTheWork = findViewById(R.id.progress_of_the_work)
@@ -33,7 +39,65 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
-        vm = ViewModelProvider(this, PlayerViewModelFactory()).get(PlayerViewModel::class.java)
+        val trackUrl = intent.getStringExtra(TRACK_URL)!!
+
+        vm.preparePlayer(trackUrl) {
+            playButton.isEnabled = true
+        }
+
+        playButton.setOnClickListener {
+            playbackControl()
+        }
+
+        vm.isPlaying.observe(this, { isPlaying ->
+            if (isPlaying) {
+                playButton.setImageResource(R.drawable.button_pause)
+            } else {
+                playButton.setImageResource(R.drawable.button_play)
+            }
+        })
+
+        vm.currentPosition.observe(this, { currentPosition ->
+            val text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
+            progressOfTheWork.text = text
+        })
+
+        setupUIWithIntentData()
+        updateTime()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (vm.isPlaying()) {
+            vm.pausePlayer { }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        vm.stopPlayer()
+    }
+
+    private fun playbackControl() {
+        if (vm.isPlaying()) {
+            vm.pausePlayer { }
+        } else {
+            vm.startPlayer { }
+        }
+    }
+
+    private fun updateTime() {
+        if (vm.isPlaying()) {
+            val currentPosition = vm.getCurrentPosition()
+            val text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
+            progressOfTheWork.text = text
+        }
+        progressOfTheWork.postDelayed(::updateTime, 400)
+    }
+
+    private fun setupUIWithIntentData() {
+        val countryTextView: TextView = findViewById(R.id.country_name)
+        val album: TextView = findViewById(R.id.album)
 
         val track = intent.getStringExtra("trackName")
         val artist = intent.getStringExtra("artistName")
@@ -53,8 +117,6 @@ class PlayerActivity : AppCompatActivity() {
         val trackTime: TextView = findViewById(R.id.duration_name)
         val genre_name: TextView = findViewById(R.id.Genre)
 
-        val countryTextView: TextView = findViewById(R.id.country_name)
-        val album: TextView = findViewById(R.id.album)
 
         trackName.text = track
         artistName.text = artist
@@ -85,73 +147,20 @@ class PlayerActivity : AppCompatActivity() {
             genre.visibility = View.VISIBLE
             genre_name.visibility = View.VISIBLE
         }
-
-        val trackUrl = intent.getStringExtra(TRACK_URL)!!
-
-        vm.preparePlayer(trackUrl) {
-            playButton.isEnabled = true
-        }
-
-        playButton.setOnClickListener {
-            playbackControl()
-        }
-
-        updateTime()
-
-        vm.isPlaying.observe(this, { isPlaying ->
-            if (isPlaying) {
-                playButton.setImageResource(R.drawable.button_pause)
-            } else {
-                playButton.setImageResource(R.drawable.button_play)
-            }
-        })
-
-        vm.currentPosition.observe(this, { currentPosition ->
-            val text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
-            progressOfTheWork.text = text
-        })
-
     }
 
-
-
-
-    override fun onPause() {
-        super.onPause()
-        if (vm.isPlaying()) {
-            vm.pausePlayer { }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        vm.stopPlayer()
-    }
-
-    private fun playbackControl() {
-        if (vm.isPlaying()) {
-            vm.pausePlayer {
-                playButton.setImageResource(R.drawable.button_play)
-            }
-        } else {
-            vm.startPlayer {
-                playButton.setImageResource(R.drawable.button_pause)
-            }
-        }
-    }
-
-    private fun updateTime() {
-        if (vm.isPlaying.value == true) {
-            val currentPosition = vm.currentPosition.value ?: 0
-            val text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
-            progressOfTheWork.text = text
-        }
-        progressOfTheWork.postDelayed(::updateTime, 400)
-    }
-    companion object{
+    companion object {
         const val TRACK_URL = "trackUrl"
     }
 }
+
+
+
+
+
+
+
+
 
 
 

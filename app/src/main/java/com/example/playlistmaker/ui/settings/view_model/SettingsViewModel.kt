@@ -13,19 +13,16 @@ class SettingsViewModel(
 ) : ViewModel() {
 
     private val _themeSettingsLiveData: MutableLiveData<ThemeSettings> = MutableLiveData()
-    val themeSettingsLiveData: LiveData<ThemeSettings>
-        get() = _themeSettingsLiveData
+    val themeSettingsLiveData: LiveData<ThemeSettings> = _themeSettingsLiveData
 
     init {
-
         loadThemeSettings()
     }
 
     private fun loadThemeSettings() {
         val themeSettings = settingsInteractor.getThemeSettings()
-        _themeSettingsLiveData.value = themeSettings
+        _themeSettingsLiveData.postValue(themeSettings) 
     }
-
 
     fun updateThemeSettings(isDarkTheme: Boolean) {
         val currentThemeSettings = _themeSettingsLiveData.value
@@ -51,3 +48,4 @@ class SettingsViewModel(
         sharingInteractor.openSupport()
     }
 }
+

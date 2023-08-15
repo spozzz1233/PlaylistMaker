@@ -10,5 +10,5 @@ class PlayerViewModelFactory: ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         return PlayerViewModel(mediaInteractor) as T
     }
-    val mediaInteractor = Creator.provideMediaInteractor()
+    val mediaInteractor = Creator.provideMediaUseCase()
 }

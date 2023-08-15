@@ -1,12 +1,16 @@
 package com.example.playlistmaker.domain.search.impl
 
 import com.example.playlistmaker.domain.search.SearchInteractor
-import com.example.playlistmaker.domain.search.SearchRepository
+import com.example.playlistmaker.data.search.SearchRepository
 
 class SearchInteractorImpl(private val searchRepository: SearchRepository): SearchInteractor {
-    override fun searchTrack(query: String) {
-        searchRepository.searchTrack(query)
+    override fun searchTrack(
+        query: String,
+        callback: (success: Boolean) -> Unit
+    ) {
+        searchRepository.searchTrack(query, callback) // Поменяйте местами query и callback
     }
+
 
     override fun getHistoryTracks() {
         searchRepository.getHistoryTracks()
@@ -16,3 +20,4 @@ class SearchInteractorImpl(private val searchRepository: SearchRepository): Sear
         return searchRepository.checkInternetConnection()
     }
 }
+

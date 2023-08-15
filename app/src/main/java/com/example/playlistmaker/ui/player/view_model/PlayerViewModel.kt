@@ -22,13 +22,13 @@ class PlayerViewModel(
         _currentPosition.value = 0
     }
 
-    fun updateIsPlaying(isPlaying: Boolean) {
-        _isPlaying.value = isPlaying
-    }
-
-    fun updateCurrentPosition(position: Int) {
-        _currentPosition.value = position
-    }
+//    fun updateIsPlaying(isPlaying: Boolean) {
+//        _isPlaying.value = isPlaying
+//    }
+//
+//    fun updateCurrentPosition(position: Int) {
+//        _currentPosition.value = position
+//    }
 
 
     fun isPlaying(): Boolean{
