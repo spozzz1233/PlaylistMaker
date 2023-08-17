@@ -24,6 +24,7 @@ import com.example.playlistmaker.util.MusicHistory
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.search.model.historyTracks
+import com.example.playlistmaker.domain.search.model.tracks
 import com.example.playlistmaker.ui.search.factory.SearchViewModelFactory
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 
@@ -120,8 +121,13 @@ class SearchActivity : AppCompatActivity(){
         }
         clearButton.setOnClickListener {
             editText.setText("")
+            val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            keyboard.hideSoftInputFromWindow(editText.windowToken, 0)
+            editText.clearFocus()
+            progressBar.visibility = View.GONE
             recyclerViewSearch.visibility = View.GONE
-            history()
+            history.visibility = View.VISIBLE
+            recyclerViewHistory.visibility = View.VISIBLE
         }
         UpdateButton.setOnClickListener {
             viewModel.searchTrack(query)
@@ -142,6 +148,7 @@ class SearchActivity : AppCompatActivity(){
                 history.visibility = View.GONE
                 query = editText.text.toString()
                 searchDebounce()
+
             }
 
             override fun afterTextChanged(s: Editable?) {
