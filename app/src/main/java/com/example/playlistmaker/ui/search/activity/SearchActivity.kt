@@ -120,6 +120,8 @@ class SearchActivity : AppCompatActivity(){
         }
         clearButton.setOnClickListener {
             editText.setText("")
+            recyclerViewSearch.visibility = View.GONE
+            history()
         }
         UpdateButton.setOnClickListener {
             viewModel.searchTrack(query)
