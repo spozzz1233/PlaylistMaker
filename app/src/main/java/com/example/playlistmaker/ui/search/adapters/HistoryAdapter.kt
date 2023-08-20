@@ -1,5 +1,6 @@
 package com.example.playlistmaker.ui.search.adapters
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +14,16 @@ import com.example.playlistmaker.domain.search.model.HistoryTrack
 import com.example.playlistmaker.R
 import com.example.playlistmaker.util.Debounce
 import com.example.playlistmaker.domain.search.model.historyTracks
+import com.example.playlistmaker.domain.search.model.tracks
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
+import com.example.playlistmaker.util.MusicHistory
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HistoryAdapter() : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
+class HistoryAdapter(private val context: Context) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+
+    private val musicHistory = MusicHistory(context)
     private val debounce = Debounce()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val cardMusicView = LayoutInflater.from(parent.context).inflate(R.layout.card_music, parent, false)
@@ -28,21 +33,23 @@ class HistoryAdapter() : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>(
     override fun getItemCount(): Int = historyTracks.size
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
-        val track = historyTracks[position]
-        holder.bind(track)
+        val historyTracks = historyTracks[position]
+        holder.bind(historyTracks)
         holder.itemView.setOnClickListener {
             debounce.clickDebounce()
+            musicHistory.curentPosition(historyTracks)
             val playerActivity = Intent(holder.itemView.context, PlayerActivity::class.java)
-            playerActivity.putExtra("trackName", track.trackName)
-            playerActivity.putExtra("artistName", track.artistName)
-            playerActivity.putExtra("trackTimeMillis", track.trackTimeMillis)
-            playerActivity.putExtra("artworkUrl100", track.artworkUrl100)
-            playerActivity.putExtra("collectionName", track.collectionName)
-            playerActivity.putExtra("releaseDate", track.releaseDate)
-            playerActivity.putExtra("primaryGenreName", track.primaryGenreName)
-            playerActivity.putExtra("country", track.country)
-            playerActivity.putExtra("trackUrl", track.previewUrl)
+            playerActivity.putExtra("trackName", historyTracks.trackName)
+            playerActivity.putExtra("artistName", historyTracks.artistName)
+            playerActivity.putExtra("trackTimeMillis", historyTracks.trackTimeMillis)
+            playerActivity.putExtra("artworkUrl100", historyTracks.artworkUrl100)
+            playerActivity.putExtra("collectionName", historyTracks.collectionName)
+            playerActivity.putExtra("releaseDate", historyTracks.releaseDate)
+            playerActivity.putExtra("primaryGenreName", historyTracks.primaryGenreName)
+            playerActivity.putExtra("country", historyTracks.country)
+            playerActivity.putExtra("trackUrl", historyTracks.previewUrl)
             holder.itemView.context.startActivity(playerActivity)
+            notifyDataSetChanged()
         }
     }
 

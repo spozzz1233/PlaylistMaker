@@ -65,5 +65,23 @@ class MusicHistory(private val context: Context) {
             historyTracks.addAll(loadedTracks)
         }
     }
+    fun curentPosition(track:HistoryTrack){
+        val existingTrackIndex = historyTracks.indexOfFirst { it.trackName == track.trackName && it.artistName == track.artistName}
+
+        val existingTrack = historyTracks.removeAt(existingTrackIndex)
+
+//        val historyTrack = HistoryTrack(
+//            track.trackName,
+//            track.artistName,
+//            track.trackTimeMillis,
+//            track.artworkUrl100,
+//            track.collectionName,
+//            track.releaseDate,
+//            track.primaryGenreName,
+//            track.country,
+//            track.previewUrl
+//        )
+        historyTracks.add(0, existingTrack)
+    }
 
 }

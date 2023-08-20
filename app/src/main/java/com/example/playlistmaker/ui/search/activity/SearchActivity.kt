@@ -121,13 +121,7 @@ class SearchActivity : AppCompatActivity(){
         }
         clearButton.setOnClickListener {
             editText.setText("")
-            val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            keyboard.hideSoftInputFromWindow(editText.windowToken, 0)
-            editText.clearFocus()
-            progressBar.visibility = View.GONE
-            recyclerViewSearch.visibility = View.GONE
-            history.visibility = View.VISIBLE
-            recyclerViewHistory.visibility = View.VISIBLE
+            clearEditText()
         }
         UpdateButton.setOnClickListener {
             viewModel.searchTrack(query)
@@ -148,7 +142,9 @@ class SearchActivity : AppCompatActivity(){
                 history.visibility = View.GONE
                 query = editText.text.toString()
                 searchDebounce()
-
+                if(query.isEmpty()){
+                    clearEditText()
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -188,7 +184,7 @@ class SearchActivity : AppCompatActivity(){
         searchAdapter = searchAdapter(this)
         recyclerViewSearch.adapter = searchAdapter
         recyclerViewHistory = binding.recyclerViewHistory
-        historyAdapter = HistoryAdapter()
+        historyAdapter = HistoryAdapter(this)
         recyclerViewHistory.adapter = historyAdapter
     }
 
@@ -200,6 +196,18 @@ class SearchActivity : AppCompatActivity(){
             recyclerViewHistory.visibility = View.GONE
             removeHistory.visibility = View.GONE
         }
+    }
+    private fun clearEditText(){
+        val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        keyboard.hideSoftInputFromWindow(editText.windowToken, 0)
+        editText.clearFocus()
+        progressBar.visibility = View.GONE
+        recyclerViewSearch.visibility = View.GONE
+        history.visibility = View.VISIBLE
+        recyclerViewHistory.visibility = View.VISIBLE
+        removeHistory.visibility = View.VISIBLE
+        noInternetPlaceholderMessage.visibility = View.GONE
+        noResultPlaceholderMessage.visibility = View.GONE
     }
 
 
