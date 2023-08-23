@@ -24,9 +24,8 @@ import com.example.playlistmaker.util.MusicHistory
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.search.model.historyTracks
-import com.example.playlistmaker.domain.search.model.tracks
-import com.example.playlistmaker.ui.search.factory.SearchViewModelFactory
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SearchActivity : AppCompatActivity(){
@@ -38,7 +37,7 @@ class SearchActivity : AppCompatActivity(){
     private lateinit var clearButton: ImageView
     private lateinit var noResultPlaceholderMessage: FrameLayout
     private lateinit var UpdateButton: Button
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel by viewModel<SearchViewModel>()
     lateinit var binding: ActivitySearchBinding
     lateinit var searchAdapter: searchAdapter
     lateinit var historyAdapter: HistoryAdapter
@@ -70,7 +69,6 @@ class SearchActivity : AppCompatActivity(){
         progressBar = findViewById(R.id.progressBar)
         noInternetPlaceholderMessage = findViewById(R.id.no_internet)
 
-        viewModel = ViewModelProvider(this, SearchViewModelFactory(this)).get(SearchViewModel::class.java)
 
 
         viewModel.searchResultsLiveData.observe(this, { searchResults ->
@@ -184,7 +182,7 @@ class SearchActivity : AppCompatActivity(){
         searchAdapter = searchAdapter(this)
         recyclerViewSearch.adapter = searchAdapter
         recyclerViewHistory = binding.recyclerViewHistory
-        historyAdapter = HistoryAdapter(this)
+        historyAdapter = HistoryAdapter(this )
         recyclerViewHistory.adapter = historyAdapter
     }
 

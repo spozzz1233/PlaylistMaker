@@ -1,17 +1,20 @@
+package com.example.playlistmaker.ui.settings.activity
 
+import SettingsViewModel
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.App
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.settings.model.ThemeSettings
-import com.example.playlistmaker.ui.settings.factory.SettingsViewModelFactory
 import com.google.android.material.switchmaterial.SwitchMaterial
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var vm: SettingsViewModel
+
+    private val vm by viewModel<SettingsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +28,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val app = application as App
 
-        vm = ViewModelProvider(this, SettingsViewModelFactory(this,app)).get(SettingsViewModel::class.java)
+//        vm = ViewModelProvider(this).get(SettingsViewModel::class.java)
 
         back.setOnClickListener {
             finish()

@@ -1,6 +1,6 @@
 package com.example.playlistmaker.ui.main.activity
 
-import SettingsActivity
+
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +9,7 @@ import com.example.playlistmaker.util.MusicHistory
 import com.example.playlistmaker.R
 import com.example.playlistmaker.ui.media.activity.MediatekaActivity
 import com.example.playlistmaker.ui.search.activity.SearchActivity
+import com.example.playlistmaker.ui.settings.activity.SettingsActivity
 
 
 class MainActivity : AppCompatActivity() {

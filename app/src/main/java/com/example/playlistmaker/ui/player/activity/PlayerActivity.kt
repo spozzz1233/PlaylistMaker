@@ -5,12 +5,11 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.ui.player.factory.PlayerViewModelFactory
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,7 +17,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var back: ImageView
     private lateinit var playButton: ImageView
     private lateinit var progressOfTheWork: TextView
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel by viewModel<PlayerViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +31,7 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
-        viewModel = ViewModelProvider(this, PlayerViewModelFactory()).get(PlayerViewModel::class.java)
+
 
 
         val track = intent.getStringExtra("trackName")
