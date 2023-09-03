@@ -22,4 +22,8 @@
     <string name="Year">Year</string>
     <string name="Album">Album</string>
     <string name="Duration">Duration</string>
+    <string name="mediateka">"Media library "</string>
+    <string name="mediatekaIsEmty">Your media library is empty</string>
+    <string name="playlistIsEmty">You haven\'t created a single playlist</string>
+    <string name="newPlaylist">New playlist</string>
 </resources>

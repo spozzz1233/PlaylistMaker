@@ -120,7 +120,8 @@
 
         <Button
             android:id="@+id/update_button"
-            style="@style/button_placeholder"
+            style="@style/button"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
@@ -160,7 +161,8 @@
 
         <Button
             android:id="@+id/button_history"
-            style="@style/button_placeholder"
+            style="@style/button"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

@@ -22,6 +22,9 @@
     <string name="Year">Год</string>
     <string name="Album">Альбом</string>
     <string name="Duration">Длительность</string>
-
+    <string name="mediateka">Медиатека</string>
+    <string name="mediatekaIsEmty">Ваша медиатека пуста</string>
+    <string name="playlistIsEmty">Вы не создали ни одного плейлиста</string>
+    <string name="newPlaylist">Новый плейлист</string>
 
 </resources>
