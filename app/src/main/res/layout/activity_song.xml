@@ -10,7 +10,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.player.activity.PlayerActivity"
-    style="@style/search">
+    style="@style/colorAllScreen">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/track_info_left_border"

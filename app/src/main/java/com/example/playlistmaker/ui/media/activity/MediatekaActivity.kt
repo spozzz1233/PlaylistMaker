@@ -27,5 +27,9 @@ class MediatekaActivity : AppCompatActivity() {
             }
         }
         tabMediator.attach()
+        binding.back.setOnClickListener {
+            finish()
+        }
     }
+
 }
