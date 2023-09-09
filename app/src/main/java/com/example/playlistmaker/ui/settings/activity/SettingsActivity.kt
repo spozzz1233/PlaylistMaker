@@ -26,9 +26,9 @@ class SettingsActivity : AppCompatActivity() {
         val support = findViewById<TextView>(R.id.Support)
         val terms = findViewById<TextView>(R.id.terms)
 
-        val app = application as App
 
-//        vm = ViewModelProvider(this).get(SettingsViewModel::class.java)
+
+
 
         back.setOnClickListener {
             finish()
