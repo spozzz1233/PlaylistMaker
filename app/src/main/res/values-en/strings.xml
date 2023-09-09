@@ -26,4 +26,6 @@
     <string name="mediatekaIsEmty">Your media library is empty</string>
     <string name="playlistIsEmty">You haven\'t created a single playlist</string>
     <string name="newPlaylist">New playlist</string>
+    <string name="selectedTracks">Selected tracks</string>
+    <string name="playlist">Playlist</string>
 </resources>

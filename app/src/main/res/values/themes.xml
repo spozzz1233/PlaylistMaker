@@ -74,8 +74,6 @@
     </style>
     <style name="all_text">
         <item name="android:textColor">@color/black</item>tabTextColor
-        <item name="tabTextColor">@color/black</item>
-        <item name="tabIndicatorColor">@color/black</item>
     </style>
     <style name="text">
         <item name="android:textColor">@color/black</item>

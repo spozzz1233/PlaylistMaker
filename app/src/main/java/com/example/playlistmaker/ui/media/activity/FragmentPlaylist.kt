@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
+import com.example.playlistmaker.ui.media.view_model.FragmentPlaylistViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FragmentPlaylist : Fragment() {
+    private val vm by viewModel<FragmentPlaylistViewModel>()
     companion object {
         fun newInstance() = FragmentPlaylist()
 

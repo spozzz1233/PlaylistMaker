@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.databinding.FragmentFavoriteBinding
+import com.example.playlistmaker.ui.media.view_model.FragmentFavoriteViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class FragmentFavorite : Fragment(){
+    private val vm by viewModel<FragmentFavoriteViewModel>()
     companion object {
 
 
