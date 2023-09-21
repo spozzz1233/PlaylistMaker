@@ -1,30 +1,33 @@
-package com.example.playlistmaker.ui.media.activity
+package com.example.playlistmaker.ui.media.fragment
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivityMediatekaBinding
+import com.example.playlistmaker.databinding.FragmentMediatekaBinding
 import com.example.playlistmaker.ui.media.adapter.MediaViewPagerAdapter
-import com.example.playlistmaker.ui.media.view_model.FragmentPlaylistViewModel
 import com.example.playlistmaker.ui.media.view_model.MediatekaViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MediatekaActivity : AppCompatActivity() {
+
+class MediatekaFragment : Fragment() {
+
     private val vm by viewModel<MediatekaViewModel>()
 
-    private lateinit var binding: ActivityMediatekaBinding
+    private lateinit var binding: FragmentMediatekaBinding
 
     private lateinit var tabMediator: TabLayoutMediator
-    override fun onCreate(savedInstanceState: Bundle?) {
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentMediatekaBinding.inflate(layoutInflater)
 
-        super.onCreate(savedInstanceState)
-        binding = ActivityMediatekaBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        binding.viewPager.adapter = MediaViewPagerAdapter(supportFragmentManager, lifecycle)
+        binding.viewPager.adapter = MediaViewPagerAdapter(childFragmentManager, lifecycle)
 
         tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when(position) {
@@ -33,9 +36,9 @@ class MediatekaActivity : AppCompatActivity() {
             }
         }
         tabMediator.attach()
-        binding.back.setOnClickListener {
-            finish()
-        }
+
+        return binding.root
     }
+
 
 }

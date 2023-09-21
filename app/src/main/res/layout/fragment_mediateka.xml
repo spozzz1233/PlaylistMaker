@@ -8,11 +8,6 @@
     <Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/back"
-            style="@style/toolbar_image" />
-
         <TextView
             style="@style/toolbar_text"
             android:text="@string/mediateka" />

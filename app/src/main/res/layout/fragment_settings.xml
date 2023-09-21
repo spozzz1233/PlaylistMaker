@@ -6,13 +6,9 @@
     style="@style/colorAllScreen">
 
     <Toolbar
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/back"
-            style="@style/toolbar_image"
-            />
         <TextView
             android:text="@string/settings"
             style="@style/toolbar_text"
