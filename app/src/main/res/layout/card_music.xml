@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    style="@style/search">
+    style="@style/colorAllScreen">
 
     <LinearLayout
         style="@style/bg_search_card"
