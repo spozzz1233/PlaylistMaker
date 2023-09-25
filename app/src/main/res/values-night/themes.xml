@@ -14,10 +14,15 @@
         <!-- Customize your theme here. -->
     </style>
     <style name="Screen">
-        <item name="android:background">#1A1B22</item>
+        <item name="android:background">@color/text_main</item>
     </style>
     <style name="colorAllScreen">
-        <item name="android:background">#1A1B22</item>
+        <item name="android:background">@color/text_main</item>
+    </style>
+    <style name="BottomNavStyle">
+        <item name="android:background">@color/text_main</item>
+        <item name="itemIconTint">@drawable/icon_color_selector_night</item>
+        <item name="itemTextColor">@drawable/text_color_selector_night</item>
     </style>
     <style name="Text">
         <item name="android:layout_marginStart">16dp</item>
