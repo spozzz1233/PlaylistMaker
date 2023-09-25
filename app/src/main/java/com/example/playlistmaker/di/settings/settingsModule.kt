@@ -1,7 +1,7 @@
 package com.example.playlistmaker.di.settings
 
 
-import SettingsFragmentViewModel
+import SettingsViewModel
 import com.example.playlistmaker.App
 import com.example.playlistmaker.data.settings.SettingsRepository
 import com.example.playlistmaker.data.settings.theme.ThemeRepository
@@ -10,6 +10,7 @@ import com.example.playlistmaker.data.sharing.impl.ExternalNavigatorImpl
 import com.example.playlistmaker.domain.settings.SettingsInteractor
 
 import com.example.playlistmaker.domain.settings.impl.SettingsInteractorImpl
+import com.example.playlistmaker.domain.settings.model.ThemeSettings
 import com.example.playlistmaker.domain.sharing.SharingInteractor
 import com.example.playlistmaker.settings.data.SettingsRepositoryImpl
 
@@ -48,6 +49,6 @@ val settingsModule = module {
     }
 
     viewModel {
-        SettingsFragmentViewModel(get(), get(), get())
+        SettingsViewModel(get(), get(), get())
     }
 }

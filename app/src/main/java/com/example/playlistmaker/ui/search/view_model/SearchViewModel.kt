@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.domain.search.model.tracks
 import com.example.playlistmaker.domain.search.SearchInteractor
 
-class SearchFragmentViewModel(
+class SearchViewModel(
     private val searchInteractor: SearchInteractor
 ) : ViewModel() {
 
