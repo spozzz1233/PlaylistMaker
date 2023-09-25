@@ -16,7 +16,7 @@
     <style name="Screen">
         <item name="android:background">#1A1B22</item>
     </style>
-    <style name="colorAllScreen">
+    <style name="search">
         <item name="android:background">#1A1B22</item>
     </style>
     <style name="Text">
@@ -74,13 +74,11 @@
     </style>
     <style name="all_text">
         <item name="android:textColor">@color/white</item>
-        <item name="tabTextColor">@color/white</item>
-        <item name="tabIndicatorColor">@color/black</item>
     </style>
     <style name="text">
         <item name="android:textColor">@color/white</item>
     </style>
-    <style name="button">
+    <style name="button_placeholder">
         <item name="android:textColor">@color/black</item>
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:textSize">14sp</item>
@@ -88,7 +86,6 @@
         <item name="cornerRadius">54dp</item>
         <item name="android:textStyle">bold</item>
     </style>
-
 </resources>
 
 
