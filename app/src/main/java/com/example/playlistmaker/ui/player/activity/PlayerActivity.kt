@@ -5,11 +5,12 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
+import com.example.playlistmaker.ui.player.factory.PlayerViewModelFactory
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -17,11 +18,12 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var back: ImageView
     private lateinit var playButton: ImageView
     private lateinit var progressOfTheWork: TextView
-    private val viewModel by viewModel<PlayerViewModel>()
+    private lateinit var vm: PlayerViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_player)
+        setContentView(R.layout.activity_song)
 
         back = findViewById(R.id.back)
         playButton = findViewById(R.id.play_button)
@@ -31,8 +33,7 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
-
-
+        vm = ViewModelProvider(this, PlayerViewModelFactory()).get(PlayerViewModel::class.java)
 
         val track = intent.getStringExtra("trackName")
         val artist = intent.getStringExtra("artistName")
@@ -87,7 +88,7 @@ class PlayerActivity : AppCompatActivity() {
 
         val trackUrl = intent.getStringExtra(TRACK_URL)!!
 
-        viewModel.preparePlayer(trackUrl) {
+        vm.preparePlayer(trackUrl) {
             playButton.isEnabled = true
         }
 
@@ -95,62 +96,42 @@ class PlayerActivity : AppCompatActivity() {
             playbackControl()
         }
 
-        viewModel.isPlaying.observe(this) { isPlaying ->
-            if (isPlaying) {
-                playButton.setImageResource(R.drawable.button_pause)
-            } else {
-                playButton.setImageResource(R.drawable.button_play)
-            }
-        }
-
-
         updateTime()
     }
 
     override fun onPause() {
         super.onPause()
-        if (viewModel.isPlaying()) {
-            viewModel.pausePlayer { }
+        if (vm.isPlaying()) {
+            vm.pausePlayer { }
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.stopPlayer()
+        vm.stopPlayer()
     }
 
     private fun playbackControl() {
-        if (viewModel.isPlaying()) {
-            viewModel.pausePlayer {}
+        if (vm.isPlaying()) {
+            vm.pausePlayer {
+                playButton.setImageResource(R.drawable.button_play)
+            }
         } else {
-            viewModel.startPlayer {}
+            vm.startPlayer {
+                playButton.setImageResource(R.drawable.button_pause)
+            }
         }
     }
 
     private fun updateTime() {
-        if (viewModel.isPlaying()) {
-            val currentPosition = viewModel.getCurrentPosition()
+        if (vm.isPlaying()) {
+            val currentPosition = vm.getCurrentPosition()
             val text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
             progressOfTheWork.text = text
         }
         progressOfTheWork.postDelayed(::updateTime, 400)
     }
-
-
     companion object{
         const val TRACK_URL = "trackUrl"
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,7 +1,5 @@
 package com.example.playlistmaker.ui.player.view_model
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.domain.player.MediaInteractor
 
@@ -10,10 +8,6 @@ class PlayerViewModel(
 ): ViewModel(){
 
 
-    private val _isPlaying = MutableLiveData<Boolean>()
-    val isPlaying: LiveData<Boolean>
-        get() = _isPlaying
-
     fun isPlaying(): Boolean{
         return mediaInteractor.isPlaying()
     }
@@ -21,25 +15,15 @@ class PlayerViewModel(
         return mediaInteractor.getCurrentPosition()
     }
     fun startPlayer(onStarted: () -> Unit){
-        mediaInteractor.startPlayer{
-            _isPlaying.postValue(true)
-            onStarted.invoke()
-        }
+        return mediaInteractor.startPlayer(onStarted)
     }
     fun pausePlayer(onPlaybackPaused: () -> Unit ){
-        return mediaInteractor.pausePlayer{
-            _isPlaying.postValue(false)
-            onPlaybackPaused.invoke()
-        }
+        return mediaInteractor.pausePlayer(onPlaybackPaused)
     }
     fun stopPlayer(){
         return mediaInteractor.stopPlayer()
     }
     fun preparePlayer(trackUrl: String, onPrepared: () -> Unit) {
-        mediaInteractor.preparePlayer(trackUrl){
-            _isPlaying.postValue(false)
-            onPrepared.invoke()
-        }
+        mediaInteractor.preparePlayer(trackUrl, onPrepared)
     }
-
 }
