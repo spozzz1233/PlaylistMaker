@@ -27,7 +27,7 @@ class MediatekaFragment : Fragment() {
     ): View? {
         binding = FragmentMediatekaBinding.inflate(layoutInflater)
 
-        binding.viewPager.adapter = MediaViewPagerAdapter(childFragmentManager, lifecycle)
+        binding.viewPager.adapter = MediaViewPagerAdapter(parentFragmentManager, lifecycle)
 
         tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when(position) {
