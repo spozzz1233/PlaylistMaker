@@ -33,9 +33,7 @@ val settingsModule = module {
         SharingInteractorImpl(get(),get())
     }
 
-    single {
-        App()
-    }
+
 
     single{
         ThemeRepository(get())
@@ -48,6 +46,6 @@ val settingsModule = module {
     }
 
     viewModel {
-        SettingsFragmentViewModel(get(), get(), get())
+        SettingsFragmentViewModel(get(), get())
     }
 }

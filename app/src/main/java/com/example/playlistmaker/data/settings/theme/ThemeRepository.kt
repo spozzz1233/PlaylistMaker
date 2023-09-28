@@ -26,9 +26,8 @@ class ThemeRepository(private val context: Context) {
             is ThemeSettings.DarkTheme -> true
             is ThemeSettings.LightTheme -> false
         }
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(KEY_DARK_THEME, isDarkTheme)
-        editor.apply()
+        switchTheme(isDarkTheme)
+        sharedPreferences.edit().putBoolean(KEY_DARK_THEME, isDarkTheme).apply()
     }
     fun switchTheme(darkThemeEnabled: Boolean) {
         darkTheme = darkThemeEnabled
