@@ -14,9 +14,9 @@
     </Toolbar>
 
     <com.google.android.material.tabs.TabLayout
+        style="@style/TabLayout"
         android:id="@+id/tabLayout"
         app:textAllCaps= "false"
-
         android:background="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

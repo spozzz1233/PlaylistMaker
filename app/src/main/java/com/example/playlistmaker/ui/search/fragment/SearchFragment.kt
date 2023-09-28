@@ -141,6 +141,7 @@ class SearchFragment : Fragment() {
             musicHistory.clearSharedPreferences(requireContext())
             recyclerViewHistory.visibility = View.GONE
             removeHistory.visibility = View.GONE
+            binding.historyText.visibility = View.GONE
             historyAdapter.notifyDataSetChanged()
         }
         val simpleTextWatcher = object : TextWatcher {
@@ -199,8 +200,10 @@ class SearchFragment : Fragment() {
         if (historyTracks.isNotEmpty()) {
             recyclerViewHistory.visibility = View.VISIBLE
             removeHistory.visibility = View.VISIBLE
+            binding.historyText.visibility = View.VISIBLE
         } else {
             recyclerViewHistory.visibility = View.GONE
+            binding.historyText.visibility = View.GONE
             removeHistory.visibility = View.GONE
         }
     }

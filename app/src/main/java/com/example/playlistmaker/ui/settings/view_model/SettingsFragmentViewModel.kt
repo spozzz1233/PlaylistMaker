@@ -30,7 +30,7 @@ class SettingsFragmentViewModel(
             val updatedThemeSettings = currentThemeSettings.copy(isDarkTheme = isDarkTheme)
             settingsInteractor.updateThemeSetting(updatedThemeSettings)
             _themeSettingsLiveData.value = updatedThemeSettings
-            app.switchTheme(isDarkTheme)
+            settingsInteractor.switchTheme(isDarkTheme)
         }
     }
 

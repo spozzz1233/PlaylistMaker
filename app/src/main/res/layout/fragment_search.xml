@@ -137,6 +137,7 @@ tools:context=".ui.search.fragment.SearchFragment">
     android:visibility="visible">
 
     <TextView
+        android:id="@+id/historyText"
         style="@style/all_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -144,7 +145,8 @@ tools:context=".ui.search.fragment.SearchFragment">
         android:text="@string/history_text"
         android:textAlignment="center"
         android:textSize="19sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewHistory"

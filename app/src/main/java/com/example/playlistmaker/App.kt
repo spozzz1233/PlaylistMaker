@@ -25,23 +25,8 @@ class App : Application() {
             )
         }
         val settingsInteractor: SettingsInteractor = getKoin().get()
-
         val darkTheme = settingsInteractor.getThemeSettings()
+
         settingsInteractor.updateThemeSetting(darkTheme)
     }
-
-    var darkTheme = false
-
-    fun switchTheme(darkThemeEnabled: Boolean) {
-        darkTheme = darkThemeEnabled
-        AppCompatDelegate.setDefaultNightMode(
-            if (darkThemeEnabled) {
-                AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                AppCompatDelegate.MODE_NIGHT_NO
-            }
-        )
-    }
-
-
 }
