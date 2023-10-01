@@ -22,7 +22,11 @@ class SearchFragmentViewModel(
     private val _noInternetLiveData = MutableLiveData<Boolean>()
     val noInternetLiveData: LiveData<Boolean> = _noInternetLiveData
 
-
+    fun clearSearch() {
+        _loadingLiveData.value = false
+        _searchResultsLiveData.value = false
+        _noResultLiveData.value = false
+    }
 
 
 

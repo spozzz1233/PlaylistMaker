@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.model.historyTracks
+import com.example.playlistmaker.domain.search.model.tracks
 
 import com.example.playlistmaker.ui.search.adapters.HistoryAdapter
 import com.example.playlistmaker.ui.search.adapters.searchAdapter
@@ -57,7 +58,9 @@ class SearchFragment : Fragment() {
         if (savedInstanceState != null) {
             inputText = savedInstanceState.getString(TEXT_SEARCH)
         }
+
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,8 +68,10 @@ class SearchFragment : Fragment() {
     ): View? {
         
         binding = FragmentSearchBinding.inflate(inflater, container, false)
+
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -133,6 +138,7 @@ class SearchFragment : Fragment() {
         clearButton.setOnClickListener {
             editText.setText("")
             clearEditText()
+            viewModel.clearSearch()
         }
         UpdateButton.setOnClickListener {
             viewModel.searchTrack(query)
@@ -221,6 +227,12 @@ class SearchFragment : Fragment() {
         noInternetPlaceholderMessage.visibility = View.GONE
         noResultPlaceholderMessage.visibility = View.GONE
     }
+
+
+
+
+
+
 }
 
 
