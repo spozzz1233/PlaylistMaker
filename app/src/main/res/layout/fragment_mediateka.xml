@@ -8,20 +8,15 @@
     <Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/back"
-            style="@style/toolbar_image" />
-
         <TextView
             style="@style/toolbar_text"
             android:text="@string/mediateka" />
     </Toolbar>
 
     <com.google.android.material.tabs.TabLayout
+        style="@style/TabLayout"
         android:id="@+id/tabLayout"
         app:textAllCaps= "false"
-
         android:background="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

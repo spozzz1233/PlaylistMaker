@@ -21,7 +21,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_song)
+        setContentView(R.layout.activity_player)
 
         back = findViewById(R.id.back)
         playButton = findViewById(R.id.play_button)

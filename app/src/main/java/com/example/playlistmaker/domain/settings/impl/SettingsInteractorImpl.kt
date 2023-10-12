@@ -14,4 +14,8 @@ class SettingsInteractorImpl(
     override fun updateThemeSetting(settings: ThemeSettings) {
         settingsRepository.updateThemeSetting(settings)
     }
+
+    override fun switchTheme(darkThemeEnabled: Boolean) {
+        settingsRepository.switchTheme(darkThemeEnabled)
+    }
 }

@@ -1,15 +1,19 @@
 package com.example.playlistmaker
 
 import android.app.Application
+import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.di.mediaLibrary.mediaModule
 import com.example.playlistmaker.di.player.playerModule
 import com.example.playlistmaker.di.search.searchModule
 import com.example.playlistmaker.di.settings.settingsModule
+import com.example.playlistmaker.domain.settings.SettingsInteractor
+import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 class App : Application() {
+
     override fun onCreate(){
         super.onCreate()
         startKoin {
@@ -20,18 +24,9 @@ class App : Application() {
                 mediaModule
             )
         }
-    }
+        val settingsInteractor: SettingsInteractor = getKoin().get()
+        val darkTheme = settingsInteractor.getThemeSettings()
 
-    var darkTheme = false
-
-    fun switchTheme(darkThemeEnabled: Boolean) {
-        darkTheme = darkThemeEnabled
-        AppCompatDelegate.setDefaultNightMode(
-            if (darkThemeEnabled) {
-                AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                AppCompatDelegate.MODE_NIGHT_NO
-            }
-        )
+        settingsInteractor.updateThemeSetting(darkTheme)
     }
 }

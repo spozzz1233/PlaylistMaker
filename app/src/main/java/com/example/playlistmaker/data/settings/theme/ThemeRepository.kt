@@ -2,10 +2,11 @@ package com.example.playlistmaker.data.settings.theme
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.domain.settings.model.ThemeSettings
 
 class ThemeRepository(private val context: Context) {
-
+    var darkTheme = false
     companion object {
         private const val PREFS_NAME = "ThemePrefs"
         private const val KEY_DARK_THEME = "isDarkTheme"
@@ -25,8 +26,17 @@ class ThemeRepository(private val context: Context) {
             is ThemeSettings.DarkTheme -> true
             is ThemeSettings.LightTheme -> false
         }
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(KEY_DARK_THEME, isDarkTheme)
-        editor.apply()
+        switchTheme(isDarkTheme)
+        sharedPreferences.edit().putBoolean(KEY_DARK_THEME, isDarkTheme).apply()
+    }
+    fun switchTheme(darkThemeEnabled: Boolean) {
+        darkTheme = darkThemeEnabled
+        AppCompatDelegate.setDefaultNightMode(
+            if (darkThemeEnabled) {
+                AppCompatDelegate.MODE_NIGHT_YES
+            } else {
+                AppCompatDelegate.MODE_NIGHT_NO
+            }
+        )
     }
 }

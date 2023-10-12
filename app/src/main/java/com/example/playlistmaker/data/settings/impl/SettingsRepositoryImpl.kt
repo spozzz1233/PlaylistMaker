@@ -13,4 +13,8 @@ class SettingsRepositoryImpl(private val themeRepository: ThemeRepository) : Set
     override fun updateThemeSetting(settings: ThemeSettings) {
         themeRepository.updateThemeSettings(settings)
     }
+
+    override fun switchTheme(darkThemeEnabled: Boolean) {
+        themeRepository.switchTheme(darkThemeEnabled)
+    }
 }

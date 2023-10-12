@@ -6,10 +6,9 @@ import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.domain.settings.model.ThemeSettings
 import com.example.playlistmaker.domain.sharing.SharingInteractor
 
-class SettingsViewModel(
+class SettingsFragmentViewModel(
     private val settingsInteractor: SettingsInteractor,
-    private val sharingInteractor: SharingInteractor,
-    private val app: App
+    private val sharingInteractor: SharingInteractor
 ) : ViewModel() {
 
     private val _themeSettingsLiveData: MutableLiveData<ThemeSettings> = MutableLiveData()
@@ -24,14 +23,20 @@ class SettingsViewModel(
         _themeSettingsLiveData.postValue(themeSettings) 
     }
 
+//    fun updateThemeSettings(isDarkTheme: Boolean) {
+//        val currentThemeSettings = _themeSettingsLiveData.value
+//        if (currentThemeSettings != null) {
+//            val updatedThemeSettings = currentThemeSettings.copy(isDarkTheme = isDarkTheme)
+//            settingsInteractor.updateThemeSetting(updatedThemeSettings)
+//            _themeSettingsLiveData.value = updatedThemeSettings
+//            settingsInteractor.switchTheme(isDarkTheme)
+//        }
+//    }
     fun updateThemeSettings(isDarkTheme: Boolean) {
-        val currentThemeSettings = _themeSettingsLiveData.value
-        if (currentThemeSettings != null) {
-            val updatedThemeSettings = currentThemeSettings.copy(isDarkTheme = isDarkTheme)
-            settingsInteractor.updateThemeSetting(updatedThemeSettings)
-            _themeSettingsLiveData.value = updatedThemeSettings
-            app.switchTheme(isDarkTheme)
-        }
+        val themeSettings = if (isDarkTheme) ThemeSettings.DarkTheme
+        else ThemeSettings.LightTheme
+        settingsInteractor.updateThemeSetting(themeSettings)
+        _themeSettingsLiveData.value = themeSettings
     }
 
 
