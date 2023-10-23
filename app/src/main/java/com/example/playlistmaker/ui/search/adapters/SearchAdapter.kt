@@ -13,17 +13,17 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.util.MusicHistory
 import com.example.playlistmaker.R
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
-import com.example.playlistmaker.util.Debounce
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.domain.search.model.tracks
 import java.text.SimpleDateFormat
 import java.util.*
 
-class searchAdapter(private val context: Context) : RecyclerView.Adapter<searchAdapter.SearchViewHolder>() {
+class searchAdapter(
+    private val context: Context,
+    private val clickListener: TrackClick
+    ) : RecyclerView.Adapter<searchAdapter.SearchViewHolder>() {
 
     private val musicHistory = MusicHistory(context)
-    private val debounce = Debounce()
-
     fun updateData() {
         notifyDataSetChanged()
     }
@@ -39,18 +39,7 @@ class searchAdapter(private val context: Context) : RecyclerView.Adapter<searchA
         val track = tracks[position]
         holder.itemView.setOnClickListener {
             musicHistory.saveHistoryTrack(track)
-            debounce.clickDebounce()
-            val playerActivity = Intent(holder.itemView.context, PlayerActivity::class.java)
-            playerActivity.putExtra("trackName", track.trackName)
-            playerActivity.putExtra("artistName", track.artistName)
-            playerActivity.putExtra("trackTimeMillis", track.trackTimeMillis)
-            playerActivity.putExtra("artworkUrl100", track.artworkUrl100)
-            playerActivity.putExtra("collectionName", track.collectionName)
-            playerActivity.putExtra("releaseDate", track.releaseDate)
-            playerActivity.putExtra("primaryGenreName", track.primaryGenreName)
-            playerActivity.putExtra("country", track.country)
-            playerActivity.putExtra("trackUrl", track.previewUrl)
-            holder.itemView.context.startActivity(playerActivity)
+            clickListener.onClick(track)
         }
     }
 
@@ -74,6 +63,9 @@ class searchAdapter(private val context: Context) : RecyclerView.Adapter<searchA
                 .transform(RoundedCorners(itemView.context.resources.getDimensionPixelSize(R.dimen.rounded_corners)))
                 .into(image)
         }
+    }
+    fun interface TrackClick {
+        fun onClick(track: Track)
     }
 
 }

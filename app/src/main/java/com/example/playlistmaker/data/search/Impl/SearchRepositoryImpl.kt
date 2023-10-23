@@ -1,58 +1,58 @@
 package com.example.playlistmaker.data.search.Impl
 
-import android.content.Context
-import android.net.ConnectivityManager
+
+
 import com.example.playlistmaker.data.api.SearchApi
 import com.example.playlistmaker.data.dto.TracksResponse
 import com.example.playlistmaker.domain.search.model.tracks
 import com.example.playlistmaker.data.search.SearchRepository
+import com.example.playlistmaker.data.search.network.NetworkClient
+import com.example.playlistmaker.data.search.network.Resource
+import com.example.playlistmaker.data.search.network.TrackSearchRequest
+import com.example.playlistmaker.domain.search.ErrorType
+import com.example.playlistmaker.domain.search.model.Track
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
+import java.util.Locale
 
-class SearchRepositoryImpl(private val context: Context): SearchRepository {
-    override fun searchTrack(query: String, callback: (success: Boolean) -> Unit) {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://itunes.apple.com")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+class SearchRepositoryImpl(private val networkClient: NetworkClient): SearchRepository {
 
-        val searchApi = retrofit.create(SearchApi::class.java)
-
-        if (query.isNotEmpty()) {
-            searchApi.search(query).enqueue(object : Callback<TracksResponse> {
-                override fun onResponse(call: Call<TracksResponse>, response: Response<TracksResponse>) {
-                    if (response.code() == 200) {
-                        tracks.clear()
-                        if (response.body()?.results?.isNotEmpty() == true){
-                            tracks.addAll(response.body()?.results!!)
-                            callback(true)
-
-                        }
-                    }
-                    if(tracks.isEmpty()){
-                        callback(true)
-                    }
+    override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
+        try{
+            val response = networkClient.doRequest(TrackSearchRequest(expression))
+            when (response.resultCode) {
+                -1 -> {
+                    emit(Resource.Error(ErrorType.CONNECTION_ERROR))
                 }
-
-                override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
-                    if(!checkInternetConnection()){
-                        callback(false)
-                    }
-
+                200 -> {
+                    emit(Resource.Success((response as TracksResponse).results.map {track ->
+                        Track(
+                            track.trackName,
+                            track.artistName,
+                            track.trackTimeMillis,
+                            track.artworkUrl100,
+                            track.collectionName,
+                            track.releaseDate,
+                            track.primaryGenreName,
+                            track.country,
+                            track.previewUrl
+                        )
+                    }))
                 }
-            })
+                else -> {
+                    emit(Resource.Error(ErrorType.SERVER_ERROR))
+                }
+            }
+        }catch (error:Error){
+            throw Exception(error)
         }
+
     }
-override fun checkInternetConnection(): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetworkInfo = connectivityManager.activeNetworkInfo
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected
-    }
-    override fun getHistoryTracks() {
-        TODO("Not yet implemented")
-    }
+
 }

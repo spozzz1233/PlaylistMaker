@@ -12,19 +12,21 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.domain.search.model.HistoryTrack
 import com.example.playlistmaker.R
-import com.example.playlistmaker.util.Debounce
+import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.domain.search.model.historyTracks
-import com.example.playlistmaker.domain.search.model.tracks
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.util.MusicHistory
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class HistoryAdapter(private val context: Context) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+class HistoryAdapter(
+    private val context: Context,
+    private val clickListener: HistoryClick
+    )  : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
     private val musicHistory = MusicHistory(context)
-    private val debounce = Debounce()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val cardMusicView = LayoutInflater.from(parent.context).inflate(R.layout.card_music, parent, false)
         return HistoryViewHolder(cardMusicView)
@@ -33,22 +35,11 @@ class HistoryAdapter(private val context: Context) : RecyclerView.Adapter<Histor
     override fun getItemCount(): Int = historyTracks.size
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
-        val historyTracks = historyTracks[position]
-        holder.bind(historyTracks)
+        val historyTrack = historyTracks[position]
+        holder.bind(historyTrack)
         holder.itemView.setOnClickListener {
-            debounce.clickDebounce()
-            musicHistory.curentPosition(historyTracks)
-            val playerActivity = Intent(holder.itemView.context, PlayerActivity::class.java)
-            playerActivity.putExtra("trackName", historyTracks.trackName)
-            playerActivity.putExtra("artistName", historyTracks.artistName)
-            playerActivity.putExtra("trackTimeMillis", historyTracks.trackTimeMillis)
-            playerActivity.putExtra("artworkUrl100", historyTracks.artworkUrl100)
-            playerActivity.putExtra("collectionName", historyTracks.collectionName)
-            playerActivity.putExtra("releaseDate", historyTracks.releaseDate)
-            playerActivity.putExtra("primaryGenreName", historyTracks.primaryGenreName)
-            playerActivity.putExtra("country", historyTracks.country)
-            playerActivity.putExtra("trackUrl", historyTracks.previewUrl)
-            holder.itemView.context.startActivity(playerActivity)
+            musicHistory.curentPosition(historyTrack)
+            clickListener.onClick(historyTrack)
             notifyDataSetChanged()
         }
     }
@@ -71,5 +62,8 @@ class HistoryAdapter(private val context: Context) : RecyclerView.Adapter<Histor
                 .transform(RoundedCorners(itemView.context.resources.getDimensionPixelSize(R.dimen.rounded_corners)))
                 .into(image)
         }
+    }
+    fun interface HistoryClick {
+        fun onClick(track: HistoryTrack)
     }
 }
