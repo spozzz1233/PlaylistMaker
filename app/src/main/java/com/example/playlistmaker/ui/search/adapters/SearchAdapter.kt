@@ -27,7 +27,10 @@ class searchAdapter(
     fun updateData() {
         notifyDataSetChanged()
     }
-
+    fun newTracks(newTracks: ArrayList<Track>) {
+        tracks = newTracks
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val cardMusicView = LayoutInflater.from(parent.context).inflate(R.layout.card_music, parent, false)

@@ -25,7 +25,6 @@ import java.util.Locale
 class SearchRepositoryImpl(private val networkClient: NetworkClient): SearchRepository {
 
     override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
-        Log.d("SearchRepositoryImpl", "Выполняется запрос searchTracks с выражением: $expression")
         try{
             val response = networkClient.doRequest(TrackSearchRequest(expression))
             when (response.resultCode) {
@@ -46,7 +45,6 @@ class SearchRepositoryImpl(private val networkClient: NetworkClient): SearchRepo
                             track.previewUrl
                         )
                     }))
-                    Log.d("SearchRepositoryImpl", "Добавлено ${tracks.size} треков в список")
                 }
                 else -> {
                     emit(Resource.Error(ErrorType.SERVER_ERROR))

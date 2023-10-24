@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
@@ -75,6 +76,9 @@ class SearchFragment : Fragment() {
 
         viewModel.noInternetLiveData.observe(viewLifecycleOwner, { noInternet ->
             binding.noInternet.visibility = if (noInternet) View.VISIBLE else View.GONE
+        })
+        viewModel.searchResultsListLiveData.observe(viewLifecycleOwner, Observer{ tracks ->
+            searchAdapter.newTracks(tracks)
         })
         initial()
         history()
@@ -215,11 +219,13 @@ class SearchFragment : Fragment() {
         binding.SearchForm.clearFocus()
         binding.progressBar.visibility = View.GONE
         binding.recyclerViewSearch.visibility = View.GONE
-        binding.history.visibility = View.VISIBLE
-        binding.recyclerViewHistory.visibility = View.VISIBLE
-        binding.buttonHistory.visibility = View.VISIBLE
         binding.noInternet.visibility = View.GONE
         binding.noResult.visibility = View.GONE
+        if(historyTracks.isNotEmpty()){
+            binding.history.visibility = View.VISIBLE
+            binding.recyclerViewHistory.visibility = View.VISIBLE
+            binding.buttonHistory.visibility = View.VISIBLE
+        }
     }
     private var isClickAllowed = true
 
