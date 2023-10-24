@@ -4,26 +4,19 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.domain.search.model.historyTracks
-import com.example.playlistmaker.ui.main.activity.MainActivity
+import com.example.playlistmaker.domain.search.model.tracks
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.adapters.HistoryAdapter
 import com.example.playlistmaker.ui.search.adapters.searchAdapter
@@ -83,7 +76,6 @@ class SearchFragment : Fragment() {
         viewModel.noInternetLiveData.observe(viewLifecycleOwner, { noInternet ->
             binding.noInternet.visibility = if (noInternet) View.VISIBLE else View.GONE
         })
-
         initial()
         history()
         binding.SearchForm.requestFocus()

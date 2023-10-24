@@ -5,5 +5,5 @@ import com.example.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.flow.Flow
 
 interface SearchInteractor {
-    fun search (expression:String) : Flow<Resource<List<Track>>>
+    fun searchTrack (expression:String) : Flow<Resource<List<Track>>>
 }

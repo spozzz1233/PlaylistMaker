@@ -1,14 +1,14 @@
 package com.example.playlistmaker.ui.search.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.search.ErrorType
-import com.example.playlistmaker.domain.search.model.tracks
 import com.example.playlistmaker.domain.search.SearchInteractor
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.ui.search.view_model.screen_state.SearchScreenState
+import com.example.playlistmaker.domain.search.model.tracks
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -30,7 +30,8 @@ class SearchFragmentViewModel(
     private val _noInternetLiveData = MutableLiveData<Boolean>()
     val noInternetLiveData: LiveData<Boolean> = _noInternetLiveData
 
-
+    private val _searchResultsListLiveData = MutableLiveData<List<Track>>()
+    val searchResultsListLiveData: LiveData<List<Track>> = _searchResultsListLiveData
 
     fun clearSearch() {
         _loadingLiveData.value = false
@@ -66,20 +67,32 @@ class SearchFragmentViewModel(
         if (query.isNotEmpty()) {
             _loadingLiveData.value = true
             viewModelScope.launch {
-                try {
-                    searchInteractor.search(query)
-                        .collect {
-                            when (it.message) {
-                                ErrorType.CONNECTION_ERROR -> _noInternetLiveData.value = true
-                                ErrorType.SERVER_ERROR -> _noResultLiveData.value = true
-                                else -> {
-                                    _searchResultsLiveData.value = true
-                                }
-                            }
-                        }
-                } catch (error: Error) {
-                    _noInternetLiveData.value = true
-                }
+                searchInteractor
+                    .searchTrack(query)
+                    .collect {
+                        processResult(tracks)
+                    }
+            }
+        }
+    }
+    fun processResult(track: List<Track>?) {
+        val tracks = mutableListOf<Track>()
+        if (track != null) {
+            tracks.addAll(track)
+        }
+
+        when {
+            tracks.isEmpty() -> {
+                _loadingLiveData.value = false
+                _searchResultsLiveData.value = false
+                _noResultLiveData.value = true
+                Log.d("MyTag", "Список tracks пуст")
+            }
+            else -> {
+                Log.d("MyTag", "Список tracks не пуст")
+                _loadingLiveData.value = false
+                _searchResultsLiveData.value = true
+                _noResultLiveData.value = false
             }
         }
     }

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class SearchInteractorImpl(private val searchRepository: SearchRepository): SearchInteractor {
-    override fun search(expression: String): Flow<Resource<List<Track>>> {
+    override fun searchTrack(expression: String): Flow<Resource<List<Track>>> {
         return searchRepository.searchTracks(expression).map { result ->
             when (result) {
                 is Resource.Success -> {
@@ -20,6 +20,5 @@ class SearchInteractorImpl(private val searchRepository: SearchRepository): Sear
             } as Resource<List<Track>>
         }
     }
-
 }
 
