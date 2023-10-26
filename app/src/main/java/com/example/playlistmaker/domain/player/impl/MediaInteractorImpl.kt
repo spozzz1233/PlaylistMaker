@@ -27,5 +27,9 @@ class MediaInteractorImpl(private val mediaRepository: MediaRepository) : MediaI
     override fun getCurrentPosition(): Int {
         return mediaRepository.getCurrentPosition()
     }
+
+    override fun getPlayerState(): Int {
+        return mediaRepository.getPlayerState()
+    }
 }
 

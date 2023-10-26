@@ -59,4 +59,7 @@ class MediaRepositoryImpl : MediaRepository {
     override fun getCurrentPosition(): Int {
         return mediaPlayer?.currentPosition ?: 0
     }
+    override fun getPlayerState(): Int {
+        return playerState
+    }
 }

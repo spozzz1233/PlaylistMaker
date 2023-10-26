@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.player.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -123,19 +124,22 @@ class PlayerActivity : AppCompatActivity() {
     private fun startUpdatingTime() {
         updateTimeJob = CoroutineScope(Dispatchers.Main).launch {
             while (true) {
+                val currentPosition = viewModel.getCurrentPosition()
+                val playerState = viewModel.getPlayerState()
                 if (viewModel.isPlaying()) {
-                    val currentPosition = viewModel.getCurrentPosition()
-                    val text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
+                    val text = viewModel.formatTime(currentPosition)
                     withContext(Dispatchers.Main) {
                         binding.progressOfTheWork.text = text
                     }
+                }else if (playerState == 1) {
+                    binding.playButton.setImageResource(R.drawable.button_play)
+                    binding.progressOfTheWork.text = "00:00"
                 }
-                delay(400)
+
+                delay(300)
             }
         }
     }
-
-
 
     companion object{
         private const val ARGS_TRACK_URL = "trackUrl"

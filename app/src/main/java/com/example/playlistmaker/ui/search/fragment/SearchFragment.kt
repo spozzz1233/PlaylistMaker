@@ -152,6 +152,7 @@ class SearchFragment : Fragment() {
         } else {
             View.VISIBLE
         }
+        binding.recyclerViewSearch.visibility = View.GONE
     }
 
     companion object {

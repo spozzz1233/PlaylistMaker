@@ -7,4 +7,5 @@ interface MediaInteractor {
     fun stopPlayer()
     fun isPlaying(): Boolean
     fun getCurrentPosition(): Int
+    fun getPlayerState(): Int
 }
