@@ -1,11 +1,11 @@
 package com.example.playlistmaker.data.search
 
-import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.data.search.network.Resource
+import com.example.playlistmaker.domain.search.model.Track
+import kotlinx.coroutines.flow.Flow
+
 
 
 interface SearchRepository {
-    fun searchTrack(query: String, callback: (success: Boolean) -> Unit)
-    fun getHistoryTracks()
-    fun checkInternetConnection(): Boolean
-
+    fun searchTracks(expression: String): Flow<Resource<List<Track>>>
 }
