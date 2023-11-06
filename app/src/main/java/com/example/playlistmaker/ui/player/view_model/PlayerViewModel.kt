@@ -38,6 +38,15 @@ class PlayerViewModel(
     fun getCurrentPosition(): Int{
         return mediaInteractor.getCurrentPosition()
     }
+    fun getPlayerState() : Int{
+        return mediaInteractor.getPlayerState()
+    }
+    fun formatTime(milliseconds: Int): String {
+        val totalSeconds = (milliseconds + 999) / 1000
+        val minutes = totalSeconds / 60
+        val seconds = totalSeconds % 60
+        return String.format("%02d:%02d", minutes, seconds)
+    }
     fun startPlayer(onStarted: () -> Unit){
         mediaInteractor.startPlayer{
             _isPlaying.postValue(true)
