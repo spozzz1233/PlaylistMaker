@@ -2,7 +2,6 @@ package com.example.playlistmaker.ui.player.activity
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -10,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
-import com.example.playlistmaker.databinding.FragmentSearchBinding
+import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
@@ -32,15 +31,15 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
-        val track = intent.getStringExtra(ARGS_TRACK)
-        val artist = intent.getStringExtra(ARGS_ARTIST)
+        val track = intent.getStringExtra(ARGS_TRACK) ?: ""
+        val artist = intent.getStringExtra(ARGS_ARTIST) ?: ""
         val trackTimeMillis = intent.getIntExtra(ARGS_TRACKTIMEMILLIS, 0)
-        val artworkUrl100 = intent.getStringExtra(ARGS_ARTWORKURL100)
-        val collectionName = intent.getStringExtra(ARGS_COLLECTIONNAME)
-        val releaseDate = intent.getStringExtra(ARGS_RELEASEDATE)
-        val primaryGenreName = intent.getStringExtra(ARGS_PRIMARYGENRENAME)
-        val country = intent.getStringExtra(ARGS_COUNTRY)
-        val trackUrl = intent.getStringExtra(ARGS_TRACK_URL)!!
+        val artworkUrl100 = intent.getStringExtra(ARGS_ARTWORKURL100) ?: ""
+        val collectionName = intent.getStringExtra(ARGS_COLLECTIONNAME) ?: ""
+        val releaseDate = intent.getStringExtra(ARGS_RELEASEDATE) ?: ""
+        val primaryGenreName = intent.getStringExtra(ARGS_PRIMARYGENRENAME) ?: ""
+        val country = intent.getStringExtra(ARGS_COUNTRY) ?: ""
+        val trackUrl = intent.getStringExtra(ARGS_TRACK_URL) ?: ""
 
         val countryTextView: TextView = findViewById(R.id.country_name)
         val album: TextView = findViewById(R.id.album)
@@ -91,6 +90,22 @@ class PlayerActivity : AppCompatActivity() {
             } else {
                 binding.playButton.setImageResource(R.drawable.button_play)
             }
+        }
+
+        val trackObject = Track(
+            track,
+            artist,
+            trackTimeMillis,
+            artworkUrl100,
+            collectionName,
+            releaseDate,
+            primaryGenreName,
+            country,
+            trackUrl
+        )
+
+        binding.buttonLike.setOnClickListener {
+            viewModel.FavoriteTrack(trackObject)
         }
 
 
@@ -148,16 +163,18 @@ class PlayerActivity : AppCompatActivity() {
         private const val ARGS_PRIMARYGENRENAME = "primaryGenreName"
         private const val ARGS_COUNTRY = "country"
 
-        fun createArgs(trackName: String,
-                       trackUrl: String,
-                       artist: String,
-                       trackTimeMillis: Int,
-                       artworkUrl100: String,
-                       collectionName: String,
-                       releaseDate: String,
-                       primaryGenreName: String,
-                       country: String,
-                       ): Bundle =
+        fun createArgs(
+            trackName: String,
+            trackUrl: String,
+            artist: String,
+            trackTimeMillis: Comparable<*>,
+            artworkUrl100: String,
+            collectionName: String,
+            releaseDate: String,
+            primaryGenreName: String,
+            country: String,
+
+            ): Bundle =
             bundleOf(ARGS_TRACK to trackName,
                 ARGS_TRACK_URL to trackUrl,
                 ARGS_ARTIST to artist,
@@ -168,7 +185,6 @@ class PlayerActivity : AppCompatActivity() {
                 ARGS_PRIMARYGENRENAME to primaryGenreName,
                 ARGS_COUNTRY to country
                 )
-
     }
 
 }

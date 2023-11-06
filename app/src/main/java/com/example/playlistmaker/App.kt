@@ -3,8 +3,11 @@ package com.example.playlistmaker
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.di.dataModule.dataModule
+import com.example.playlistmaker.di.favoriteModule.favoriteModule
 import com.example.playlistmaker.di.mediaLibrary.mediaModule
 import com.example.playlistmaker.di.player.playerModule
+import com.example.playlistmaker.di.repositoryModule.repositoryModule
 import com.example.playlistmaker.di.search.searchModule
 import com.example.playlistmaker.di.settings.settingsModule
 import com.example.playlistmaker.domain.settings.SettingsInteractor
@@ -21,7 +24,10 @@ class App : Application() {
             modules(settingsModule,
                 playerModule,
                 searchModule,
-                mediaModule
+                mediaModule,
+                dataModule,
+                repositoryModule,
+                favoriteModule
             )
         }
         val settingsInteractor: SettingsInteractor = getKoin().get()
