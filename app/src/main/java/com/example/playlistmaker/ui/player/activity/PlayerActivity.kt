@@ -1,7 +1,7 @@
 package com.example.playlistmaker.ui.player.activity
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -32,7 +32,23 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
+        viewModel.favoriteTrack.observe(this, { like ->
+            if(like)
+            {
+                binding.buttonLike.setImageResource(R.drawable.button_like)
+            }else{
+                binding.buttonLike.setImageResource(R.drawable.button_like_red)
+            }
+        })
+
+
         val track = intent.getStringExtra(ARGS_TRACK) ?: ""
+        val trackIdSerializable = intent.getSerializableExtra(ARGS_TRACKID)
+        val trackId = if (trackIdSerializable is Int) {
+            trackIdSerializable
+        } else {
+            0
+        }
         val artist = intent.getStringExtra(ARGS_ARTIST) ?: ""
         val trackTimeMillis = intent.getIntExtra(ARGS_TRACKTIMEMILLIS, 0)
         val artworkUrl100 = intent.getStringExtra(ARGS_ARTWORKURL100) ?: ""
@@ -94,6 +110,7 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         val trackObject = Track(
+            trackId.toLong(),
             track,
             artist,
             trackTimeMillis,
@@ -108,6 +125,14 @@ class PlayerActivity : AppCompatActivity() {
         binding.buttonLike.setOnClickListener {
             viewModel.FavoriteTrack(trackObject)
         }
+        viewModel.checkTrackInFavorite(trackObject)
+            .observe(this) { favourtitesIndicator ->
+                if (favourtitesIndicator) {
+                    binding.buttonLike.setImageResource(R.drawable.button_like_red)
+                } else binding.buttonLike.setImageResource(
+                    R.drawable.button_like
+                )
+            }
 
 
         startUpdatingTime()
@@ -158,6 +183,7 @@ class PlayerActivity : AppCompatActivity() {
 
     companion object{
         private const val ARGS_TRACK_URL = "trackUrl"
+        private const val ARGS_TRACKID = "trackId"
         private const val ARGS_TRACK = "trackName"
         private const val ARGS_ARTIST = "artistName"
         private const val ARGS_TRACKTIMEMILLIS = "trackTimeMillis"
@@ -168,10 +194,11 @@ class PlayerActivity : AppCompatActivity() {
         private const val ARGS_COUNTRY = "country"
 
         fun createArgs(
+            trackId: Long,
             trackName: String,
             trackUrl: String,
             artist: String,
-            trackTimeMillis: Comparable<*>,
+            trackTimeMillis: Int,
             artworkUrl100: String,
             collectionName: String,
             releaseDate: String,
@@ -179,7 +206,8 @@ class PlayerActivity : AppCompatActivity() {
             country: String,
 
             ): Bundle =
-            bundleOf(ARGS_TRACK to trackName,
+            bundleOf(ARGS_TRACKID to trackId,
+                ARGS_TRACK to trackName,
                 ARGS_TRACK_URL to trackUrl,
                 ARGS_ARTIST to artist,
                 ARGS_TRACKTIMEMILLIS to trackTimeMillis,

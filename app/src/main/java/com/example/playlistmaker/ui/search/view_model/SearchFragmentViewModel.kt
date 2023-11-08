@@ -31,6 +31,7 @@ class SearchFragmentViewModel(
     private val _searchResultsListLiveData = MutableLiveData<ArrayList<Track>>()
     val searchResultsListLiveData: LiveData<ArrayList<Track>> = _searchResultsListLiveData
 
+
     fun clearSearch() {
         _loadingLiveData.value = false
         _searchResultsLiveData.value = false

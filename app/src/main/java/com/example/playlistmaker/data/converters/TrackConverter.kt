@@ -32,7 +32,6 @@ class TrackConverter {
             track.primaryGenreName,
             track.country,
             track.previewUrl,
-            track.isFavorite
         )
     }
 }

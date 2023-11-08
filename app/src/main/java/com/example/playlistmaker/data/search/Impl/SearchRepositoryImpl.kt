@@ -24,6 +24,7 @@ class SearchRepositoryImpl(private val networkClient: NetworkClient): SearchRepo
                     emit(Resource.Success((response as TracksResponse).results.map {track ->
                         Track(
                             track.trackId,
+                            track.trackName,
                             track.artistName,
                             track.trackTimeMillis,
                             track.artworkUrl100,
@@ -32,7 +33,6 @@ class SearchRepositoryImpl(private val networkClient: NetworkClient): SearchRepo
                             track.primaryGenreName,
                             track.country,
                             track.previewUrl,
-                            track.trackName
                         )
                     }))
                 }

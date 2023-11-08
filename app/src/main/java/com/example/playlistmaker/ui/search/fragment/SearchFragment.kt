@@ -153,10 +153,7 @@ class SearchFragment : Fragment() {
         binding.recyclerViewSearch.visibility = View.GONE
     }
 
-    companion object {
-        const val TEXT_SEARCH = "TEXT_SEARCH"
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
+
 
 
     private fun initial() {
@@ -165,15 +162,16 @@ class SearchFragment : Fragment() {
             if (clickDebounce()) {
                 findNavController().navigate(R.id.action_searchFragment_to_playerActivity,
                     PlayerActivity.createArgs(
-                        track.trackName,
-                        track.previewUrl,
-                        track.artistName,
-                        track.trackTimeMillis,
-                        track.artworkUrl100,
-                        track.collectionName,
-                        track.releaseDate,
-                        track.primaryGenreName,
-                        track.country
+                        track.trackId,
+                        track.trackName?: "",
+                        track.previewUrl?: "",
+                        track.artistName?: "",
+                        track.trackTimeMillis?: 0,
+                        track.artworkUrl100?: "",
+                        track.collectionName?: "",
+                        track.releaseDate?: "",
+                        track.primaryGenreName?: "",
+                        track.country?: ""
                     )
                 )
 
@@ -185,15 +183,16 @@ class SearchFragment : Fragment() {
             if (clickDebounce()) {
                 findNavController().navigate(R.id.action_searchFragment_to_playerActivity,
                     PlayerActivity.createArgs(
-                        track.trackName,
-                        track.previewUrl,
-                        track.artistName,
-                        track.trackTimeMillis,
-                        track.artworkUrl100,
-                        track.collectionName,
-                        track.releaseDate,
-                        track.primaryGenreName,
-                        track.country
+                        track.trackId,
+                        track.trackName?: "",
+                        track.previewUrl?: "",
+                        track.artistName?: "",
+                        track.trackTimeMillis?: 0,
+                        track.artworkUrl100?: "",
+                        track.collectionName?: "",
+                        track.releaseDate?: "",
+                        track.primaryGenreName?: "",
+                        track.country?: ""
                     ))
             }
         }
@@ -239,6 +238,10 @@ class SearchFragment : Fragment() {
             }
         }
         return current
+    }
+    companion object {
+        const val TEXT_SEARCH = "TEXT_SEARCH"
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
 
