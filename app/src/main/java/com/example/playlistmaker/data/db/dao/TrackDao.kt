@@ -17,9 +17,9 @@ interface TrackDao {
     @Delete(entity = TrackEntity::class)
     fun deleteTrack (track:TrackEntity)
 
-    @Query("SELECT * FROM track_table WHERE isFavorite = 1")
+    @Query("SELECT * FROM track_table ORDER BY addedTimestamp DESC")
     fun getFavoriteTracks(): Flow<List<TrackEntity>>
 
     @Query("SELECT * FROM track_table WHERE trackId=:id")
-    fun checkTreckInFavorite(id: Long):TrackEntity
+    fun checkTreckInFavorite(id: Int):TrackEntity
 }

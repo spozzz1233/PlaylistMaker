@@ -33,6 +33,7 @@ class SearchRepositoryImpl(private val networkClient: NetworkClient): SearchRepo
                             track.primaryGenreName,
                             track.country,
                             track.previewUrl,
+                            addedTimestamp = System.currentTimeMillis()
                         )
                     }))
                 }

@@ -1,6 +1,5 @@
 package com.example.playlistmaker.ui.player.activity
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -32,15 +31,6 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
-        viewModel.favoriteTrack.observe(this, { like ->
-            if(like)
-            {
-                binding.buttonLike.setImageResource(R.drawable.button_like)
-            }else{
-                binding.buttonLike.setImageResource(R.drawable.button_like_red)
-            }
-        })
-
 
         val track = intent.getStringExtra(ARGS_TRACK) ?: ""
         val trackIdSerializable = intent.getSerializableExtra(ARGS_TRACKID)
@@ -57,7 +47,7 @@ class PlayerActivity : AppCompatActivity() {
         val primaryGenreName = intent.getStringExtra(ARGS_PRIMARYGENRENAME) ?: ""
         val country = intent.getStringExtra(ARGS_COUNTRY) ?: ""
         val trackUrl = intent.getStringExtra(ARGS_TRACK_URL) ?: ""
-
+        val addedTimestamp = System.currentTimeMillis()
         val countryTextView: TextView = findViewById(R.id.country_name)
         val album: TextView = findViewById(R.id.album)
 
@@ -110,7 +100,7 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         val trackObject = Track(
-            trackId.toLong(),
+            trackId,
             track,
             artist,
             trackTimeMillis,
@@ -194,7 +184,7 @@ class PlayerActivity : AppCompatActivity() {
         private const val ARGS_COUNTRY = "country"
 
         fun createArgs(
-            trackId: Long,
+            trackId: Int,
             trackName: String,
             trackUrl: String,
             artist: String,

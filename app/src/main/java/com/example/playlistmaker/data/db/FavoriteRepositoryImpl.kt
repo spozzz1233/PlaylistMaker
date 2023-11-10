@@ -1,5 +1,6 @@
 package com.example.playlistmaker.data.db
 
+import android.util.Log
 import com.example.playlistmaker.data.converters.TrackConverter
 import com.example.playlistmaker.data.db.entity.TrackEntity
 import com.example.playlistmaker.domain.db.FavoriteRepository
@@ -29,8 +30,9 @@ class FavoriteRepositoryImpl(
             .map { trackEntityList ->
                 trackEntityList.map { TrackConverter.mapFavouriteToTrack(it) }
             }
+
     }
-    override fun checkTreckInFavorite(id: Long): Flow<Boolean> = flow {
+    override fun checkTreckInFavorite(id: Int): Flow<Boolean> = flow {
         emit(appDatabase.TrackDao().checkTreckInFavorite(id) != null)
     }
 }

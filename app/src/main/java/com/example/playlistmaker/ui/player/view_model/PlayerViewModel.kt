@@ -17,7 +17,7 @@ class PlayerViewModel(
     private val mediaInteractor: MediaInteractor,
     private val favoriteInteractor: FavoriteInteractor
 ): ViewModel(){
-    private val favouritLiveData = MutableLiveData<Boolean>()
+    val favouritLiveData = MutableLiveData<Boolean>()
     private val _isPlaying = MutableLiveData<Boolean>()
     val isPlaying: LiveData<Boolean>
         get() = _isPlaying
@@ -27,14 +27,12 @@ class PlayerViewModel(
 
     fun FavoriteTrack(track: Track) {
         if (track.isFavorite) {
-            _favoriteTrack.value = false
             viewModelScope.launch(Dispatchers.IO) {
-                favoriteInteractor.deleteTrack(track)
+                track.trackId?.let{favoriteInteractor.deleteTrack(track)}
             }
         } else{
-            _favoriteTrack.value = true
             viewModelScope.launch(Dispatchers.IO) {
-                favoriteInteractor.addTrack(track)
+                track.trackId?.let{favoriteInteractor.addTrack(track)}
             }
         }
     }
@@ -85,6 +83,7 @@ class PlayerViewModel(
                             favouritLiveData.postValue(value)
                         }
                 }
+
             }
         }
         return favouritLiveData

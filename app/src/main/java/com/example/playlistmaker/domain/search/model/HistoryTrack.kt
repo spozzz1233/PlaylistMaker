@@ -1,7 +1,7 @@
 package com.example.playlistmaker.domain.search.model
 
 data class HistoryTrack(
-    val trackId: Long,
+    val trackId: Int,
     val trackName: String?,
     val artistName: String?,
     val trackTimeMillis: Int?,
@@ -11,7 +11,8 @@ data class HistoryTrack(
     val primaryGenreName: String?,
     val country: String?,
     val previewUrl: String?,
-    var isFavorite: Boolean = false
+    var isFavorite: Boolean = false,
+    val addedTimestamp: Long = System.currentTimeMillis()
 )
 
 var historyTracks = ArrayList<HistoryTrack>()

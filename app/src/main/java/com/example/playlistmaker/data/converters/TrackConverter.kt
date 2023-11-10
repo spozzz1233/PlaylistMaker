@@ -16,7 +16,8 @@ class TrackConverter {
             track.primaryGenreName,
             track.country,
             track.previewUrl,
-            track.isFavorite
+            track.isFavorite,
+            track.addedTimestamp
         )
     }
 
@@ -32,6 +33,8 @@ class TrackConverter {
             track.primaryGenreName,
             track.country,
             track.previewUrl,
+            track.isFavorite,
+            track.addedTimestamp
         )
     }
 }

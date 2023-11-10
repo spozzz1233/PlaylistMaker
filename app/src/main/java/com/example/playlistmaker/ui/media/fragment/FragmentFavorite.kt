@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.media.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,7 +35,15 @@ class FragmentFavorite : Fragment(){
         lifecycleScope.launchWhenStarted {
             viewModel.getFavoriteTracks().collect { favoriteTracks ->
                 FragmentFavoriteAdapter.setItems(favoriteTracks)
+                if(favoriteTracks.isEmpty()){
+                    binding.placeholder.isVisible = true
+                    binding.placeholderText.isVisible = true
+                }else{
+                    binding.placeholder.isVisible = false
+                    binding.placeholderText.isVisible = false
+                }
             }
+
         }
     }
 

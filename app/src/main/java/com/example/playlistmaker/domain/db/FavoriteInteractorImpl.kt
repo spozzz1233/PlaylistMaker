@@ -16,7 +16,7 @@ class FavoriteInteractorImpl(private val favoriteRepository: FavoriteRepository)
         return favoriteRepository.getFavorite()
     }
 
-    override fun checkTreckInFavorite(id: Long): Flow<Boolean> {
+    override fun checkTreckInFavorite(id: Int): Flow<Boolean> {
         return favoriteRepository.checkTreckInFavorite(id)
     }
 }
