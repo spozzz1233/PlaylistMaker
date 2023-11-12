@@ -117,11 +117,11 @@ class PlayerActivity : AppCompatActivity() {
         }
         viewModel.checkTrackInFavorite(trackObject)
             .observe(this) { favourtitesIndicator ->
-                if (favourtitesIndicator) {
+                if (favourtitesIndicator){
                     binding.buttonLike.setImageResource(R.drawable.button_like_red)
-                } else binding.buttonLike.setImageResource(
-                    R.drawable.button_like
-                )
+                }else {
+                    binding.buttonLike.setImageResource(R.drawable.button_like)
+                }
             }
 
 

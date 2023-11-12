@@ -106,22 +106,3 @@ class SearchFragmentViewModel(
 
     }
 }
-
-//searchInteractor.searchTrack(query) { success ->
-//    if (success) {
-//        if (tracks.isEmpty()) {
-//            _loadingLiveData.value = false
-//            _searchResultsLiveData.value = false
-//            _noResultLiveData.value = true
-//        } else{
-//            _loadingLiveData.value = false
-//            _searchResultsLiveData.value = true
-//            _noResultLiveData.value = false
-//        }
-//    } else {
-//        _loadingLiveData.value = false
-//        _searchResultsLiveData.value = false
-//        _noResultLiveData.value = false
-//        _noInternetLiveData.value = true
-//    }
-

@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.media.view_model
 
 import android.util.Log
+import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,8 +19,18 @@ class FragmentFavoriteViewModel(
     private val favoriteInteractor: FavoriteInteractor,
 
     ) : ViewModel() {
-
+    private val _isFavoriteEmpty = MutableLiveData<Boolean>()
+    val isFavoriteEmpty: LiveData<Boolean> = _isFavoriteEmpty
     fun getFavoriteTracks(): Flow<List<Track>> {
+        viewModelScope.launch {
+            favoriteInteractor.getFavorite().collect() { favoriteTracks ->
+                if (favoriteTracks.isEmpty()) {
+                    _isFavoriteEmpty.value = true
+                } else {
+                    _isFavoriteEmpty.value = false
+                }
+            }
+        }
         return favoriteInteractor.getFavorite()
     }
 

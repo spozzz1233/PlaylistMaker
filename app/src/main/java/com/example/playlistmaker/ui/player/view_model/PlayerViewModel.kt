@@ -83,7 +83,6 @@ class PlayerViewModel(
                             favouritLiveData.postValue(value)
                         }
                 }
-
             }
         }
         return favouritLiveData
