@@ -99,7 +99,7 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
-        val trackObject = Track(
+        var trackObject = Track(
             trackId,
             track,
             artist,
@@ -112,18 +112,19 @@ class PlayerActivity : AppCompatActivity() {
             trackUrl
         )
 
-        binding.buttonLike.setOnClickListener {
-            viewModel.FavoriteTrack(trackObject)
-        }
+
         viewModel.checkTrackInFavorite(trackObject)
             .observe(this) { favourtitesIndicator ->
                 if (favourtitesIndicator){
+                    trackObject.isFavorite = true
                     binding.buttonLike.setImageResource(R.drawable.button_like_red)
                 }else {
                     binding.buttonLike.setImageResource(R.drawable.button_like)
                 }
             }
-
+        binding.buttonLike.setOnClickListener {
+            viewModel.FavoriteTrack(trackObject)
+        }
 
         startUpdatingTime()
     }
