@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.model.historyTracks
-import com.example.playlistmaker.domain.search.model.tracks
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.adapters.HistoryAdapter
 import com.example.playlistmaker.ui.search.adapters.searchAdapter
@@ -155,10 +153,7 @@ class SearchFragment : Fragment() {
         binding.recyclerViewSearch.visibility = View.GONE
     }
 
-    companion object {
-        const val TEXT_SEARCH = "TEXT_SEARCH"
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
+
 
 
     private fun initial() {
@@ -167,16 +162,18 @@ class SearchFragment : Fragment() {
             if (clickDebounce()) {
                 findNavController().navigate(R.id.action_searchFragment_to_playerActivity,
                     PlayerActivity.createArgs(
-                        track.trackName,
-                        track.previewUrl,
-                        track.artistName,
-                        track.trackTimeMillis,
-                        track.artworkUrl100,
-                        track.collectionName,
-                        track.releaseDate,
-                        track.primaryGenreName,
-                        track.country
-                    ))
+                        track.trackId,
+                        track.trackName?: "",
+                        track.previewUrl?: "",
+                        track.artistName?: "",
+                        track.trackTimeMillis?: 0,
+                        track.artworkUrl100?: "",
+                        track.collectionName?: "",
+                        track.releaseDate?: "",
+                        track.primaryGenreName?: "",
+                        track.country?: ""
+                    )
+                )
 
             }
         }
@@ -186,15 +183,16 @@ class SearchFragment : Fragment() {
             if (clickDebounce()) {
                 findNavController().navigate(R.id.action_searchFragment_to_playerActivity,
                     PlayerActivity.createArgs(
-                        track.trackName,
-                        track.previewUrl,
-                        track.artistName,
-                        track.trackTimeMillis,
-                        track.artworkUrl100,
-                        track.collectionName,
-                        track.releaseDate,
-                        track.primaryGenreName,
-                        track.country
+                        track.trackId,
+                        track.trackName?: "",
+                        track.previewUrl?: "",
+                        track.artistName?: "",
+                        track.trackTimeMillis?: 0,
+                        track.artworkUrl100?: "",
+                        track.collectionName?: "",
+                        track.releaseDate?: "",
+                        track.primaryGenreName?: "",
+                        track.country?: ""
                     ))
             }
         }
@@ -240,6 +238,10 @@ class SearchFragment : Fragment() {
             }
         }
         return current
+    }
+    companion object {
+        const val TEXT_SEARCH = "TEXT_SEARCH"
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
 

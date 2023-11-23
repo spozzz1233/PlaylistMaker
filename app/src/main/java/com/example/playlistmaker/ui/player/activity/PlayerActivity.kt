@@ -1,9 +1,7 @@
 package com.example.playlistmaker.ui.player.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -11,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
-import com.example.playlistmaker.databinding.FragmentSearchBinding
+import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
@@ -33,16 +31,23 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
-        val track = intent.getStringExtra(ARGS_TRACK)
-        val artist = intent.getStringExtra(ARGS_ARTIST)
-        val trackTimeMillis = intent.getIntExtra(ARGS_TRACKTIMEMILLIS, 0)
-        val artworkUrl100 = intent.getStringExtra(ARGS_ARTWORKURL100)
-        val collectionName = intent.getStringExtra(ARGS_COLLECTIONNAME)
-        val releaseDate = intent.getStringExtra(ARGS_RELEASEDATE)
-        val primaryGenreName = intent.getStringExtra(ARGS_PRIMARYGENRENAME)
-        val country = intent.getStringExtra(ARGS_COUNTRY)
-        val trackUrl = intent.getStringExtra(ARGS_TRACK_URL)!!
 
+        val track = intent.getStringExtra(ARGS_TRACK) ?: ""
+        val trackIdSerializable = intent.getSerializableExtra(ARGS_TRACKID)
+        val trackId = if (trackIdSerializable is Int) {
+            trackIdSerializable
+        } else {
+            0
+        }
+        val artist = intent.getStringExtra(ARGS_ARTIST) ?: ""
+        val trackTimeMillis = intent.getIntExtra(ARGS_TRACKTIMEMILLIS, 0)
+        val artworkUrl100 = intent.getStringExtra(ARGS_ARTWORKURL100) ?: ""
+        val collectionName = intent.getStringExtra(ARGS_COLLECTIONNAME) ?: ""
+        val releaseDate = intent.getStringExtra(ARGS_RELEASEDATE) ?: ""
+        val primaryGenreName = intent.getStringExtra(ARGS_PRIMARYGENRENAME) ?: ""
+        val country = intent.getStringExtra(ARGS_COUNTRY) ?: ""
+        val trackUrl = intent.getStringExtra(ARGS_TRACK_URL) ?: ""
+        val addedTimestamp = System.currentTimeMillis()
         val countryTextView: TextView = findViewById(R.id.country_name)
         val album: TextView = findViewById(R.id.album)
 
@@ -94,6 +99,32 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
+        var trackObject = Track(
+            trackId,
+            track,
+            artist,
+            trackTimeMillis,
+            artworkUrl100,
+            collectionName,
+            releaseDate,
+            primaryGenreName,
+            country,
+            trackUrl
+        )
+
+
+        viewModel.checkTrackInFavorite(trackObject)
+            .observe(this) { favourtitesIndicator ->
+                if (favourtitesIndicator){
+                    trackObject.isFavorite = true
+                    binding.buttonLike.setImageResource(R.drawable.button_like_red)
+                }else {
+                    binding.buttonLike.setImageResource(R.drawable.button_like)
+                }
+            }
+        binding.buttonLike.setOnClickListener {
+            viewModel.FavoriteTrack(trackObject)
+        }
 
         startUpdatingTime()
     }
@@ -143,6 +174,7 @@ class PlayerActivity : AppCompatActivity() {
 
     companion object{
         private const val ARGS_TRACK_URL = "trackUrl"
+        private const val ARGS_TRACKID = "trackId"
         private const val ARGS_TRACK = "trackName"
         private const val ARGS_ARTIST = "artistName"
         private const val ARGS_TRACKTIMEMILLIS = "trackTimeMillis"
@@ -152,17 +184,21 @@ class PlayerActivity : AppCompatActivity() {
         private const val ARGS_PRIMARYGENRENAME = "primaryGenreName"
         private const val ARGS_COUNTRY = "country"
 
-        fun createArgs(trackName: String,
-                       trackUrl: String,
-                       artist: String,
-                       trackTimeMillis: Int,
-                       artworkUrl100: String,
-                       collectionName: String,
-                       releaseDate: String,
-                       primaryGenreName: String,
-                       country: String,
-                       ): Bundle =
-            bundleOf(ARGS_TRACK to trackName,
+        fun createArgs(
+            trackId: Int,
+            trackName: String,
+            trackUrl: String,
+            artist: String,
+            trackTimeMillis: Int,
+            artworkUrl100: String,
+            collectionName: String,
+            releaseDate: String,
+            primaryGenreName: String,
+            country: String,
+
+            ): Bundle =
+            bundleOf(ARGS_TRACKID to trackId,
+                ARGS_TRACK to trackName,
                 ARGS_TRACK_URL to trackUrl,
                 ARGS_ARTIST to artist,
                 ARGS_TRACKTIMEMILLIS to trackTimeMillis,
@@ -172,7 +208,6 @@ class PlayerActivity : AppCompatActivity() {
                 ARGS_PRIMARYGENRENAME to primaryGenreName,
                 ARGS_COUNTRY to country
                 )
-
     }
 
 }
