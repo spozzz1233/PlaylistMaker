@@ -18,7 +18,9 @@ data class Track(
     var isFavorite: Boolean = false,
     val addedTimestamp: Long = System.currentTimeMillis()
 
-)
+){
+    fun updateTime() = this.also { System.currentTimeMillis() }
+}
 
 
 
