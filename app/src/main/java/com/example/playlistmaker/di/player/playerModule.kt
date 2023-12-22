@@ -20,6 +20,6 @@ val playerModule = module {
     }
 
     viewModel {
-        PlayerViewModel(get(),get())
+        PlayerViewModel(get(),get(),get())
     }
 }

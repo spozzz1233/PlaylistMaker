@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.favorite.FavoriteInteractor
+import com.example.playlistmaker.domain.playList.PlayListInteractor
+import com.example.playlistmaker.domain.playList.model.Playlist
 import com.example.playlistmaker.domain.player.MediaInteractor
 import com.example.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.Dispatchers
@@ -13,10 +15,12 @@ import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     private val mediaInteractor: MediaInteractor,
-    private val favoriteInteractor: FavoriteInteractor
+    private val favoriteInteractor: FavoriteInteractor,
+    private val playListInteractor: PlayListInteractor
 ): ViewModel(){
     val favouritLiveData = MutableLiveData<Boolean>()
     private val _isPlaying = MutableLiveData<Boolean>()
+    val playListList: MutableLiveData<List<Playlist>> = MutableLiveData<List<Playlist>>()
     val isPlaying: LiveData<Boolean>
         get() = _isPlaying
     private val _favoriteTrack = MutableLiveData<Boolean>()
@@ -84,6 +88,18 @@ class PlayerViewModel(
             }
         }
         return favouritLiveData
+    }
+    fun getPlaylists() {
+        viewModelScope.launch {
+            playListInteractor.getPlayList()
+                .collect {
+                    if (it.isNotEmpty()) {
+                        playListList.postValue(it)
+                    } else {
+                        playListList.postValue(emptyList())
+                    }
+                }
+        }
     }
 
 

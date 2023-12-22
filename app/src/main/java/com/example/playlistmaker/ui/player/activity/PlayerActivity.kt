@@ -1,16 +1,23 @@
 package com.example.playlistmaker.ui.player.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.ui.media.adapter.FragmentPlayListAdapter
+import com.example.playlistmaker.ui.media.fragment.CreatePlayListFragment
+import com.example.playlistmaker.ui.player.adapter.PlayerPlayListAdapter
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,6 +31,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<PlayerViewModel>()
     lateinit var binding: ActivityPlayerBinding
+    private lateinit var playerPlayListAdapter: PlayerPlayListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,13 +39,37 @@ class PlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        val recyclerView = binding.recyclerView
+        playerPlayListAdapter = PlayerPlayListAdapter()
+        recyclerView.adapter = playerPlayListAdapter
         binding.back.setOnClickListener {
             finish()
         }
         binding.addButton.setOnClickListener{
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
+        binding.newPlaylist.setOnClickListener {
+            val createPlaylistFragment = CreatePlayListFragment()
+            val fragmentManager: FragmentManager = supportFragmentManager
+            val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+            transaction.replace(android.R.id.content, createPlaylistFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
 
+        viewModel.getPlaylists()
+
+        viewModel.playListList.observe(this) { it ->
+            Log.d("playListList","$it")
+            if (it.isNullOrEmpty()) {
+
+                return@observe
+            } else {
+                recyclerView.adapter = playerPlayListAdapter
+                playerPlayListAdapter.setItems(it)
+                return@observe
+            }
+        }
 
 
         val track = intent.getStringExtra(ARGS_TRACK) ?: ""
