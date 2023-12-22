@@ -27,7 +27,8 @@
         android:id="@+id/playerActivity"
         android:name="com.example.playlistmaker.ui.player.activity.PlayerActivity"
         android:label="activity_player"
-        tools:layout="@layout/activity_player" />
+        tools:layout="@layout/activity_player">
+    </activity>
     <fragment
         android:id="@+id/fragmentFavorite"
         android:name="com.example.playlistmaker.ui.media.fragment.FragmentFavorite"
