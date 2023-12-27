@@ -27,6 +27,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlayListBinding
 import com.example.playlistmaker.ui.media.view_model.FragmentCreatePlayListViewModel
+import com.example.playlistmaker.ui.player.adapter.PlayerPlayListAdapter
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tbruyelle.rxpermissions3.RxPermissions
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -37,6 +39,7 @@ class CreatePlayListFragment : Fragment() {
     private val viewModel by viewModel<FragmentCreatePlayListViewModel>()
     private lateinit var binding: FragmentCreatePlayListBinding
     private var Uri: Uri? = null
+
 
 
     override fun onCreateView(
@@ -51,6 +54,8 @@ class CreatePlayListFragment : Fragment() {
     @SuppressLint("CheckResult")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         val rxPermissions = RxPermissions(this)
         binding.back.setOnClickListener{
             backClick()

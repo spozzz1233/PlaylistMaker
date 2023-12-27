@@ -10,7 +10,7 @@ import org.koin.dsl.module
 val playListModule = module{
 
     single<PlayListRepository>{
-        PlayListRepositoryImpl(get(),get())
+        PlayListRepositoryImpl(get(),get(),get())
     }
     single<PlayListInteractor> {
         PlayListInteractorImpl(get())

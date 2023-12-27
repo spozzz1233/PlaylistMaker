@@ -1,25 +1,31 @@
 package com.example.playlistmaker.ui.player.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
+import com.example.playlistmaker.domain.playList.model.Playlist
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.media.adapter.FragmentPlayListAdapter
 import com.example.playlistmaker.ui.media.fragment.CreatePlayListFragment
 import com.example.playlistmaker.ui.player.adapter.PlayerPlayListAdapter
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,46 +38,10 @@ class PlayerActivity : AppCompatActivity() {
     private val viewModel by viewModel<PlayerViewModel>()
     lateinit var binding: ActivityPlayerBinding
     private lateinit var playerPlayListAdapter: PlayerPlayListAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        val recyclerView = binding.recyclerView
-        playerPlayListAdapter = PlayerPlayListAdapter()
-        recyclerView.adapter = playerPlayListAdapter
-        binding.back.setOnClickListener {
-            finish()
-        }
-        binding.addButton.setOnClickListener{
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-        }
-        binding.newPlaylist.setOnClickListener {
-            val createPlaylistFragment = CreatePlayListFragment()
-            val fragmentManager: FragmentManager = supportFragmentManager
-            val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-            transaction.replace(android.R.id.content, createPlaylistFragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
-        }
-
-        viewModel.getPlaylists()
-
-        viewModel.playListList.observe(this) { it ->
-            Log.d("playListList","$it")
-            if (it.isNullOrEmpty()) {
-
-                return@observe
-            } else {
-                recyclerView.adapter = playerPlayListAdapter
-                playerPlayListAdapter.setItems(it)
-                return@observe
-            }
-        }
-
-
         val track = intent.getStringExtra(ARGS_TRACK) ?: ""
         val trackIdSerializable = intent.getSerializableExtra(ARGS_TRACKID)
         val trackId = if (trackIdSerializable is Int) {
@@ -87,10 +57,79 @@ class PlayerActivity : AppCompatActivity() {
         val primaryGenreName = intent.getStringExtra(ARGS_PRIMARYGENRENAME) ?: ""
         val country = intent.getStringExtra(ARGS_COUNTRY) ?: ""
         val trackUrl = intent.getStringExtra(ARGS_TRACK_URL) ?: ""
-        val addedTimestamp = System.currentTimeMillis()
         val countryTextView: TextView = findViewById(R.id.country_name)
         val album: TextView = findViewById(R.id.album)
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        val recyclerView = binding.recyclerView
 
+        var trackObject = Track(
+            trackId,
+            track,
+            artist,
+            trackTimeMillis,
+            artworkUrl100,
+            collectionName,
+            releaseDate,
+            primaryGenreName,
+            country,
+            trackUrl
+        )
+        playerPlayListAdapter = PlayerPlayListAdapter(emptyList()) {playlistList ->
+            playlistAddTrack(trackObject, playlistList)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+        }
+        viewModel.getPlaylists()
+        recyclerView.adapter = playerPlayListAdapter
+        binding.back.setOnClickListener {
+            finish()
+        }
+        binding.addButton.setOnClickListener{
+            binding.overlay.visibility = View.VISIBLE
+            bottomSheetBehavior.state = STATE_COLLAPSED
+        }
+        bottomSheetBehavior.addBottomSheetCallback(
+                object : BottomSheetBehavior.BottomSheetCallback() {
+                    override fun onStateChanged(bottomSheet: View, newState: Int) {
+                        when (newState) {
+                            BottomSheetBehavior.STATE_HIDDEN -> {
+                                binding.overlay.visibility = View.GONE
+                            }
+
+                            else -> {
+                                binding.overlay.visibility = View.VISIBLE
+                            }
+                        }
+                    }
+
+                    override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+                }
+            )
+        binding.newPlaylist.setOnClickListener {
+            val createPlaylistFragment = CreatePlayListFragment()
+            val fragmentManager: FragmentManager = supportFragmentManager
+            val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+            transaction.replace(android.R.id.content, createPlaylistFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+
+
+
+        viewModel.playListList.observe(this) { it ->
+            Log.d("playListList","$it")
+            if (it.isNullOrEmpty()) {
+
+                return@observe
+            } else {
+                recyclerView.adapter = playerPlayListAdapter
+                playerPlayListAdapter.setItems(it)
+                return@observe
+            }
+        }
         binding.trackName.text = track
         binding.artistName.text = artist
         binding.durationName.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis)
@@ -139,18 +178,7 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
-        var trackObject = Track(
-            trackId,
-            track,
-            artist,
-            trackTimeMillis,
-            artworkUrl100,
-            collectionName,
-            releaseDate,
-            primaryGenreName,
-            country,
-            trackUrl
-        )
+
 
 
         viewModel.checkTrackInFavorite(trackObject)
@@ -211,6 +239,31 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
     }
+    private fun playlistAddTrack(track: Track, playlist: Playlist) {
+        var trackIsAdded = false
+        viewModel.addTrack(track, playlist)
+        lifecycleScope.launch {
+            delay(300)
+            viewModel.playListAdding.observe(this@PlayerActivity) { playlistAdding ->
+                val playlistName = playlist.playlistName
+                if (!trackIsAdded) {
+                    if (playlistAdding) {
+                        val toastMessage = "Трек уже добавлен в плейлист $playlistName"
+                        Toast.makeText(this@PlayerActivity, toastMessage, Toast.LENGTH_SHORT)
+                            .show()
+                        trackIsAdded = true
+                        return@observe
+                    } else {
+                        val toastMessage = "Добавлено в плейлист $playlistName"
+                        Toast.makeText(this@PlayerActivity, toastMessage, Toast.LENGTH_SHORT)
+                            .show()
+                        trackIsAdded = true
+                        return@observe
+                    }
+                }
+            }
+        }
+    }
 
     companion object{
         private const val ARGS_TRACK_URL = "trackUrl"
@@ -249,6 +302,8 @@ class PlayerActivity : AppCompatActivity() {
                 ARGS_COUNTRY to country
                 )
     }
+
+
 
 }
 

@@ -10,8 +10,13 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.CardNewPlaylistMiniBinding
 import com.example.playlistmaker.domain.playList.model.Playlist
 
-class PlayerPlayListAdapter: RecyclerView.Adapter<PlayerPlayListAdapter.PlayerPlayLisViewHolder>() {
-    private var plalists: List<Playlist> = emptyList()
+class PlayerPlayListAdapter(private var playlists: List<Playlist>,
+                            private val clickListener: PlaylistClick
+): RecyclerView.Adapter<PlayerPlayListAdapter.PlayerPlayLisViewHolder>() {
+    fun updateData(newPlaylistList: List<Playlist>) {
+        playlists = newPlaylistList
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerPlayLisViewHolder {
         val layoutInspector = LayoutInflater.from(parent.context)
@@ -19,11 +24,16 @@ class PlayerPlayListAdapter: RecyclerView.Adapter<PlayerPlayListAdapter.PlayerPl
     }
 
     override fun getItemCount(): Int {
-        return plalists.size
+        return playlists.size
     }
 
     override fun onBindViewHolder(holder: PlayerPlayLisViewHolder, position: Int) {
-        holder.bind(plalists[position])
+        holder.bind(playlists[position])
+        holder.itemView.setOnClickListener {
+            clickListener.onClick(playlists[position])
+            notifyDataSetChanged()
+        }
+
     }
 
 
@@ -42,21 +52,12 @@ class PlayerPlayListAdapter: RecyclerView.Adapter<PlayerPlayListAdapter.PlayerPl
             val number = "$innerNumber $text"
             binding.numberOfTracks.text = number
 
-            if (item.uri.isEmpty()) {
-                val imageResource = R.drawable.placeholder
-                binding.image.setImageResource(imageResource)
-                val layoutParams = binding.image.layoutParams
-                layoutParams.width = 104
-                layoutParams.height = 103
-                binding.image.layoutParams = layoutParams
-            } else {
-                Glide.with(itemView)
-                    .load(item.uri)
-                    .placeholder(R.drawable.placeholder)
-                    .transform(CenterCrop(), RoundedCorners(8))
-                    .override(160, 160)
-                    .into(binding.image)
-            }
+            Glide.with(itemView)
+                .load(item.uri)
+                .placeholder(R.drawable.placeholder)
+                .transform(CenterCrop(), RoundedCorners(2))
+                .override(45, 45)
+                .into(binding.image)
         }
     }
     fun interface PlaylistClick {
@@ -64,7 +65,7 @@ class PlayerPlayListAdapter: RecyclerView.Adapter<PlayerPlayListAdapter.PlayerPl
     }
 
     fun setItems(items: List<Playlist>) {
-        plalists = items
+        playlists = items
         notifyDataSetChanged()
     }
 }

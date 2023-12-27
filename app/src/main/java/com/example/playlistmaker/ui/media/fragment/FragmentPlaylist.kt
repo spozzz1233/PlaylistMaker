@@ -12,11 +12,13 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import com.example.playlistmaker.ui.media.adapter.FragmentPlayListAdapter
 import com.example.playlistmaker.ui.media.view_model.FragmentPlaylistViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FragmentPlaylist : Fragment() {
     private val vm by viewModel<FragmentPlaylistViewModel>()
     private lateinit var fragmentPlayListAdapter: FragmentPlayListAdapter
+    private lateinit var bottomNavigator: BottomNavigationView
     companion object {
         fun newInstance() = FragmentPlaylist()
 
@@ -34,6 +36,8 @@ class FragmentPlaylist : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.newPlaylist.setOnClickListener{
             findNavController().navigate(R.id.createPlayListFragment)
+            bottomNavigator = requireActivity().findViewById(R.id.bottomNavigationView)
+            bottomNavigator.visibility = View.GONE
         }
         val recyclerView = binding.recyclerViewPlayList
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)

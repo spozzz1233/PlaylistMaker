@@ -1,5 +1,6 @@
 package com.example.playlistmaker.ui.player.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,12 +21,23 @@ class PlayerViewModel(
 ): ViewModel(){
     val favouritLiveData = MutableLiveData<Boolean>()
     private val _isPlaying = MutableLiveData<Boolean>()
-    val playListList: MutableLiveData<List<Playlist>> = MutableLiveData<List<Playlist>>()
+    val playListList: MutableLiveData<List<Playlist>> = MutableLiveData<List<Playlist>>(emptyList())
+    val playListAdding =MutableLiveData(false)
     val isPlaying: LiveData<Boolean>
         get() = _isPlaying
-    private val _favoriteTrack = MutableLiveData<Boolean>()
-    val favoriteTrack: LiveData<Boolean> = _favoriteTrack
+    fun addTrack(track: Track, playlist: Playlist) {
+        if (playlist.trackArray.contains(track.trackId.toLong())) {
+            playListAdding.postValue(true)
+        } else {
+            playListAdding.postValue(false)
+            playlist.trackArray = (playlist.trackArray + track.trackId.toLong())!!
+            playlist.arrayNumber = (playlist.arrayNumber?.plus(1))!!
+            viewModelScope.launch(Dispatchers.IO){
+                playListInteractor.update(track, playlist)
+            }
 
+        }
+    }
 
     fun FavoriteTrack(track: Track) {
         if (track.isFavorite) {
@@ -89,6 +101,7 @@ class PlayerViewModel(
         }
         return favouritLiveData
     }
+
     fun getPlaylists() {
         viewModelScope.launch {
             playListInteractor.getPlayList()
