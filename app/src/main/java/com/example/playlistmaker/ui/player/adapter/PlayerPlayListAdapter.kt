@@ -13,8 +13,7 @@ import com.example.playlistmaker.domain.playList.model.Playlist
 class PlayerPlayListAdapter(private var playlists: List<Playlist>,
                             private val clickListener: PlaylistClick
 ): RecyclerView.Adapter<PlayerPlayListAdapter.PlayerPlayLisViewHolder>() {
-    fun updateData(newPlaylistList: List<Playlist>) {
-        playlists = newPlaylistList
+    fun updateData() {
         notifyDataSetChanged()
     }
 

@@ -80,7 +80,7 @@ class PlayerActivity : AppCompatActivity() {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
         }
-        viewModel.getPlaylists()
+
         recyclerView.adapter = playerPlayListAdapter
         binding.back.setOnClickListener {
             finish()
@@ -88,6 +88,7 @@ class PlayerActivity : AppCompatActivity() {
         binding.addButton.setOnClickListener{
             binding.overlay.visibility = View.VISIBLE
             bottomSheetBehavior.state = STATE_COLLAPSED
+            viewModel.getPlaylists()
         }
         bottomSheetBehavior.addBottomSheetCallback(
                 object : BottomSheetBehavior.BottomSheetCallback() {
@@ -209,7 +210,6 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.stopPlayer()
 
     }
-
     private fun playbackControl() {
         if (viewModel.isPlaying()) {
             viewModel.pausePlayer {}
