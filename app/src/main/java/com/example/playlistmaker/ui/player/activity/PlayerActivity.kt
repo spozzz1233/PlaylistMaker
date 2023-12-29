@@ -38,6 +38,8 @@ class PlayerActivity : AppCompatActivity() {
     private val viewModel by viewModel<PlayerViewModel>()
     lateinit var binding: ActivityPlayerBinding
     private lateinit var playerPlayListAdapter: PlayerPlayListAdapter
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
@@ -59,7 +61,7 @@ class PlayerActivity : AppCompatActivity() {
         val trackUrl = intent.getStringExtra(ARGS_TRACK_URL) ?: ""
         val countryTextView: TextView = findViewById(R.id.country_name)
         val album: TextView = findViewById(R.id.album)
-        val bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         val recyclerView = binding.recyclerView
 
@@ -77,7 +79,7 @@ class PlayerActivity : AppCompatActivity() {
         )
         playerPlayListAdapter = PlayerPlayListAdapter(emptyList()) {playlistList ->
             playlistAddTrack(trackObject, playlistList)
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
 
         }
 
@@ -252,12 +254,14 @@ class PlayerActivity : AppCompatActivity() {
                         Toast.makeText(this@PlayerActivity, toastMessage, Toast.LENGTH_SHORT)
                             .show()
                         trackIsAdded = true
+
                         return@observe
                     } else {
                         val toastMessage = "Добавлено в плейлист $playlistName"
                         Toast.makeText(this@PlayerActivity, toastMessage, Toast.LENGTH_SHORT)
                             .show()
                         trackIsAdded = true
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                         return@observe
                     }
                 }
