@@ -16,4 +16,29 @@ class PlayListInteractorImpl(private val playListRepository: PlayListRepository)
         playListRepository.update(track, playlist)
     }
 
+    override fun getUpdatePlayListById(id: Int): Flow<Playlist> {
+        return playListRepository.getUpdatePlayListById(id)
+    }
+
+    override fun getTrackList(playlist: Playlist): Flow<List<Track>> {
+        return playListRepository.getTrackList(playlist)
+    }
+
+    override fun deletePlaylist(playlist: Playlist) {
+        playListRepository.deletePlaylist(playlist)
+    }
+    override fun savePlaylist(
+        playlist: Playlist,
+        playlistName: String,
+        description: String?,
+        uri: String
+    ) {
+        playListRepository.savePlaylist(
+            playlist,
+            playlistName,
+            description,
+            uri
+        )
+    }
+
 }

@@ -2,6 +2,7 @@ package com.example.playlistmaker.data.playlist
 
 import com.example.playlistmaker.data.db.PlayListTrackDatabase
 import com.example.playlistmaker.data.converters.PlayListConverter
+import com.example.playlistmaker.data.converters.TrackConverter
 import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.domain.playList.PlayListRepository
 import com.example.playlistmaker.domain.playList.model.Playlist
@@ -42,5 +43,42 @@ class PlayListRepositoryImpl(
     override fun update(track: Track, playlist: Playlist) {
         appDatabase.PlayListDao().updatePlaylist(converter.mapplaylistClassToEntity(playlist))
         trackInDataBase.trackListingDao().insertTrack(track)
+    }
+
+    override fun getUpdatePlayListById(id:Int): Flow<Playlist> = flow{
+        emit(
+            converter.mapplaylistEntityToClass(appDatabase.PlayListDao().getUpdatePlayList(id))
+        )
+        return@flow
+    }
+    override fun getTrackList(playlist: Playlist): Flow<List<Track>> = flow {
+        var trackList: List<Track> = emptyList()
+        playlist.trackArray.map { id ->
+            val entity = id?.let { trackInDataBase.trackListingDao().queryTrackId(searchId = it) } ?: return@map
+            trackList = trackList + (TrackConverter().mapTrackEntityToTrack(entity))
+        }
+        emit(trackList)
+    }
+    override fun deletePlaylist(playlist: Playlist) {
+        converter.mapplaylistClassToEntity(playlist)
+            ?.let { appDatabase.PlayListDao().deletePlaylist(it) }
+    }
+    override fun savePlaylist(
+        playlist: Playlist,
+        playlistName: String,
+        description: String?,
+        uri: String
+    ) {
+        val newPlaylist = Playlist(
+            playlist.playlistId,
+            playlistName,
+            description,
+            uri,
+            playlist.trackArray,
+            playlist.arrayNumber
+        )
+        appDatabase.PlayListDao().updatePlaylist(
+            converter.mapplaylistClassToEntity(newPlaylist)
+        )
     }
 }
