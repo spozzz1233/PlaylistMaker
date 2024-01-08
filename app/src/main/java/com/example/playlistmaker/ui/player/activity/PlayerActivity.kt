@@ -1,27 +1,22 @@
 package com.example.playlistmaker.ui.player.activity
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
-import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.domain.playList.model.Playlist
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.ui.media.adapter.FragmentPlayListAdapter
-import com.example.playlistmaker.ui.media.fragment.CreatePlayListFragment
+import com.example.playlistmaker.ui.media.fragment.edit.CreatePlayListFragment
 import com.example.playlistmaker.ui.player.adapter.PlayerPlayListAdapter
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -79,8 +74,6 @@ class PlayerActivity : AppCompatActivity() {
         )
         playerPlayListAdapter = PlayerPlayListAdapter(emptyList()) {playlistList ->
             playlistAddTrack(trackObject, playlistList)
-
-
         }
 
         recyclerView.adapter = playerPlayListAdapter
