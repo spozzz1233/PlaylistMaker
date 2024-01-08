@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.media.fragment
+package com.example.playlistmaker.ui.media.fragment.edit
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
@@ -21,14 +21,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlayListBinding
 import com.example.playlistmaker.ui.media.view_model.FragmentCreatePlayListViewModel
-import com.example.playlistmaker.ui.player.adapter.PlayerPlayListAdapter
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tbruyelle.rxpermissions3.RxPermissions
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -86,6 +85,7 @@ class CreatePlayListFragment : Fragment() {
                     finish()
                 }
                 .show()
+            finish()
         }
         binding.playlistNameEditText.addTextChangedListener(simpleTextWatcher)
         val pickMedia =
@@ -132,7 +132,7 @@ class CreatePlayListFragment : Fragment() {
 
                 }
                 .setPositiveButton("Завершить") { dialog, which -> // Добавляет кнопку «Нет»
-                    finish()
+                    requireActivity().finish()
                 }
                 .show()
         }else{
@@ -158,7 +158,9 @@ class CreatePlayListFragment : Fragment() {
         Uri = file.toUri()
     }
     fun finish(){
-        requireActivity().supportFragmentManager.popBackStack()
+        if (isAdded) {  // Проверяем, привязан ли фрагмент к активности
+            findNavController().popBackStack()
+        }
     }
     fun turnOn(){
         binding.createButton.backgroundTintList =

@@ -32,6 +32,11 @@
     <string name="description">Описание</string>
     <string name="title">Название*</string>
     <string name="Add_to_playlist">Добавить в плейлист</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="share_menu">Поделиться</string>
+    <string name="editInformationMenu">Редактировать информацию</string>
+    <string name="deletePlaylistMenu">Удалить плейлист</string>
+    <string name="save">Сохранить</string>
 
 
 </resources>

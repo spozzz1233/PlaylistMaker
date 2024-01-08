@@ -10,4 +10,13 @@ interface PlayListRepository {
                        uri: String)
     fun getPlayList() : Flow<List<Playlist>>
     fun update(track: Track, playlist: Playlist)
+    fun getUpdatePlayListById(id:Int): Flow<Playlist>
+    fun getTrackList(playlist: Playlist) : Flow<List<Track>>
+    fun deletePlaylist(playlist: Playlist)
+    fun savePlaylist (
+        playlist:Playlist,
+        playlistName: String,
+        description: String?,
+        uri: String
+    )
 }
