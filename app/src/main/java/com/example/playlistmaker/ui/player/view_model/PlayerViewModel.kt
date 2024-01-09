@@ -5,25 +5,39 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.domain.db.FavoriteInteractor
+import com.example.playlistmaker.domain.favorite.FavoriteInteractor
+import com.example.playlistmaker.domain.playList.PlayListInteractor
+import com.example.playlistmaker.domain.playList.model.Playlist
 import com.example.playlistmaker.domain.player.MediaInteractor
 import com.example.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     private val mediaInteractor: MediaInteractor,
-    private val favoriteInteractor: FavoriteInteractor
+    private val favoriteInteractor: FavoriteInteractor,
+    private val playListInteractor: PlayListInteractor
 ): ViewModel(){
     val favouritLiveData = MutableLiveData<Boolean>()
     private val _isPlaying = MutableLiveData<Boolean>()
+    val playListList: MutableLiveData<List<Playlist>> = MutableLiveData<List<Playlist>>(emptyList())
+    val playListAdding =MutableLiveData(false)
     val isPlaying: LiveData<Boolean>
         get() = _isPlaying
-    private val _favoriteTrack = MutableLiveData<Boolean>()
-    val favoriteTrack: LiveData<Boolean> = _favoriteTrack
+    fun addTrack(track: Track, playlist: Playlist) {
+        if (playlist.trackArray.contains(track.trackId.toLong())) {
+            playListAdding.postValue(true)
+        } else {
+            playListAdding.postValue(false)
+            playlist.trackArray = (playlist.trackArray + track.trackId.toLong())!!
+            playlist.arrayNumber = (playlist.arrayNumber?.plus(1))!!
+            viewModelScope.launch(Dispatchers.IO){
+                playListInteractor.update(track, playlist)
+            }
 
+        }
+    }
 
     fun FavoriteTrack(track: Track) {
         if (track.isFavorite) {
@@ -86,6 +100,19 @@ class PlayerViewModel(
             }
         }
         return favouritLiveData
+    }
+
+    fun getPlaylists() {
+        viewModelScope.launch {
+            playListInteractor.getPlayList()
+                .collect {
+                    if (it.isNotEmpty()) {
+                        playListList.postValue(it)
+                    } else {
+                        playListList.postValue(emptyList())
+                    }
+                }
+        }
     }
 
 

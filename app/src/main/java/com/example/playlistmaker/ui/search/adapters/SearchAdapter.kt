@@ -19,11 +19,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class searchAdapter(
-    private val context: Context,
-    private val clickListener: TrackClick
+    private val clickListener: TrackClick,
+    private val longClickListener : LongClick
     ) : RecyclerView.Adapter<searchAdapter.SearchViewHolder>() {
 
-    private val musicHistory = MusicHistory(context)
     fun updateData() {
         notifyDataSetChanged()
     }
@@ -41,8 +40,12 @@ class searchAdapter(
         holder.bind(tracks[position])
         val track = tracks[position]
         holder.itemView.setOnClickListener {
-            musicHistory.saveHistoryTrack(track)
             clickListener.onClick(track)
+        }
+        holder.itemView.setOnLongClickListener{
+            longClickListener.onLongClick(track)
+            notifyDataSetChanged()
+            return@setOnLongClickListener true
         }
     }
 
@@ -69,6 +72,9 @@ class searchAdapter(
     }
     fun interface TrackClick {
         fun onClick(track: Track)
+    }
+    fun interface LongClick {
+        fun onLongClick(track: Track)
     }
 
 }

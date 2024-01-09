@@ -13,6 +13,14 @@
         <action
             android:id="@+id/action_mediatekaFragment_to_playerActivity"
             app:destination="@id/playerActivity" />
+        <action
+            android:id="@+id/action_mediatekaFragment_to_createPlayListFragment"
+            app:destination="@id/createPlayListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_mediatekaFragment_to_screenPlaylistFragment"
+            app:destination="@id/screenPlaylistFragment" />
     </fragment>
 
     <fragment
@@ -24,7 +32,8 @@
         android:id="@+id/playerActivity"
         android:name="com.example.playlistmaker.ui.player.activity.PlayerActivity"
         android:label="activity_player"
-        tools:layout="@layout/activity_player" />
+        tools:layout="@layout/activity_player">
+    </activity>
     <fragment
         android:id="@+id/fragmentFavorite"
         android:name="com.example.playlistmaker.ui.media.fragment.FragmentFavorite"
@@ -41,6 +50,46 @@
         tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/action_searchFragment_to_playerActivity"
-            app:destination="@id/playerActivity" />
+            app:destination="@id/playerActivity"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
+    <fragment
+        android:id="@+id/createPlayListFragment"
+        android:name="com.example.playlistmaker.ui.media.fragment.edit.CreatePlayListFragment"
+        android:label="fragment_create_play_list"
+        tools:layout="@layout/fragment_create_play_list" >
+        <action
+            android:id="@+id/action_createPlayListFragment_to_mediatekaFragment"
+            app:destination="@id/mediatekaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentPlaylist"
+        android:name="com.example.playlistmaker.ui.media.fragment.FragmentPlaylist"
+        android:label="fragment_playlist"
+        tools:layout="@layout/fragment_playlist" >
+        <action
+            android:id="@+id/action_fragmentPlaylist_to_screenPlaylistFragment"
+            app:destination="@id/screenPlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/screenPlaylistFragment"
+        android:name="com.example.playlistmaker.ui.playlist.fragment.ScreenPlaylistFragment"
+        android:label="fragment_screen_playlist"
+        tools:layout="@layout/fragment_screen_playlist" >
+        <action
+            android:id="@+id/action_screenPlaylistFragment_to_playerActivity"
+            app:destination="@id/playerActivity" />
+        <action
+            android:id="@+id/action_screenPlaylistFragment_to_mediatekaFragment"
+            app:destination="@id/mediatekaFragment" />
+        <action
+            android:id="@+id/action_screenPlaylistFragment_to_editPlaylistFragment"
+            app:destination="@id/editPlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPlaylistFragment"
+        android:name="com.example.playlistmaker.ui.mediaLibrary.fragments.playlist.EditPlaylistFragment"
+        android:label="EditPlaylistFragment" />
+
 </navigation>
