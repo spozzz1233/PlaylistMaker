@@ -87,7 +87,7 @@ class FragmentFavorite : Fragment() {
         if (isClickAllowed) {
             isClickAllowed = false
             viewLifecycleOwner.lifecycleScope.launch {
-                delay(CLICK_DEBOUNCE_DELAY)
+                delay(FragmentFavorite.CLICK_DEBOUNCE_DELAY)
                 isClickAllowed = true
             }
         }

@@ -34,7 +34,6 @@ class SearchFragment : Fragment() {
     lateinit var query: String
     private lateinit var musicHistory: MusicHistory
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState != null) {
@@ -159,9 +158,8 @@ class SearchFragment : Fragment() {
 
     private fun initial() {
         val recyclerViewSearch = binding.recyclerViewSearch
-        searchAdapter = searchAdapter(clickListener = {track ->
+        searchAdapter = searchAdapter(requireContext()){ track->
             if (clickDebounce()) {
-                musicHistory.saveHistoryTrack(track)
                 findNavController().navigate(R.id.action_searchFragment_to_playerActivity,
                     PlayerActivity.createArgs(
                         track.trackId,
@@ -178,7 +176,7 @@ class SearchFragment : Fragment() {
                 )
 
             }
-        },longClickListener = {})
+        }
         recyclerViewSearch.adapter = searchAdapter
         val recyclerViewHistory = binding.recyclerViewHistory
         historyAdapter = HistoryAdapter(requireContext()){track ->

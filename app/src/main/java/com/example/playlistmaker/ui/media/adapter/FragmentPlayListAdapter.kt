@@ -14,11 +14,10 @@ import com.example.playlistmaker.databinding.CardPlaylistBinding
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.domain.playList.model.Playlist
-import com.example.playlistmaker.ui.player.adapter.PlayerPlayListAdapter
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class FragmentPlayListAdapter(private val clickListener: PlaylistClick): RecyclerView.Adapter<FragmentPlayListAdapter.PlaylistViewHolder>()  {
+class FragmentPlayListAdapter(): RecyclerView.Adapter<FragmentPlayListAdapter.PlaylistViewHolder>()  {
     private var plalists: List<Playlist> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
@@ -32,9 +31,6 @@ class FragmentPlayListAdapter(private val clickListener: PlaylistClick): Recycle
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
         holder.bind(plalists[position])
-        holder.itemView.setOnClickListener {
-            clickListener.onClick(plalists[position])
-        }
     }
 
 

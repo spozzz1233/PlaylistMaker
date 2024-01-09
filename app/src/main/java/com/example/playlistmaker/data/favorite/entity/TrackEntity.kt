@@ -19,5 +19,5 @@ data class TrackEntity(
     val country: String?,
     val previewUrl: String?,
     var isFavorite: Boolean = false,
-    val addedTimestamp: Long? = System.currentTimeMillis()
+    val addedTimestamp: Long = System.currentTimeMillis()
 )

@@ -6,24 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
-import com.example.playlistmaker.ui.media.adapter.FragmentFavoriteAdapter
 import com.example.playlistmaker.ui.media.adapter.FragmentPlayListAdapter
 import com.example.playlistmaker.ui.media.view_model.FragmentPlaylistViewModel
-import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FragmentPlaylist : Fragment() {
     private val vm by viewModel<FragmentPlaylistViewModel>()
     private lateinit var fragmentPlayListAdapter: FragmentPlayListAdapter
     private lateinit var bottomNavigator: BottomNavigationView
+    companion object {
+        fun newInstance() = FragmentPlaylist()
+
+    }
 
     private lateinit var binding: FragmentPlaylistBinding
 
@@ -42,11 +41,7 @@ class FragmentPlaylist : Fragment() {
         }
         val recyclerView = binding.recyclerViewPlayList
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        fragmentPlayListAdapter = FragmentPlayListAdapter{
-            val bundle = Bundle()
-            bundle.putParcelable("playlist", it)
-            findNavController().navigate(R.id.action_mediatekaFragment_to_screenPlaylistFragment,bundle)
-        }
+        fragmentPlayListAdapter = FragmentPlayListAdapter()
         recyclerView.adapter = fragmentPlayListAdapter
 
 
@@ -63,23 +58,6 @@ class FragmentPlaylist : Fragment() {
                 return@observe
             }
         }
-    }
-    private var isClickAllowed = true
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            viewLifecycleOwner.lifecycleScope.launch {
-                delay(CLICK_DEBOUNCE_DELAY)
-                isClickAllowed = true
-            }
-        }
-        return current
-    }
-    companion object {
-        fun newInstance() = FragmentPlaylist()
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-
     }
 }
 

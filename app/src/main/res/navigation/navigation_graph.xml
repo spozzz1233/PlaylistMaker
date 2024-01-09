@@ -18,9 +18,6 @@
             app:destination="@id/createPlayListFragment"
             app:enterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_right"/>
-        <action
-            android:id="@+id/action_mediatekaFragment_to_screenPlaylistFragment"
-            app:destination="@id/screenPlaylistFragment" />
     </fragment>
 
     <fragment
@@ -56,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/createPlayListFragment"
-        android:name="com.example.playlistmaker.ui.media.fragment.edit.CreatePlayListFragment"
+        android:name="com.example.playlistmaker.ui.media.fragment.CreatePlayListFragment"
         android:label="fragment_create_play_list"
         tools:layout="@layout/fragment_create_play_list" >
         <action
@@ -68,28 +65,5 @@
         android:name="com.example.playlistmaker.ui.media.fragment.FragmentPlaylist"
         android:label="fragment_playlist"
         tools:layout="@layout/fragment_playlist" >
-        <action
-            android:id="@+id/action_fragmentPlaylist_to_screenPlaylistFragment"
-            app:destination="@id/screenPlaylistFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/screenPlaylistFragment"
-        android:name="com.example.playlistmaker.ui.playlist.fragment.ScreenPlaylistFragment"
-        android:label="fragment_screen_playlist"
-        tools:layout="@layout/fragment_screen_playlist" >
-        <action
-            android:id="@+id/action_screenPlaylistFragment_to_playerActivity"
-            app:destination="@id/playerActivity" />
-        <action
-            android:id="@+id/action_screenPlaylistFragment_to_mediatekaFragment"
-            app:destination="@id/mediatekaFragment" />
-        <action
-            android:id="@+id/action_screenPlaylistFragment_to_editPlaylistFragment"
-            app:destination="@id/editPlaylistFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/editPlaylistFragment"
-        android:name="com.example.playlistmaker.ui.mediaLibrary.fragments.playlist.EditPlaylistFragment"
-        android:label="EditPlaylistFragment" />
-
 </navigation>
