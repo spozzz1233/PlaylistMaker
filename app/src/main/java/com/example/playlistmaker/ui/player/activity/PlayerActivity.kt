@@ -1,71 +1,149 @@
 package com.example.playlistmaker.ui.player.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ActivityPlayerBinding
+import com.example.playlistmaker.domain.playList.model.Playlist
+import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.ui.media.adapter.FragmentPlayListAdapter
+import com.example.playlistmaker.ui.media.fragment.CreatePlayListFragment
+import com.example.playlistmaker.ui.player.adapter.PlayerPlayListAdapter
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlinx.coroutines.*
+
+
 
 class PlayerActivity : AppCompatActivity() {
-    private lateinit var back: ImageView
-    private lateinit var playButton: ImageView
-    private lateinit var progressOfTheWork: TextView
+
     private val viewModel by viewModel<PlayerViewModel>()
+    lateinit var binding: ActivityPlayerBinding
+    private lateinit var playerPlayListAdapter: PlayerPlayListAdapter
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_song)
+        binding = ActivityPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        val track = intent.getStringExtra(ARGS_TRACK) ?: ""
+        val trackIdSerializable = intent.getSerializableExtra(ARGS_TRACKID)
+        val trackId = if (trackIdSerializable is Int) {
+            trackIdSerializable
+        } else {
+            0
+        }
+        val artist = intent.getStringExtra(ARGS_ARTIST) ?: ""
+        val trackTimeMillis = intent.getIntExtra(ARGS_TRACKTIMEMILLIS, 0)
+        val artworkUrl100 = intent.getStringExtra(ARGS_ARTWORKURL100) ?: ""
+        val collectionName = intent.getStringExtra(ARGS_COLLECTIONNAME) ?: ""
+        val releaseDate = intent.getStringExtra(ARGS_RELEASEDATE) ?: ""
+        val primaryGenreName = intent.getStringExtra(ARGS_PRIMARYGENRENAME) ?: ""
+        val country = intent.getStringExtra(ARGS_COUNTRY) ?: ""
+        val trackUrl = intent.getStringExtra(ARGS_TRACK_URL) ?: ""
+        val countryTextView: TextView = findViewById(R.id.country_name)
+        val album: TextView = findViewById(R.id.album)
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        val recyclerView = binding.recyclerView
 
-        back = findViewById(R.id.back)
-        playButton = findViewById(R.id.play_button)
-        progressOfTheWork = findViewById(R.id.progress_of_the_work)
+        var trackObject = Track(
+            trackId,
+            track,
+            artist,
+            trackTimeMillis,
+            artworkUrl100,
+            collectionName,
+            releaseDate,
+            primaryGenreName,
+            country,
+            trackUrl
+        )
+        playerPlayListAdapter = PlayerPlayListAdapter(emptyList()) {playlistList ->
+            playlistAddTrack(trackObject, playlistList)
 
-        back.setOnClickListener {
+
+        }
+
+        recyclerView.adapter = playerPlayListAdapter
+        binding.back.setOnClickListener {
             finish()
+        }
+        binding.addButton.setOnClickListener{
+            binding.overlay.visibility = View.VISIBLE
+            bottomSheetBehavior.state = STATE_COLLAPSED
+            viewModel.getPlaylists()
+        }
+        bottomSheetBehavior.addBottomSheetCallback(
+                object : BottomSheetBehavior.BottomSheetCallback() {
+                    override fun onStateChanged(bottomSheet: View, newState: Int) {
+                        when (newState) {
+                            BottomSheetBehavior.STATE_HIDDEN -> {
+                                binding.overlay.visibility = View.GONE
+                            }
+
+                            else -> {
+                                binding.overlay.visibility = View.VISIBLE
+                            }
+                        }
+                    }
+
+                    override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+                }
+            )
+        binding.newPlaylist.setOnClickListener {
+            val createPlaylistFragment = CreatePlayListFragment()
+            val fragmentManager: FragmentManager = supportFragmentManager
+            val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+            transaction.replace(android.R.id.content, createPlaylistFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
 
 
 
-        val track = intent.getStringExtra("trackName")
-        val artist = intent.getStringExtra("artistName")
-        val trackTimeMillis = intent.getIntExtra("trackTimeMillis", 0)
-        val artworkUrl100 = intent.getStringExtra("artworkUrl100")
-        val collectionName = intent.getStringExtra("collectionName")
-        val releaseDate = intent.getStringExtra("releaseDate")
-        val primaryGenreName = intent.getStringExtra("primaryGenreName")
-        val country = intent.getStringExtra("country")
+        viewModel.playListList.observe(this) { it ->
+            Log.d("playListList","$it")
+            if (it.isNullOrEmpty()) {
 
-        val trackName: TextView = findViewById(R.id.trackName)
-        val artistName: TextView = findViewById(R.id.artistName)
-        val genre: TextView = findViewById(R.id.Genre_name)
-        val image: ImageView = findViewById(R.id.track_cover)
-        val collection: TextView = findViewById(R.id.album_name)
-        val date: TextView = findViewById(R.id.year_name)
-        val trackTime: TextView = findViewById(R.id.duration_name)
-        val genre_name: TextView = findViewById(R.id.Genre)
-
-        val countryTextView: TextView = findViewById(R.id.country_name)
-        val album: TextView = findViewById(R.id.album)
-
-        trackName.text = track
-        artistName.text = artist
-        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis)
+                return@observe
+            } else {
+                recyclerView.adapter = playerPlayListAdapter
+                playerPlayListAdapter.setItems(it)
+                return@observe
+            }
+        }
+        binding.trackName.text = track
+        binding.artistName.text = artist
+        binding.durationName.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis)
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
         val dateObj = dateFormat.parse(releaseDate)
         val formattedDate = SimpleDateFormat("yyyy", Locale.getDefault()).format(dateObj)
-        date.text = formattedDate
+        binding.yearName.text = formattedDate
 
-        collection.text = collectionName
-        genre.text = primaryGenreName
+        binding.albumName.text = collectionName
+        binding.GenreName.text = primaryGenreName
         countryTextView.text = country
 
         Glide.with(this)
@@ -73,38 +151,53 @@ class PlayerActivity : AppCompatActivity() {
             .placeholder(R.drawable.placeholder_512)
             .error(R.drawable.placeholder_512)
             .transform(RoundedCorners(8))
-            .into(image)
+            .into(binding.trackCover)
 
         if (!collectionName.isNullOrEmpty()) {
-            collection.visibility = View.VISIBLE
+            binding.albumName.visibility = View.VISIBLE
             album.visibility = View.VISIBLE
         }
 
         if (!primaryGenreName.isNullOrEmpty()) {
-            genre.visibility = View.VISIBLE
-            genre_name.visibility = View.VISIBLE
+            binding.GenreName.visibility = View.VISIBLE
+            binding.Genre.visibility = View.VISIBLE
         }
 
-        val trackUrl = intent.getStringExtra(TRACK_URL)!!
+
 
         viewModel.preparePlayer(trackUrl) {
-            playButton.isEnabled = true
+            binding.playButton.isEnabled = true
         }
 
-        playButton.setOnClickListener {
+        binding.playButton.setOnClickListener {
             playbackControl()
         }
 
         viewModel.isPlaying.observe(this) { isPlaying ->
             if (isPlaying) {
-                playButton.setImageResource(R.drawable.button_pause)
+                binding.playButton.setImageResource(R.drawable.button_pause)
             } else {
-                playButton.setImageResource(R.drawable.button_play)
+                binding.playButton.setImageResource(R.drawable.button_play)
             }
         }
 
 
-        updateTime()
+
+
+        viewModel.checkTrackInFavorite(trackObject)
+            .observe(this) { favourtitesIndicator ->
+                if (favourtitesIndicator){
+                    trackObject.isFavorite = true
+                    binding.buttonLike.setImageResource(R.drawable.button_like_red)
+                }else {
+                    binding.buttonLike.setImageResource(R.drawable.button_like)
+                }
+            }
+        binding.buttonLike.setOnClickListener {
+            viewModel.FavoriteTrack(trackObject)
+        }
+
+        startUpdatingTime()
     }
 
     override fun onPause() {
@@ -117,8 +210,8 @@ class PlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.stopPlayer()
-    }
 
+    }
     private fun playbackControl() {
         if (viewModel.isPlaying()) {
             viewModel.pausePlayer {}
@@ -127,19 +220,95 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateTime() {
-        if (viewModel.isPlaying()) {
-            val currentPosition = viewModel.getCurrentPosition()
-            val text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
-            progressOfTheWork.text = text
-        }
-        progressOfTheWork.postDelayed(::updateTime, 400)
-    }
+    private var updateTimeJob: Job? = null
 
+    private fun startUpdatingTime() {
+        updateTimeJob = CoroutineScope(Dispatchers.Main).launch {
+            while (true) {
+                val currentPosition = viewModel.getCurrentPosition()
+                val playerState = viewModel.getPlayerState()
+                if (viewModel.isPlaying()) {
+                    val text = viewModel.formatTime(currentPosition)
+                    withContext(Dispatchers.Main) {
+                        binding.progressOfTheWork.text = text
+                    }
+                }else if (playerState == 1) {
+                    binding.playButton.setImageResource(R.drawable.button_play)
+                    binding.progressOfTheWork.text = "00:00"
+                }
+
+                delay(300)
+            }
+        }
+    }
+    private fun playlistAddTrack(track: Track, playlist: Playlist) {
+        var trackIsAdded = false
+        viewModel.addTrack(track, playlist)
+        lifecycleScope.launch {
+            delay(300)
+            viewModel.playListAdding.observe(this@PlayerActivity) { playlistAdding ->
+                val playlistName = playlist.playlistName
+                if (!trackIsAdded) {
+                    if (playlistAdding) {
+                        val toastMessage = "Трек уже добавлен в плейлист $playlistName"
+                        Toast.makeText(this@PlayerActivity, toastMessage, Toast.LENGTH_SHORT)
+                            .show()
+                        trackIsAdded = true
+
+                        return@observe
+                    } else {
+                        val toastMessage = "Добавлено в плейлист $playlistName"
+                        Toast.makeText(this@PlayerActivity, toastMessage, Toast.LENGTH_SHORT)
+                            .show()
+                        trackIsAdded = true
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                        return@observe
+                    }
+                }
+            }
+        }
+    }
 
     companion object{
-        const val TRACK_URL = "trackUrl"
+        private const val ARGS_TRACK_URL = "trackUrl"
+        private const val ARGS_TRACKID = "trackId"
+        private const val ARGS_TRACK = "trackName"
+        private const val ARGS_ARTIST = "artistName"
+        private const val ARGS_TRACKTIMEMILLIS = "trackTimeMillis"
+        private const val ARGS_ARTWORKURL100 = "artworkUrl100"
+        private const val ARGS_COLLECTIONNAME = "collectionName"
+        private const val ARGS_RELEASEDATE = "releaseDate"
+        private const val ARGS_PRIMARYGENRENAME = "primaryGenreName"
+        private const val ARGS_COUNTRY = "country"
+
+        fun createArgs(
+            trackId: Int,
+            trackName: String,
+            trackUrl: String,
+            artist: String,
+            trackTimeMillis: Int,
+            artworkUrl100: String,
+            collectionName: String,
+            releaseDate: String,
+            primaryGenreName: String,
+            country: String,
+
+            ): Bundle =
+            bundleOf(ARGS_TRACKID to trackId,
+                ARGS_TRACK to trackName,
+                ARGS_TRACK_URL to trackUrl,
+                ARGS_ARTIST to artist,
+                ARGS_TRACKTIMEMILLIS to trackTimeMillis,
+                ARGS_ARTWORKURL100 to artworkUrl100,
+                ARGS_COLLECTIONNAME to collectionName,
+                ARGS_RELEASEDATE to releaseDate,
+                ARGS_PRIMARYGENRENAME to primaryGenreName,
+                ARGS_COUNTRY to country
+                )
     }
+
+
+
 }
 
 

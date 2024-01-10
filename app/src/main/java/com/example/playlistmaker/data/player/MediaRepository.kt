@@ -7,5 +7,6 @@ interface MediaRepository {
     fun pausePlayer(onPlaybackPaused: () -> Unit)
     fun stopPlayer()
     fun isPlaying(): Boolean
+    fun getPlayerState(): Int
     fun getCurrentPosition(): Int
 }

@@ -28,4 +28,8 @@
     <string name="newPlaylist">New playlist</string>
     <string name="selectedTracks">Selected tracks</string>
     <string name="playlist">Playlist</string>
+    <string name="Create">Create</string>
+    <string name="description">Description</string>
+    <string name="title">Title*</string>
+    <string name="Add_to_playlist">Add to playlist</string>
 </resources>

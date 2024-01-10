@@ -33,15 +33,16 @@ class MusicHistory(private val context: Context) {
             historyTracks.add(0, existingTrack)
         } else {
             val historyTrack = HistoryTrack(
-                track.trackName,
-                track.artistName,
-                track.trackTimeMillis,
-                track.artworkUrl100,
-                track.collectionName,
-                track.releaseDate,
-                track.primaryGenreName,
-                track.country,
-                track.previewUrl
+                track.trackId,
+                track.trackName?: "",
+                track.artistName?: "",
+                track.trackTimeMillis?: 0,
+                track.artworkUrl100?: "",
+                track.collectionName?: "",
+                track.releaseDate?: "",
+                track.primaryGenreName?: "",
+                track.country?: "",
+                track.previewUrl?: ""
             )
             historyTracks.add(0, historyTrack)
         }

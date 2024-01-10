@@ -28,5 +28,10 @@
     <string name="newPlaylist">Новый плейлист</string>
     <string name="selectedTracks">Избранные треки</string>
     <string name="playlist">Плейлисты</string>
+    <string name="Create">Создать</string>
+    <string name="description">Описание</string>
+    <string name="title">Название*</string>
+    <string name="Add_to_playlist">Добавить в плейлист</string>
+
 
 </resources>
