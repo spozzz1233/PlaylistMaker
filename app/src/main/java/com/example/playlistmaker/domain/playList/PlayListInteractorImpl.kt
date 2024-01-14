@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 class PlayListInteractorImpl(private val playListRepository: PlayListRepository): PlayListInteractor {
     override fun createPlayList(playlistName: String, description: String?, uri: String) {
-        playListRepository.createPlayList(playlistName,playlistName,uri)
+        playListRepository.createPlayList(playlistName,description,uri)
     }
 
     override fun getPlayList(): Flow<List<Playlist>> {
@@ -40,5 +40,14 @@ class PlayListInteractorImpl(private val playListRepository: PlayListRepository)
             uri
         )
     }
+
+    override fun durationCounting(playlist: Playlist): Flow<String> {
+        return playListRepository.durationCounting(playlist)
+    }
+
+    override fun deleteIfIsNotInPlaylist(searchId: Long) {
+        playListRepository.deleteIfIsNotInPlaylist(searchId)
+    }
+
 
 }

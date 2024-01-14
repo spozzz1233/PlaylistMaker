@@ -37,6 +37,7 @@
     <string name="editInformationMenu">Редактировать информацию</string>
     <string name="deletePlaylistMenu">Удалить плейлист</string>
     <string name="save">Сохранить</string>
+    <string name="playlist_placeholder">В этом плейлисте еще нет треков</string>
 
 
 </resources>

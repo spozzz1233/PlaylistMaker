@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.search.adapters
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.domain.search.model.HistoryTrack
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.domain.search.model.historyTracks
-import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.util.MusicHistory
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,12 +20,13 @@ import java.util.*
 class HistoryAdapter(
     private val context: Context,
     private val clickListener: HistoryClick
-    )  : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
     private val musicHistory = MusicHistory(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
-        val cardMusicView = LayoutInflater.from(parent.context).inflate(R.layout.card_music, parent, false)
+        val cardMusicView =
+            LayoutInflater.from(parent.context).inflate(R.layout.card_music, parent, false)
         return HistoryViewHolder(cardMusicView)
     }
 
@@ -53,7 +51,8 @@ class HistoryAdapter(
         fun bind(track: HistoryTrack) {
             trackName.text = track.trackName
             artistName.text = track.artistName
-            trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+            trackTime.text =
+                SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
 
             Glide.with(itemView.context)
                 .load(track.artworkUrl100)
@@ -63,6 +62,7 @@ class HistoryAdapter(
                 .into(image)
         }
     }
+
     fun interface HistoryClick {
         fun onClick(track: HistoryTrack)
     }

@@ -1,7 +1,5 @@
 package com.example.playlistmaker.ui.search.adapters
 
-import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.util.MusicHistory
 import com.example.playlistmaker.R
-import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.domain.search.model.tracks
 import java.text.SimpleDateFormat
@@ -20,19 +16,21 @@ import java.util.*
 
 class searchAdapter(
     private val clickListener: TrackClick,
-    private val longClickListener : LongClick
-    ) : RecyclerView.Adapter<searchAdapter.SearchViewHolder>() {
+    private val longClickListener: LongClick
+) : RecyclerView.Adapter<searchAdapter.SearchViewHolder>() {
 
     fun updateData() {
         notifyDataSetChanged()
     }
+
     fun newTracks(newTracks: ArrayList<Track>) {
         tracks = newTracks
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-        val cardMusicView = LayoutInflater.from(parent.context).inflate(R.layout.card_music, parent, false)
+        val cardMusicView =
+            LayoutInflater.from(parent.context).inflate(R.layout.card_music, parent, false)
         return SearchViewHolder(cardMusicView)
     }
 
@@ -42,7 +40,7 @@ class searchAdapter(
         holder.itemView.setOnClickListener {
             clickListener.onClick(track)
         }
-        holder.itemView.setOnLongClickListener{
+        holder.itemView.setOnLongClickListener {
             longClickListener.onLongClick(track)
             notifyDataSetChanged()
             return@setOnLongClickListener true
@@ -60,7 +58,8 @@ class searchAdapter(
         fun bind(track: Track) {
             trackName.text = track.trackName
             artistName.text = track.artistName
-            trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+            trackTime.text =
+                SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
 
             Glide.with(itemView.context)
                 .load(track.artworkUrl100)
@@ -70,9 +69,11 @@ class searchAdapter(
                 .into(image)
         }
     }
+
     fun interface TrackClick {
         fun onClick(track: Track)
     }
+
     fun interface LongClick {
         fun onLongClick(track: Track)
     }

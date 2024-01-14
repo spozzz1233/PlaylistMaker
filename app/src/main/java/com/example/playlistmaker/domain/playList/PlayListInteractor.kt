@@ -19,4 +19,6 @@ interface PlayListInteractor {
         description: String?,
         uri: String
     )
+    fun durationCounting(playlist: Playlist): Flow<String>
+    fun deleteIfIsNotInPlaylist(searchId :Long)
 }

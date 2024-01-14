@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -60,26 +61,30 @@ class EditPlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val playlist = arguments?.getParcelable<Playlist>("playlist")
-        Log.d("фвфывфыафыа", playlist.toString())
         val name = binding.playlistNameEditText
+
+
         if (playlist != null) {
-            name.setText(playlist.playlistName)
-            binding.playlistDescriptEditText.setText(playlist.description)
+            playlist.playlistId?.let { viewModel.getUpdatePlayListById(it) }
+        }
+        viewModel.updatedPlaylist.observe(viewLifecycleOwner) {
+            name.setText(it.playlistName)
+            binding.playlistDescriptEditText.setText(it.description)
+            val image = (it?.uri ?: "Unknown Cover")
+
+            if (image != "Unknown Cover") {
+                binding.playlistPlaceHolder.visibility = View.GONE
+                Glide.with(this)
+                    .load(image)
+                    .centerCrop()
+                    .transform(CenterCrop())
+                    .placeholder(R.drawable.placeholder)
+                    .override(312, 312)
+                    .into(binding.playlistCover)
+                selectedUri = image.toUri()
+            }
         }
 
-        val getImage = (playlist?.uri ?: "Unknown Cover")
-
-        if (getImage != "Unknown Cover") {
-            binding.playlistPlaceHolder.visibility = View.GONE
-            Glide.with(this)
-                .load(getImage)
-                .centerCrop()
-                .transform(CenterCrop())
-                .placeholder(R.drawable.placeholder)
-                .override(312, 312)
-                .into(binding.playlistCover)
-            selectedUri= getImage.toUri()
-        }
         val rxPermissions = RxPermissions(this)
 
         binding.back.setOnClickListener {
@@ -155,8 +160,7 @@ class EditPlaylistFragment : Fragment() {
     }
 
     private fun closer() {
-        val fragmentmanager = requireActivity().supportFragmentManager
-        fragmentmanager.popBackStack()
+        findNavController().popBackStack()
     }
 
     private fun saveImageToPrivateStorage(uri: Uri) {

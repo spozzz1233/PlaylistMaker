@@ -15,9 +15,7 @@ class MediaRepositoryImpl : MediaRepository {
     }
 
     override fun preparePlayer(trackUrl: String, onPrepared: () -> Unit) {
-        if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer()
-        }
+        mediaPlayer = MediaPlayer()
         mediaPlayer?.let {
             it.setDataSource(trackUrl)
             it.prepareAsync()

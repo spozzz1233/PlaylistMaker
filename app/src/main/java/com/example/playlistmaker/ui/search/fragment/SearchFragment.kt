@@ -16,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.model.historyTracks
-import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.adapters.HistoryAdapter
 import com.example.playlistmaker.ui.search.adapters.searchAdapter
 import com.example.playlistmaker.ui.search.view_model.SearchFragmentViewModel
@@ -76,7 +75,7 @@ class SearchFragment : Fragment() {
         viewModel.noInternetLiveData.observe(viewLifecycleOwner, { noInternet ->
             binding.noInternet.visibility = if (noInternet) View.VISIBLE else View.GONE
         })
-        viewModel.searchResultsListLiveData.observe(viewLifecycleOwner, Observer{ tracks ->
+        viewModel.searchResultsListLiveData.observe(viewLifecycleOwner, Observer { tracks ->
             searchAdapter.newTracks(tracks)
         })
         initial()
@@ -155,48 +154,26 @@ class SearchFragment : Fragment() {
     }
 
 
-
-
     private fun initial() {
         val recyclerViewSearch = binding.recyclerViewSearch
-        searchAdapter = searchAdapter(clickListener = {track ->
-            if (clickDebounce()) {
-                musicHistory.saveHistoryTrack(track)
-                findNavController().navigate(R.id.action_searchFragment_to_playerActivity,
-                    PlayerActivity.createArgs(
-                        track.trackId,
-                        track.trackName?: "",
-                        track.previewUrl?: "",
-                        track.artistName?: "",
-                        track.trackTimeMillis?: 0,
-                        track.artworkUrl100?: "",
-                        track.collectionName?: "",
-                        track.releaseDate?: "",
-                        track.primaryGenreName?: "",
-                        track.country?: ""
-                    )
-                )
+        searchAdapter = searchAdapter(clickListener = { track ->
+            val bundle = Bundle()
+            bundle.putParcelable("track", track)
+            musicHistory.saveHistoryTrack(track)
+            findNavController().navigate(
+                R.id.action_searchFragment_to_playerActivity, bundle
+            )
 
-            }
-        },longClickListener = {})
+
+        }, longClickListener = {})
         recyclerViewSearch.adapter = searchAdapter
         val recyclerViewHistory = binding.recyclerViewHistory
-        historyAdapter = HistoryAdapter(requireContext()){track ->
-            if (clickDebounce()) {
-                findNavController().navigate(R.id.action_searchFragment_to_playerActivity,
-                    PlayerActivity.createArgs(
-                        track.trackId,
-                        track.trackName?: "",
-                        track.previewUrl?: "",
-                        track.artistName?: "",
-                        track.trackTimeMillis?: 0,
-                        track.artworkUrl100?: "",
-                        track.collectionName?: "",
-                        track.releaseDate?: "",
-                        track.primaryGenreName?: "",
-                        track.country?: ""
-                    ))
-            }
+        historyAdapter = HistoryAdapter(requireContext()) { track ->
+            val bundle = Bundle()
+            bundle.putParcelable("track", track)
+            findNavController().navigate(
+                R.id.action_searchFragment_to_playerActivity, bundle
+            )
         }
         binding.recyclerViewHistory.adapter = historyAdapter
     }
@@ -222,12 +199,13 @@ class SearchFragment : Fragment() {
         binding.recyclerViewSearch.visibility = View.GONE
         binding.noInternet.visibility = View.GONE
         binding.noResult.visibility = View.GONE
-        if(historyTracks.isNotEmpty()){
+        if (historyTracks.isNotEmpty()) {
             binding.history.visibility = View.VISIBLE
             binding.recyclerViewHistory.visibility = View.VISIBLE
             binding.buttonHistory.visibility = View.VISIBLE
         }
     }
+
     private var isClickAllowed = true
 
     private fun clickDebounce(): Boolean {
@@ -241,6 +219,7 @@ class SearchFragment : Fragment() {
         }
         return current
     }
+
     companion object {
         const val TEXT_SEARCH = "TEXT_SEARCH"
         private const val CLICK_DEBOUNCE_DELAY = 1000L

@@ -1,5 +1,9 @@
 package com.example.playlistmaker.domain.search.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class HistoryTrack(
     val trackId: Int,
     val trackName: String?,
@@ -13,6 +17,6 @@ data class HistoryTrack(
     val previewUrl: String?,
     var isFavorite: Boolean = false,
     val addedTimestamp: Long = System.currentTimeMillis()
-)
+): Parcelable
 
 var historyTracks = ArrayList<HistoryTrack>()

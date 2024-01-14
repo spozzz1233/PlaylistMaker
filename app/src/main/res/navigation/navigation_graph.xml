@@ -28,20 +28,21 @@
         android:name="com.example.playlistmaker.ui.settings.fragment.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
-    <activity
+    <fragment
         android:id="@+id/playerActivity"
-        android:name="com.example.playlistmaker.ui.player.activity.PlayerActivity"
+        android:name="com.example.playlistmaker.ui.player.fragment.PlayerFragment"
         android:label="activity_player"
-        tools:layout="@layout/activity_player">
-    </activity>
+        tools:layout="@layout/fragment_player">
+        <action
+            android:id="@+id/action_playerActivity_to_createPlayListFragment"
+            app:destination="@id/createPlayListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentFavorite"
         android:name="com.example.playlistmaker.ui.media.fragment.FragmentFavorite"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" >
-        <action
-            android:id="@+id/action_fragmentFavorite_to_playerActivity"
-            app:destination="@id/playerActivity" />
+
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -68,9 +69,7 @@
         android:name="com.example.playlistmaker.ui.media.fragment.FragmentPlaylist"
         android:label="fragment_playlist"
         tools:layout="@layout/fragment_playlist" >
-        <action
-            android:id="@+id/action_fragmentPlaylist_to_screenPlaylistFragment"
-            app:destination="@id/screenPlaylistFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/screenPlaylistFragment"

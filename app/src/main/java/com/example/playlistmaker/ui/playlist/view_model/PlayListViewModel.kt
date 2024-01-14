@@ -1,5 +1,6 @@
 package com.example.playlistmaker.ui.playlist.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,10 +22,27 @@ class PlayListViewModel(
             }
         }
     }
+    fun getPlaylists(track: Track) {
+        viewModelScope.launch(Dispatchers.IO){
+            playListInteractor.getPlayList()
+                .collect {
+                    val id = track.trackId.toLong()
+                     Log.d("sad",it.toString())
+                    val isIdInAnyPlaylist = it.any { playlist ->
+                        playlist.trackArray?.contains(id) == true
+                    }
+
+                    if (!isIdInAnyPlaylist) {
+                        playListInteractor.deleteIfIsNotInPlaylist(id)
+                    }
+                }
+        }
+    }
+
     val trackList : MutableLiveData <List <Track>> = MutableLiveData(emptyList())
     fun getTrackList(playlist: Playlist){
         viewModelScope.launch(Dispatchers.IO) {
-            playListInteractor.getTrackList(playlist).collect{track->
+            playListInteractor.getTrackList(playlist).collect { track ->
                 trackList.postValue(track)
             }
         }
@@ -46,8 +64,17 @@ class PlayListViewModel(
                 playListInteractor.update(track, playlist)
                 _deletedTrack.postValue(true)
             }
+            getPlaylists(track)
         }
 
+    }
+    val playlistTime: MutableLiveData <String> = MutableLiveData("")
+    fun getPlaylistTime (playlist: Playlist) {
+        viewModelScope.launch(Dispatchers.IO) {
+            playListInteractor.durationCounting(playlist).collect{
+                    readyTime -> playlistTime.postValue(readyTime)
+            }
+        }
     }
 
 

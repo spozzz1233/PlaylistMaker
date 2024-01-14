@@ -13,17 +13,18 @@ import com.example.playlistmaker.domain.search.model.Track
 @Dao
 interface PlayListDao {
     @Insert(entity = PlayListEntity::class, onConflict = OnConflictStrategy.REPLACE)
-    fun insertPlayList (playList: PlayListEntity)
+    fun insertPlayList(playList: PlayListEntity)
 
     @Query("SELECT * FROM PlayList_table")
-    fun getPlayList(): List <PlayListEntity>
+    fun getPlayList(): List<PlayListEntity>
+
     @Update(entity = PlayListEntity::class, onConflict = OnConflictStrategy.REPLACE)
     fun updatePlaylist(playlist: PlayListEntity)
+
     @Query("SELECT * FROM PlayList_table WHERE playlistId =:id")
-    fun getUpdatePlayList(id:Int): PlayListEntity
-    @Delete (entity=PlayListEntity::class)
-    fun deletePlaylist (playlist: PlayListEntity)
+    fun getUpdatePlayList(id: Int): PlayListEntity
 
-
+    @Delete(entity = PlayListEntity::class)
+    fun deletePlaylist(playlist: PlayListEntity)
 }
 
