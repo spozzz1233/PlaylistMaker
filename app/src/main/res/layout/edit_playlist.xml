@@ -96,7 +96,8 @@
                 android:textColor="?attr/colorOnSecondary"
                 android:textColorHint="?attr/colorOnSecondary"
                 app:boxStrokeColor="@animator/text_input_layout_stroke_colors"
-                app:hintTextColor="#3772E7" />
+                app:hintTextColor="#3772E7"
+                android:textCursorDrawable="@drawable/cursor"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -134,7 +135,8 @@
                 android:maxLines="1"
                 android:textColor="?attr/colorOnSecondary"
                 android:textColorHint="?attr/colorOnSecondary"
-                app:hintTextColor="#3772E7" />
+                app:hintTextColor="#3772E7"
+                android:textCursorDrawable="@drawable/cursor"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

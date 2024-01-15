@@ -17,6 +17,7 @@ import com.example.playlistmaker.domain.playList.model.Playlist
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.adapter.PlayerPlayListAdapter
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -31,6 +32,7 @@ class PlayerFragment : Fragment() {
     lateinit var binding: FragmentPlayerBinding
     private lateinit var playerPlayListAdapter: PlayerPlayListAdapter
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+    private lateinit var bottomNavigator: BottomNavigationView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,6 +46,8 @@ class PlayerFragment : Fragment() {
         val track = arguments?.getParcelable<Track>("track")
         bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomNavigator = requireActivity().findViewById(R.id.bottomNavigationView)
+        bottomNavigator.visibility = View.GONE
         val recyclerView = binding.recyclerView
         var trackObject = track?.let {
             Track(

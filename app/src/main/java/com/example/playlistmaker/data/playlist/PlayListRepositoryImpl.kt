@@ -48,6 +48,14 @@ class PlayListRepositoryImpl(
     override fun deleteIfIsNotInPlaylist(searchId :Long){
         appDatabase.trackListingDao().deleteIfisNotInPlaylist(searchId)
     }
+
+    override fun getTrackId(): Flow<List<Long>> = flow {
+        val trackIdList = withContext(Dispatchers.IO) {
+            appDatabase.trackListingDao().getTrackId()
+        }
+        emit(trackIdList)
+    }
+
     override fun getUpdatePlayListById(id:Int): Flow<Playlist> = flow{
         emit(
             converter.mapplaylistEntityToClass(appDatabase.PlayListDao().getUpdatePlayList(id))

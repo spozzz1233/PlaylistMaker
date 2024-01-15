@@ -64,8 +64,7 @@ class FragmentPlayListAdapter(private val clickListener: PlaylistClick): Recycle
                 Glide.with(itemView)
                         .load(item.uri)
                     .placeholder(R.drawable.placeholder)
-                    .transform(CenterCrop(), RoundedCorners(8))
-                    .override(160, 160)
+                    .transform(CenterCrop(), RoundedCorners(16))
                     .into(binding.image)
             }
         }
@@ -76,6 +75,9 @@ class FragmentPlayListAdapter(private val clickListener: PlaylistClick): Recycle
 
     fun setItems(items: List<Playlist>) {
         plalists = items
+        notifyDataSetChanged()
+    }
+    fun updateData() {
         notifyDataSetChanged()
     }
 }

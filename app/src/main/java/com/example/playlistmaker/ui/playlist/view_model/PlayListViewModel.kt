@@ -13,25 +13,24 @@ import kotlinx.coroutines.launch
 
 class PlayListViewModel(
     private val playListInteractor: PlayListInteractor
-): ViewModel() {
-    val updatedPlaylist : MutableLiveData<Playlist> = MutableLiveData()
-    fun getUpdatePlayListById (searchId: Int) {
+) : ViewModel() {
+    val updatedPlaylist: MutableLiveData<Playlist> = MutableLiveData()
+    fun getUpdatePlayListById(searchId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            playListInteractor.getUpdatePlayListById(searchId).collect{
+            playListInteractor.getUpdatePlayListById(searchId).collect {
                 updatedPlaylist.postValue(it)
             }
         }
     }
-    fun getPlaylists(track: Track) {
-        viewModelScope.launch(Dispatchers.IO){
+
+    fun deleteTrackIfIsNotInPlaylist(playlist: Playlist, track: Track) {
+        viewModelScope.launch(Dispatchers.IO) {
             playListInteractor.getPlayList()
                 .collect {
                     val id = track.trackId.toLong()
-                     Log.d("sad",it.toString())
                     val isIdInAnyPlaylist = it.any { playlist ->
                         playlist.trackArray?.contains(id) == true
                     }
-
                     if (!isIdInAnyPlaylist) {
                         playListInteractor.deleteIfIsNotInPlaylist(id)
                     }
@@ -39,22 +38,24 @@ class PlayListViewModel(
         }
     }
 
-    val trackList : MutableLiveData <List <Track>> = MutableLiveData(emptyList())
-    fun getTrackList(playlist: Playlist){
+    val trackList: MutableLiveData<List<Track>> = MutableLiveData(emptyList())
+    fun getTrackList(playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
             playListInteractor.getTrackList(playlist).collect { track ->
                 trackList.postValue(track)
             }
         }
     }
-    fun deletePlayList(playlist: Playlist){
+
+    fun deletePlayList(playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
             playListInteractor.deletePlaylist(playlist)
         }
     }
+
     private val _deletedTrack = MutableLiveData<Boolean>()
     val deletedTrack: LiveData<Boolean> = _deletedTrack
-    fun deleteTrack (track: Track, playlist: Playlist){
+    fun deleteTrack(track: Track, playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
             val originalTrackArraySize = playlist.trackArray.size
             playlist.trackArray = playlist.trackArray.filter { it?.toInt() != track.trackId }
@@ -64,15 +65,16 @@ class PlayListViewModel(
                 playListInteractor.update(track, playlist)
                 _deletedTrack.postValue(true)
             }
-            getPlaylists(track)
+            deleteTrackIfIsNotInPlaylist(playlist,track)
         }
 
     }
-    val playlistTime: MutableLiveData <String> = MutableLiveData("")
-    fun getPlaylistTime (playlist: Playlist) {
+
+    val playlistTime: MutableLiveData<String> = MutableLiveData("")
+    fun getPlaylistTime(playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
-            playListInteractor.durationCounting(playlist).collect{
-                    readyTime -> playlistTime.postValue(readyTime)
+            playListInteractor.durationCounting(playlist).collect { readyTime ->
+                playlistTime.postValue(readyTime)
             }
         }
     }

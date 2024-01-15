@@ -24,6 +24,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ScreenPlaylistFragment : Fragment() {
     lateinit var binding: FragmentScreenPlaylistBinding
@@ -105,9 +107,7 @@ class ScreenPlaylistFragment : Fragment() {
         binding.shareMenu.setOnClickListener {
             viewModel.updatedPlaylist.observe(viewLifecycleOwner) { playlist ->
                 sharePlaylist(playlist)
-                if (playlist.arrayNumber == 0) {
-                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                }
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             }
 
         }
@@ -238,8 +238,9 @@ class ScreenPlaylistFragment : Fragment() {
         trackList.forEach { track ->
             i += 1
             val name = track.trackName
-            val duration = track.trackTimeMillis
-            trackInfo = "$trackInfo $i. $name  - ($duration) \n"
+            val artistName = track.artistName
+            val duration = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+            trackInfo = "$trackInfo $i. $artistName - $name ($duration) \n"
         }
 
         val intentSend = Intent().apply {
@@ -289,7 +290,6 @@ class ScreenPlaylistFragment : Fragment() {
                 .load(imageUrl)
                 .centerCrop()
                 .transform(CenterCrop(), RoundedCorners(6))
-                .override(312, 312)
                 .placeholder(R.drawable.placeholder_512)
                 .into(binding.playlistCover)
         }

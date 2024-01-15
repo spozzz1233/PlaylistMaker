@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.media.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,12 +43,17 @@ class FragmentPlaylist : Fragment() {
             findNavController().navigate(R.id.action_mediatekaFragment_to_screenPlaylistFragment,bundle)
         }
         recyclerView.adapter = fragmentPlayListAdapter
+        fragmentPlayListAdapter.updateData()
         vm.playListList.observe(viewLifecycleOwner) { it ->
-            Log.d("playListList","$it")
             if (it.isNullOrEmpty()) {
-
+                binding.recyclerViewPlayList.visibility = View.GONE
+                binding.placeholderImage.visibility = View.VISIBLE
+                binding.placeholderText.visibility = View.VISIBLE
                 return@observe
             } else {
+                binding.recyclerViewPlayList.visibility = View.VISIBLE
+                binding.placeholderImage.visibility = View.GONE
+                binding.placeholderText.visibility = View.GONE
                 recyclerView.adapter = fragmentPlayListAdapter
                 fragmentPlayListAdapter.setItems(it)
                 return@observe

@@ -12,6 +12,7 @@
         tools:layout="@layout/fragment_mediateka" >
         <action
             android:id="@+id/action_mediatekaFragment_to_playerActivity"
+            app:enterAnim="@anim/slide_in_right"
             app:destination="@id/playerActivity" />
         <action
             android:id="@+id/action_mediatekaFragment_to_createPlayListFragment"
@@ -20,6 +21,7 @@
             app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_mediatekaFragment_to_screenPlaylistFragment"
+            app:enterAnim="@anim/slide_in_right"
             app:destination="@id/screenPlaylistFragment" />
     </fragment>
 
@@ -35,6 +37,7 @@
         tools:layout="@layout/fragment_player">
         <action
             android:id="@+id/action_playerActivity_to_createPlayListFragment"
+            app:enterAnim="@anim/slide_in_right"
             app:destination="@id/createPlayListFragment" />
     </fragment>
     <fragment
@@ -62,6 +65,7 @@
         tools:layout="@layout/fragment_create_play_list" >
         <action
             android:id="@+id/action_createPlayListFragment_to_mediatekaFragment"
+            app:enterAnim="@anim/slide_in_right"
             app:destination="@id/mediatekaFragment" />
     </fragment>
     <fragment
@@ -78,12 +82,15 @@
         tools:layout="@layout/fragment_screen_playlist" >
         <action
             android:id="@+id/action_screenPlaylistFragment_to_playerActivity"
+            app:enterAnim="@anim/slide_in_right"
             app:destination="@id/playerActivity" />
         <action
             android:id="@+id/action_screenPlaylistFragment_to_mediatekaFragment"
+            app:enterAnim="@anim/slide_in_right"
             app:destination="@id/mediatekaFragment" />
         <action
             android:id="@+id/action_screenPlaylistFragment_to_editPlaylistFragment"
+            app:enterAnim="@anim/slide_in_right"
             app:destination="@id/editPlaylistFragment" />
     </fragment>
     <fragment

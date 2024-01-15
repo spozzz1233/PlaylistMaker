@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    style="@style/colorAllScreen">
+    style="@style/colorAllScreen"
+    app:cardElevation="0dp">
 
     <LinearLayout
         style="@style/bg_search_card"

@@ -49,5 +49,9 @@ class PlayListInteractorImpl(private val playListRepository: PlayListRepository)
         playListRepository.deleteIfIsNotInPlaylist(searchId)
     }
 
+    override fun getTrackId(): Flow<List<Long>> {
+        return playListRepository.getTrackId()
+    }
+
 
 }

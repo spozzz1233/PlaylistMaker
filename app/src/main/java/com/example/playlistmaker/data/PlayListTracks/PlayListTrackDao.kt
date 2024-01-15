@@ -19,4 +19,7 @@ interface PlayListTrackDao {
 
     @Query("DELETE FROM track_in_playlist_table WHERE trackId = :id")
     fun deleteIfisNotInPlaylist(id: Long)
+
+    @Query("SELECT trackId FROM track_in_playlist_table")
+    fun getTrackId(): List<Long>
 }

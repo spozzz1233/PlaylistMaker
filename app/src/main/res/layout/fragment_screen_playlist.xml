@@ -36,19 +36,18 @@
                     style="@style/toolbar_image"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
                 <ImageView
                     android:id="@+id/playlist_cover"
-                    android:layout_width="312dp"
-                    android:layout_height="312dp"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="50dp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/placeholder"
+                    android:layout_marginHorizontal="30dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/placeholder_512"
-                    android:layout_marginTop="50dp"
-                    />
-
-
+                    app:layout_constraintDimensionRatio="w,1:1"/>
                 <TextView
                     android:id="@+id/playListName"
                     android:textColor="@color/black"

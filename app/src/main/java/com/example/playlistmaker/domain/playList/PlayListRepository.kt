@@ -21,4 +21,5 @@ interface PlayListRepository {
     )
     fun durationCounting(playlist: Playlist): Flow<String>
     fun deleteIfIsNotInPlaylist(searchId :Long)
+    fun getTrackId():Flow<List<Long>>
 }

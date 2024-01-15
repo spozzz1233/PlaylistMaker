@@ -131,16 +131,21 @@ class CreatePlayListFragment : Fragment() {
         val name = binding.playlistNameEditText.text
         val description = binding.playlistDescriptEditText.text
         if (!(name.isNullOrEmpty()) || !(description.isNullOrEmpty())) {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Завершить создание плейлиста?") // Заголовок диалога
-                .setMessage("Все несохраненные данные будут потеряны") // Описание диалога
-                .setNegativeButton("Отмена") { dialog, which -> // Добавляет кнопку «Отмена»
+            val dialog = MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Завершить создание плейлиста?")
+                .setMessage("Все несохраненные данные будут потеряны")
+                .setNegativeButton("Отмена") { dialog, which ->
 
                 }
-                .setPositiveButton("Завершить") { dialog, which -> // Добавляет кнопку «Нет»
-                    requireActivity().finish()
+                .setPositiveButton("Завершить") { dialog, which ->
+                    finish()
                 }
                 .show()
+            val positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            val negativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+
+            positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.YP_Blue))
+            negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.YP_Blue))
         } else {
             finish()
         }

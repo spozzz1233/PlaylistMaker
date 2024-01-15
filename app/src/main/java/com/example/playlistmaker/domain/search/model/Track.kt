@@ -23,4 +23,5 @@ data class Track(
 }
 var tracks = ArrayList<Track>()
 
+var historyTracks = ArrayList<Track>()
 
