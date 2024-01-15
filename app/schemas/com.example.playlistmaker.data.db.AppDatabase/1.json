@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "2ab939bac3ab014ec63bc57909e20a2b",
+    "identityHash": "c8784a11daa8131b2bf180d1ea76ae1b",
     "entities": [
       {
         "tableName": "track_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `trackName` TEXT, `artistName` TEXT, `trackTimeMillis` INTEGER, `artworkUrl100` TEXT, `collectionName` TEXT, `releaseDate` TEXT, `primaryGenreName` TEXT, `country` TEXT, `previewUrl` TEXT, `isFavorite` INTEGER NOT NULL, `addedTimestamp` INTEGER, PRIMARY KEY(`trackId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `trackName` TEXT, `artistName` TEXT, `trackTimeMillis` INTEGER, `artworkUrl100` TEXT, `artworkUrl60` TEXT, `collectionName` TEXT, `releaseDate` TEXT, `primaryGenreName` TEXT, `country` TEXT, `previewUrl` TEXT, `isFavorite` INTEGER NOT NULL, `addedTimestamp` INTEGER, PRIMARY KEY(`trackId`))",
         "fields": [
           {
             "fieldPath": "trackId",
@@ -35,6 +35,12 @@
           {
             "fieldPath": "artworkUrl100",
             "columnName": "artworkUrl100",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "artworkUrl60",
+            "columnName": "artworkUrl60",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -139,12 +145,110 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "track_in_playlist_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `addTime` INTEGER, `trackName` TEXT, `artistName` TEXT, `trackTimeMillis` INTEGER, `artworkUrl100` TEXT, `artworkUrl60` TEXT, `collectionName` TEXT, `releaseDate` TEXT, `primaryGenreName` TEXT, `country` TEXT, `previewUrl` TEXT, `isFavorite` INTEGER NOT NULL, `addedTimestamp` INTEGER NOT NULL, PRIMARY KEY(`trackId`))",
+        "fields": [
+          {
+            "fieldPath": "trackId",
+            "columnName": "trackId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "addTime",
+            "columnName": "addTime",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "trackName",
+            "columnName": "trackName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "artistName",
+            "columnName": "artistName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "trackTimeMillis",
+            "columnName": "trackTimeMillis",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "artworkUrl100",
+            "columnName": "artworkUrl100",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "artworkUrl60",
+            "columnName": "artworkUrl60",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "collectionName",
+            "columnName": "collectionName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "releaseDate",
+            "columnName": "releaseDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "primaryGenreName",
+            "columnName": "primaryGenreName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "previewUrl",
+            "columnName": "previewUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isFavorite",
+            "columnName": "isFavorite",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "addedTimestamp",
+            "columnName": "addedTimestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "trackId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2ab939bac3ab014ec63bc57909e20a2b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c8784a11daa8131b2bf180d1ea76ae1b')"
     ]
   }
 }

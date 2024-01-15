@@ -17,7 +17,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.model.historyTracks
 import com.example.playlistmaker.ui.search.adapters.HistoryAdapter
-import com.example.playlistmaker.ui.search.adapters.searchAdapter
+import com.example.playlistmaker.ui.search.adapters.SearchAdapter
 import com.example.playlistmaker.ui.search.view_model.SearchFragmentViewModel
 import com.example.playlistmaker.util.MusicHistory
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -29,7 +29,7 @@ class SearchFragment : Fragment() {
     private var inputText: String? = null
     private val viewModel by viewModel<SearchFragmentViewModel>()
     lateinit var binding: FragmentSearchBinding
-    private lateinit var searchAdapter: searchAdapter
+    private lateinit var searchAdapter: SearchAdapter
     lateinit var historyAdapter: HistoryAdapter
     lateinit var query: String
     private lateinit var musicHistory: MusicHistory
@@ -158,7 +158,7 @@ class SearchFragment : Fragment() {
 
 
     private fun initial() {
-        searchAdapter = searchAdapter(clickListener = { track ->
+        searchAdapter = SearchAdapter(clickListener = { track ->
             val bundle = Bundle()
             bundle.putParcelable("track", track)
             musicHistory.saveHistoryTrack(track)
@@ -167,7 +167,7 @@ class SearchFragment : Fragment() {
             )
 
 
-        }, longClickListener = {})
+        }, longClickListener = {}, SearchAdapter.ImageSize._100)
         binding.recyclerViewSearch.adapter = searchAdapter
         historyAdapter = HistoryAdapter(clickListener ={ track ->
             val bundle = Bundle()

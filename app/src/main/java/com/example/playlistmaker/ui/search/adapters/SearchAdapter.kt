@@ -14,10 +14,11 @@ import com.example.playlistmaker.domain.search.model.tracks
 import java.text.SimpleDateFormat
 import java.util.*
 
-class searchAdapter(
+class SearchAdapter(
     private val clickListener: TrackClick,
-    private val longClickListener: LongClick
-) : RecyclerView.Adapter<searchAdapter.SearchViewHolder>() {
+    private val longClickListener: LongClick,
+    private val imageSize: ImageSize
+) : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
 
     fun updateData() {
         notifyDataSetChanged()
@@ -31,7 +32,7 @@ class searchAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val cardMusicView =
             LayoutInflater.from(parent.context).inflate(R.layout.card_music, parent, false)
-        return SearchViewHolder(cardMusicView)
+        return SearchViewHolder(cardMusicView, imageSize)
     }
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
@@ -49,7 +50,7 @@ class searchAdapter(
 
     override fun getItemCount(): Int = tracks.size
 
-    class SearchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class SearchViewHolder(view: View, private val imageSize: ImageSize) : RecyclerView.ViewHolder(view) {
         private val trackName: TextView = itemView.findViewById(R.id.track_name)
         private val artistName: TextView = itemView.findViewById(R.id.artist_Name)
         private val trackTime: TextView = itemView.findViewById(R.id.track_Time)
@@ -62,7 +63,10 @@ class searchAdapter(
                 SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
 
             Glide.with(itemView.context)
-                .load(track.artworkUrl100)
+                .load(when(imageSize){
+                    ImageSize._100 -> track.artworkUrl100
+                    ImageSize._60 -> track.artworkUrl60
+                })
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.placeholder)
                 .transform(RoundedCorners(itemView.context.resources.getDimensionPixelSize(R.dimen.rounded_corners)))
@@ -70,6 +74,10 @@ class searchAdapter(
         }
     }
 
+    enum class ImageSize{
+        _60,
+        _100
+    }
     fun interface TrackClick {
         fun onClick(track: Track)
     }

@@ -23,16 +23,35 @@ class PlayListViewModel(
         }
     }
 
-    fun deleteTrackIfIsNotInPlaylist(playlist: Playlist, track: Track) {
+    fun deleteTrackIfIsNotInPlaylist(id:Long) {
         viewModelScope.launch(Dispatchers.IO) {
             playListInteractor.getPlayList()
                 .collect {
-                    val id = track.trackId.toLong()
                     val isIdInAnyPlaylist = it.any { playlist ->
                         playlist.trackArray?.contains(id) == true
                     }
                     if (!isIdInAnyPlaylist) {
                         playListInteractor.deleteIfIsNotInPlaylist(id)
+                    }
+                }
+        }
+    }
+
+    val playlistTrackId: MutableList<Long?> = mutableListOf()
+    fun deleteTrackInTrackTable(playlist: Playlist){
+        viewModelScope.launch(Dispatchers.IO) {
+            playListInteractor.getPlayList()
+                .collect{
+                    it.forEach{
+                        playlistTrackId.addAll(it.trackArray)
+
+                    }
+                    playlist.trackArray.forEach {
+                        if(playlistTrackId.contains(it)){
+                            if (it != null) {
+                                deleteTrackIfIsNotInPlaylist(it)
+                            }
+                        }
                     }
                 }
         }
@@ -65,7 +84,7 @@ class PlayListViewModel(
                 playListInteractor.update(track, playlist)
                 _deletedTrack.postValue(true)
             }
-            deleteTrackIfIsNotInPlaylist(playlist,track)
+            deleteTrackIfIsNotInPlaylist(track.trackId.toLong())
         }
 
     }

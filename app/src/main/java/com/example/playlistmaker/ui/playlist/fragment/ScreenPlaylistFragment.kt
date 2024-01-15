@@ -19,7 +19,7 @@ import com.example.playlistmaker.databinding.FragmentScreenPlaylistBinding
 import com.example.playlistmaker.domain.playList.model.Playlist
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.playlist.view_model.PlayListViewModel
-import com.example.playlistmaker.ui.search.adapters.searchAdapter
+import com.example.playlistmaker.ui.search.adapters.SearchAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -30,7 +30,7 @@ import java.util.Locale
 class ScreenPlaylistFragment : Fragment() {
     lateinit var binding: FragmentScreenPlaylistBinding
     private val viewModel by viewModel<PlayListViewModel>()
-    private lateinit var adapter: searchAdapter
+    private lateinit var adapter: SearchAdapter
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -131,6 +131,7 @@ class ScreenPlaylistFragment : Fragment() {
                     }
                     .setPositiveButton("ДА") { dialog, which -> // Добавляет кнопку «Нет»
                         viewModel.deletePlayList(it)
+                        viewModel.deleteTrackInTrackTable(playlist)
                         finish()
                     }
                     .show()
@@ -173,7 +174,7 @@ class ScreenPlaylistFragment : Fragment() {
 
     private fun initial(playlist: Playlist) {
         val recyclerViewSearch = binding.recyclerView
-        adapter = searchAdapter(
+        adapter = SearchAdapter(
             clickListener = { track ->
                 val bundle = Bundle()
                 bundle.putParcelable("track", track)
@@ -188,7 +189,7 @@ class ScreenPlaylistFragment : Fragment() {
 
                     }
                     .setPositiveButton("ДА") { dialog, which ->
-                        deleteTrackByClick(track, playlist)
+                        deleteTrackByClick(track,playlist)
                     }
                     .show()
                 val positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
@@ -206,7 +207,7 @@ class ScreenPlaylistFragment : Fragment() {
                         R.color.YP_Blue
                     )
                 )
-            }
+            }, SearchAdapter.ImageSize._60
         )
         viewModel.getTrackList(playlist)
         viewModel.trackList.observe(viewLifecycleOwner) { trackList ->
@@ -254,8 +255,8 @@ class ScreenPlaylistFragment : Fragment() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun deleteTrackByClick(item: Track, playlist: Playlist) {
-        viewModel.deleteTrack(item, playlist)
+    private fun deleteTrackByClick(track: Track, playlist: Playlist) {
+        viewModel.deleteTrack(track, playlist)
         viewModel.getTrackList(playlist)
         viewModel.deletedTrack.observe(viewLifecycleOwner) { isTrackDeleted ->
             if (isTrackDeleted) {
