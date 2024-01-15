@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.settings.fragment
 
 import SettingsFragmentViewModel
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,35 +29,41 @@ class SettingsFragment : Fragment() {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-            super.onViewCreated(view, savedInstanceState)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
 
-            binding.share.setOnClickListener {
-                vm.share()
-            }
-
-            binding.themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
-                vm.updateThemeSettings(isChecked)
-            }
-
-            binding.Support.setOnClickListener {
-                vm.support()
-            }
-
-            binding.terms.setOnClickListener {
-                vm.terms()
-            }
-
-
-            vm.themeSettingsLiveData.observe(viewLifecycleOwner, { themeSettings ->
-                binding.themeSwitcher.isChecked = when (themeSettings) {
-                    is ThemeSettings.LightTheme -> false
-                    is ThemeSettings.DarkTheme -> true
-                }
-            })
+        binding.share.setOnClickListener {
+            vm.share()
         }
 
+        binding.themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
+            vm.updateThemeSettings(isChecked)
+        }
+
+        binding.Support.setOnClickListener {
+            vm.support()
+        }
+
+        binding.terms.setOnClickListener {
+            vm.terms()
+        }
+
+
+        vm.themeSettingsLiveData.observe(viewLifecycleOwner, { themeSettings ->
+            binding.themeSwitcher.isChecked = when (themeSettings) {
+                is ThemeSettings.LightTheme -> false
+                is ThemeSettings.DarkTheme -> true
+            }
+            if (binding.themeSwitcher.isChecked) {
+                binding.themeSwitcher.thumbTintList =
+                    ColorStateList.valueOf(resources.getColor(R.color.YP_Blue))
+                binding.themeSwitcher.trackTintList =
+                    ColorStateList.valueOf(resources.getColor(R.color.YP_Blue_Light))
+            }
+        })
+    }
 
 
 }

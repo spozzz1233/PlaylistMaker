@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.media.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,10 +18,6 @@ class FragmentPlaylist : Fragment() {
     private val vm by viewModel<FragmentPlaylistViewModel>()
     private lateinit var fragmentPlayListAdapter: FragmentPlayListAdapter
     private lateinit var bottomNavigator: BottomNavigationView
-    companion object {
-        fun newInstance() = FragmentPlaylist()
-
-    }
 
     private lateinit var binding: FragmentPlaylistBinding
 
@@ -34,6 +29,7 @@ class FragmentPlaylist : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        vm.getPlaylists()
         binding.newPlaylist.setOnClickListener{
             findNavController().navigate(R.id.createPlayListFragment)
             bottomNavigator = requireActivity().findViewById(R.id.bottomNavigationView)
@@ -41,23 +37,33 @@ class FragmentPlaylist : Fragment() {
         }
         val recyclerView = binding.recyclerViewPlayList
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        fragmentPlayListAdapter = FragmentPlayListAdapter()
+        fragmentPlayListAdapter = FragmentPlayListAdapter{
+            val bundle = Bundle()
+            bundle.putParcelable("playlist", it)
+            findNavController().navigate(R.id.action_mediatekaFragment_to_screenPlaylistFragment,bundle)
+        }
         recyclerView.adapter = fragmentPlayListAdapter
-
-
-        vm.getPlaylists()
-
+        fragmentPlayListAdapter.updateData()
         vm.playListList.observe(viewLifecycleOwner) { it ->
-            Log.d("playListList","$it")
             if (it.isNullOrEmpty()) {
-
+                binding.recyclerViewPlayList.visibility = View.GONE
+                binding.placeholderImage.visibility = View.VISIBLE
+                binding.placeholderText.visibility = View.VISIBLE
                 return@observe
             } else {
+                binding.recyclerViewPlayList.visibility = View.VISIBLE
+                binding.placeholderImage.visibility = View.GONE
+                binding.placeholderText.visibility = View.GONE
                 recyclerView.adapter = fragmentPlayListAdapter
                 fragmentPlayListAdapter.setItems(it)
                 return@observe
             }
         }
+    }
+
+    companion object {
+        fun newInstance() = FragmentPlaylist()
+
     }
 }
 

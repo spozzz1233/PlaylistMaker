@@ -5,7 +5,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context="com.example.playlistmaker.ui.media.fragment.CreatePlayListFragment"
+tools:context="com.example.playlistmaker.ui.media.fragment.edit.CreatePlayListFragment"
 style="@style/colorAllScreen">
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -96,7 +96,8 @@ style="@style/colorAllScreen">
             android:textColor="?attr/colorOnSecondary"
             android:textColorHint="?attr/colorOnSecondary"
             app:boxStrokeColor="@animator/text_input_layout_stroke_colors"
-            app:hintTextColor="#3772E7" />
+            app:hintTextColor="#3772E7"
+            android:textCursorDrawable="@drawable/cursor"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -134,7 +135,8 @@ style="@style/colorAllScreen">
             android:maxLines="1"
             android:textColor="?attr/colorOnSecondary"
             android:textColorHint="?attr/colorOnSecondary"
-            app:hintTextColor="#3772E7" />
+            app:hintTextColor="#3772E7"
+            android:textCursorDrawable="@drawable/cursor"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

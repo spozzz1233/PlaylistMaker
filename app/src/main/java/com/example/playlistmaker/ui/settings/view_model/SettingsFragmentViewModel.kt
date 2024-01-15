@@ -20,7 +20,7 @@ class SettingsFragmentViewModel(
 
     private fun loadThemeSettings() {
         val themeSettings = settingsInteractor.getThemeSettings()
-        _themeSettingsLiveData.postValue(themeSettings) 
+        _themeSettingsLiveData.postValue(themeSettings)
     }
 
 
@@ -30,7 +30,6 @@ class SettingsFragmentViewModel(
         settingsInteractor.updateThemeSetting(themeSettings)
         _themeSettingsLiveData.value = themeSettings
     }
-
 
 
     fun terms() {

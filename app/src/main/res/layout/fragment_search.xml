@@ -38,7 +38,8 @@ tools:context=".ui.search.fragment.SearchFragment">
         android:padding="8dp"
         android:paddingStart="12dp"
         android:paddingEnd="32dp"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:textCursorDrawable="@drawable/cursor"/>
 
 
     <ImageView

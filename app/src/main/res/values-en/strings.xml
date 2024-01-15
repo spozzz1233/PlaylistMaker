@@ -32,4 +32,10 @@
     <string name="description">Description</string>
     <string name="title">Title*</string>
     <string name="Add_to_playlist">Add to playlist</string>
+    <string name="share_menu">Share</string>
+    <string name="editInformationMenu">Edit information</string>
+    <string name="deletePlaylistMenu">Delete a playlist</string>
+    <string name="save">Save</string>
+    <string name="playlist_placeholder">There are no tracks in this playlist yet</string>
+
 </resources>

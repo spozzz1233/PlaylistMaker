@@ -61,8 +61,6 @@ class SearchFragmentViewModel(
     }
 
 
-
-
     fun searchTrack(query: String) {
         if (query.isNotEmpty()) {
             _loadingLiveData.value = true
@@ -70,20 +68,24 @@ class SearchFragmentViewModel(
                 searchInteractor
                     .searchTrack(query)
                     .collect {
-                        when(it.message){
-                            ErrorType.CONNECTION_ERROR ->{
+                        when (it.message) {
+                            ErrorType.CONNECTION_ERROR -> {
                                 _loadingLiveData.value = false
                                 _searchResultsLiveData.value = false
                                 _noResultLiveData.value = false
                                 _noInternetLiveData.value = true
                             }
-                            else -> {processResult(it.data)}
+
+                            else -> {
+                                processResult(it.data)
+                            }
                         }
                     }
             }
             _searchResultsListLiveData.value = tracks
         }
     }
+
     fun processResult(track: List<Track>?) {
         val tracks = ArrayList<Track>()
         if (track != null) {
@@ -97,6 +99,7 @@ class SearchFragmentViewModel(
                 _searchResultsLiveData.value = false
                 _noResultLiveData.value = true
             }
+
             else -> {
                 _loadingLiveData.value = false
                 _searchResultsLiveData.value = true
